@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.25302.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayflower", "Mayflower\Mayflower.csproj", "{F8B16D25-FAFF-4605-8F17-3583795AAFBD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayflowerCLI", "MayflowerCLI\MayflowerCLI.csproj", "{A86336E6-BCFC-4B3D-8F2F-5524533A3C88}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A3CA428-B7A3-4E50-BB9C-0D2A131951E6}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
 		Mayflower\Mayflower.nuspec = Mayflower\Mayflower.nuspec
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mayflower", "Mayflower\Mayflower.csproj", "{7DED586A-754A-4555-A080-69A345B2D8AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MayflowerCli", "MayflowerCli\MayflowerCli.csproj", "{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +19,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A86336E6-BCFC-4B3D-8F2F-5524533A3C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A86336E6-BCFC-4B3D-8F2F-5524533A3C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A86336E6-BCFC-4B3D-8F2F-5524533A3C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A86336E6-BCFC-4B3D-8F2F-5524533A3C88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8B16D25-FAFF-4605-8F17-3583795AAFBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8B16D25-FAFF-4605-8F17-3583795AAFBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8B16D25-FAFF-4605-8F17-3583795AAFBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8B16D25-FAFF-4605-8F17-3583795AAFBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DED586A-754A-4555-A080-69A345B2D8AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DED586A-754A-4555-A080-69A345B2D8AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DED586A-754A-4555-A080-69A345B2D8AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DED586A-754A-4555-A080-69A345B2D8AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DDE8061B-A0E1-477F-BC01-C2AE44E8FA18}
 	EndGlobalSection
 EndGlobal

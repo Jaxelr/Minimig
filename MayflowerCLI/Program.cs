@@ -1,28 +1,28 @@
-﻿using System;
+﻿using CommandLine.Options;
+using Mayflower;
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Mayflower;
-using NDesk.Options;
 
-namespace MayflowerCLI
+namespace MayflowerCli
 {
-    class Program
+    internal class Program
     {
-        enum Command
+        private enum Command
         {
             None,
             RunMigrations,
             GetCount,
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             SetupAssemblyResolving();
             Run(args);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void Run(string[] args)
+        private static void Run(string[] args)
         {
             Options options;
             var cmd = TryParseArgs(args, out options);
@@ -34,6 +34,7 @@ namespace MayflowerCLI
                     if (!result.Success)
                         Environment.Exit(1);
                     break;
+
                 case Command.GetCount:
                     var count = Migrator.GetOutstandingMigrationsCount(options);
                     Console.WriteLine(count + " outstanding migrations");
@@ -44,7 +45,7 @@ namespace MayflowerCLI
             Environment.Exit(0);
         }
 
-        static Command TryParseArgs(string[] args, out Options options)
+        private static Command TryParseArgs(string[] args, out Options options)
         {
             var showHelp = false;
             var showVersion = false;
@@ -98,7 +99,7 @@ namespace MayflowerCLI
             return getCount ? Command.GetCount : Command.RunMigrations;
         }
 
-        static void ShowHelpMessage(OptionSet optionSet)
+        private static void ShowHelpMessage(OptionSet optionSet)
         {
             Console.WriteLine("Usage: mayflower [OPTIONS]+");
             Console.WriteLine("  Runs all *.sql files in the directory --dir=<directory>.");
@@ -109,7 +110,7 @@ namespace MayflowerCLI
             optionSet.WriteOptionDescriptions(Console.Out);
         }
 
-        static void SetupAssemblyResolving()
+        private static void SetupAssemblyResolving()
         {
             // Load dependant assemblies from embedded resources so that we don't have to distribute them separate from the exe.
             // https://blogs.msdn.microsoft.com/microsoft_press/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition/
