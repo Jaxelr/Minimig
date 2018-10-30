@@ -24,8 +24,7 @@ namespace MayflowerCli
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void Run(string[] args)
         {
-            Options options;
-            var cmd = TryParseArgs(args, out options);
+            var cmd = TryParseArgs(args, out Options options);
 
             switch (cmd)
             {
@@ -57,7 +56,7 @@ namespace MayflowerCli
                 { "h|help", "Shows this help message.", v => showHelp= v != null },
                 {"c|connection=", "A SQL Server connection string. For integrated auth, you can use --database and --server instead.", v => optionsTmp.ConnectionString = v },
                 {"d|database=", "Generates an integrated auth connection string for the specified database.", v => optionsTmp.Database = v },
-                {"s|server=", "Generates an integrated auth connection string with the specified server (default: localhost).", v=> optionsTmp.Server = v },
+                {"s|server=", "Generates an integrated auth connection string with the specified server (default: localhost).", v => optionsTmp.Server = v },
                 {"f|folder=", "The folder containing your .sql migration files (defaults to current working directory).", v => optionsTmp.MigrationsFolder = v },
                 {"timeout=", "Command timeout duration in seconds (default: 30)", v => optionsTmp.CommandTimeout = int.Parse(v) },
                 {"preview", "Run outstanding migrations, but roll them back.", v => optionsTmp.IsPreview = v != null },

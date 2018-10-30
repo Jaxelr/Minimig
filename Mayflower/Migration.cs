@@ -38,8 +38,7 @@ namespace Mayflower
 
         internal MigrateMode GetMigrateMode(AlreadyRan alreadyRan)
         {
-            MigrationRow row;
-            if (alreadyRan.ByFilename.TryGetValue(Filename, out row))
+            if (alreadyRan.ByFilename.TryGetValue(Filename, out MigrationRow row))
             {
                 return row.Hash == Hash ? MigrateMode.Skip : MigrateMode.HashMismatch;
             }
