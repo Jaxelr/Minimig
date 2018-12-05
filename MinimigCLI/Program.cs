@@ -1,10 +1,10 @@
 ﻿using CommandLine.Options;
-using Mayflower;
+using Minimig;
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace MayflowerCli
+namespace MinimigCli
 {
     internal class Program
     {
@@ -66,7 +66,7 @@ namespace MayflowerCli
                 {"version", "Print version number.", v => showVersion = v != null },
                 { "count", "Print the number of outstanding migrations.", v => getCount = v != null },
             };
-
+            
             try
             {
                 optionSet.Parse(args);
@@ -84,7 +84,7 @@ namespace MayflowerCli
 
             if (showVersion)
             {
-                Console.WriteLine("Mayflower.NET - Version " + Migrator.GetVersion());
+                Console.WriteLine("Minimig --Version " + Migrator.GetVersion());
                 Console.WriteLine();
                 return Command.None;
             }
@@ -100,10 +100,10 @@ namespace MayflowerCli
 
         private static void ShowHelpMessage(OptionSet optionSet)
         {
-            Console.WriteLine("Usage: mayflower [OPTIONS]+");
+            Console.WriteLine("Usage: Minimig [OPTIONS]+");
             Console.WriteLine("  Runs all *.sql files in the directory --dir=<directory>.");
             Console.WriteLine("  The databse connection can be specified using a full connection string with --connection,");
-            Console.WriteLine("  or Mayflower can generate an integrated auth connection string using the --database and");
+            Console.WriteLine("  or Minimig can generate an integrated auth connection string using the --database and");
             Console.WriteLine("  optional --server arguments.");
             Console.WriteLine();
             optionSet.WriteOptionDescriptions(Console.Out);
@@ -115,7 +115,7 @@ namespace MayflowerCli
             // https://blogs.msdn.microsoft.com/microsoft_press/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition/
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
-                var resourceName = "MayflowerCLI." + new AssemblyName(args.Name).Name + ".dll";
+                var resourceName = "MinimigCli." + new AssemblyName(args.Name).Name + ".dll";
 
                 using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
                 {

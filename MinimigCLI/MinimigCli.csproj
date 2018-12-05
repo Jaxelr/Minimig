@@ -16,6 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mayflower\Mayflower.csproj" />
+    <ProjectReference Include="..\Minimig\Minimig.csproj" />
   </ItemGroup>
 </Project>

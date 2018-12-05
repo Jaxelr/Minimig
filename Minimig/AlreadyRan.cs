@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mayflower
+namespace Minimig
 {
     class AlreadyRan
     {

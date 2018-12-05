@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mayflower
+namespace Minimig
 {
     public class MigrationChangedException : Exception
     {

@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
-namespace Mayflower
+namespace Minimig
 {
     public enum DatabaseProvider
     {

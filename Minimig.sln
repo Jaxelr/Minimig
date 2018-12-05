@@ -6,12 +6,12 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A3CA428-B7A3-4E50-BB9C-0D2A131951E6}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		Mayflower\Mayflower.nuspec = Mayflower\Mayflower.nuspec
+		Minimig\Minimig.nuspec = Minimig\Minimig.nuspec
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mayflower", "Mayflower\Mayflower.csproj", "{7DED586A-754A-4555-A080-69A345B2D8AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minimig", "Minimig\Minimig.csproj", "{7DED586A-754A-4555-A080-69A345B2D8AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MayflowerCli", "MayflowerCli\MayflowerCli.csproj", "{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimigCli", "MinimigCli\MinimigCli.csproj", "{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

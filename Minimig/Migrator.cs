@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Mayflower
+namespace Minimig
 {
     public class Migrator : IDisposable
     {
@@ -43,7 +43,7 @@ namespace Mayflower
 
             var dir = options.GetFolder();
 
-            Log("Mayflower.NET Migrator");
+            Log("Minimig Migrator");
             Log("    Directory:        " + dir);
             Log("    Provider:         " + options.Provider);
 
@@ -233,7 +233,7 @@ namespace Mayflower
             else if (mode == MigrateMode.HashMismatch)
                 Log($"  {migration.Filename} has been modified since it was run. It is being run again because --force was used.");
             else
-                throw new Exception("Mayflower bug: RunMigrationCommands called with mode: " + mode);
+                throw new Exception("Minimig bug: RunMigrationCommands called with mode: " + mode);
             
             var sw = new Stopwatch();
             sw.Start();

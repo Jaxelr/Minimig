@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Mayflower
+namespace Minimig
 {
     static class SqlExtensions
     {
