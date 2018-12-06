@@ -1,6 +1,8 @@
-# Mayflower.NET
+# Minimig
 
-Mayflower is a simple, forward-only, database migrator for SQL Server based on the migrator which Stack Overflow uses.
+*** This library is a fork from Mayflower.net which seems to be [inactive](https://github.com/bretcope/Mayflower.NET)
+
+Minimig is a simple, forward-only, db migrator for SQL Server.
 
 ## Usage
 
@@ -26,7 +28,7 @@ GO
 
 We recommend prefixing migration file names with a zero-padded number so that the migrations are listed in chronological order. For example, a directory of migrations might look like:
 
-```
+``` cmd
 0001 - Add Users table.sql
 0002 - Add Posts.sql
 0003 - Insert default users.sql
@@ -38,27 +40,27 @@ We recommend prefixing migration file names with a zero-padded number so that th
 
 #### Command Line
 
-The easiest way to run migrations is with `mayflower.exe` . You obtain it from the Downloads section of [GitHub releases](https://github.com/bretcope/Mayflower.NET/releases) or installable via [nuget](https://www.nuget.org/packages/Mayflower/). It requires .NET Framework 4.5.2 or above.
+The easiest way to run migrations is with `mig` command. You obtain it from the Downloads section of [GitHub releases](https://github.com/jaxelr/Minimig/releases) or installable via [nuget](https://www.nuget.org/packages/Minimig/). It requires .NET Framework 4.5.2 or above.
 
 Typical usage is simply:
 
-```
-mayflower --folder="c:\path\to\migrations" --connection="Persist Security Info=False;Integrated Security=true;Initial Catalog=MyDatabase;server=localhost"
+``` cmd
+mig --folder="c:\path\to\migrations" --connection="Persist Security Info=False;Integrated Security=true;Initial Catalog=MyDatabase;server=localhost"
 ```
 
 If you use integrated auth, you can use the `--database` and `--server` arguments instead of supplying a connection string (server defaults to "localhost").
 
-```
-mayflower --folder="c:\path\to\migrations" --database=MyLocalDatabase
+``` cmd
+mig --folder="c:\path\to\migrations" --database=MyLocalDatabase
 ```
 
-Use `mayflower --help` to show the complete set of options:
+Use `mig --help` to show the complete set of options:
 
-```
-Usage: mayflower [OPTIONS]+
+``` cmd
+Usage: mig [OPTIONS]+
   Runs all *.sql files in the directory --dir=<directory>.
   The databse connection can be specified using a full connection string
-  with --connection, or Mayflower can generate an integrated auth connection
+  with --connection, or Minimig can generate an integrated auth connection
   string using the --database and optional --server arguments.
 
   -h, --help                 Shows this help message.
@@ -84,7 +86,7 @@ Usage: mayflower [OPTIONS]+
 
 #### Programmatic
 
-If you'd prefer, Mayflower can be called via code. Mayflower.dll is included in the [nuget package](https://www.nuget.org/packages/Mayflower/).
+If you'd prefer, Minimig can be called via code. Minimig.dll is included in the [nuget package](https://www.nuget.org/packages/Minimig/).
 
 ```csharp
 var options = new Options
@@ -106,14 +108,4 @@ Many migration systems have a notion of reversing a migration or "downgrading" i
 
 ## License
 
-Mayflower is available under the [MIT License](https://github.com/bretcope/Mayflower.NET/blob/master/LICENSE.MIT).
-
-#### Why not just open source the actual Stack Overflow migrator?
-
-Nick Craver put it pretty well [in his blog post](https://nickcraver.com/blog/2016/05/03/stack-overflow-how-we-do-deployment-2016-edition/#database-migrations):
-
-> The database migrator we use is a very simple repo we could open source, but honestly there are dozens out there and the “same migration against n databases” is fairly specific. The others are probably much better and ours is very specific to *only* our needs. The migrator connects to the Sites database, gets the list of databases to run against, and executes all migrations against every one (running multiple databases in parallel). This is done by looking at the passed-in migrations folder and loading it (once) as well as hashing the contents of every file. Each database has a `Migrations` table that keeps track of what has already been run.
-
-Mayflower uses the same basic technique described in the last two sentences, but doesn't have any of the Stack Overflow-specific functionality. Additionally, it was built from the ground-up as a public migrator, rather than trying to adapt our internal codebase, which means it focuses on usability for third parties.
-
-It's true that there are lots of other database migrators out there, but I personally love the extremely simple way we do migrations, so I thought it was worth having a public implementation. And, selfishly, I wanted to be able to use it for my own projects.
+Minimig is available under the [MIT License](https://github.com/bretcope/Mayflower.NET/blob/master/LICENSE.MIT).
