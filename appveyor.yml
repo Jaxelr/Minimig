@@ -11,7 +11,7 @@ configuration:
 before_build:
   - cmd: dotnet --version
 build_script:
-  - cmd: dotnet build ./src/MinimigCli/MinimigCli.csproj -v quiet
+  - cmd: dotnet build . -v quiet
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
