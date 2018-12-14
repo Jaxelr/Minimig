@@ -1,10 +1,9 @@
 ﻿using CommandLine.Options;
-using Minimig;
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace MinimigCli
+namespace Minimig
 {
     internal class Program
     {

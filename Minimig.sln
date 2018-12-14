@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".Solution
 		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minimig", "src\Minimig\Minimig.csproj", "{7DED586A-754A-4555-A080-69A345B2D8AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimigLib", "src\MinimigLib\MinimigLib.csproj", "{7DED586A-754A-4555-A080-69A345B2D8AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimigCli", "src\MinimigCli\MinimigCli.csproj", "{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minimig", "src\Minimig\Minimig.csproj", "{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
