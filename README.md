@@ -4,6 +4,12 @@
 
 Minimig is a simple, forward-only, db migrator for SQL Server.
 
+## Build Status
+
+| Appveyor  |
+| :---:     |
+| [![Build status][build-img]][build] |
+
 ## Usage
 
 ### Creating Migrations
@@ -108,4 +114,7 @@ Many migration systems have a notion of reversing a migration or "downgrading" i
 
 ## License
 
-Minimig is available under the [MIT License](https://github.com/bretcope/Mayflower.NET/blob/master/LICENSE.MIT).
+Minimig is available under the [MIT License](https://github.com/Jaxelr/Minimig/blob/master/LICENSE).
+
+[build-img]: https://ci.appveyor.com/api/projects/status/v0tvqedqw4nuwpk4/branch/master?svg=true
+[build]: https://ci.appveyor.com/project/Jaxelr/minimig/branch/master
