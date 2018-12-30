@@ -10,6 +10,12 @@ Minimig is a simple, forward-only, db migrator for SQL Server.
 | :---:     |
 | [![Build status][build-img]][build] |
 
+## Packages
+
+Package | NuGet (Stable) | MyGet (Prerelease)
+| :--- | :---: | :---: |
+| Minimig | [![NuGet][nuget-mig-img]][nuget-mig] | [![MyGet][myget-mig-img]][myget-mig] |
+
 ## Usage
 
 ### Creating Migrations
@@ -118,3 +124,7 @@ Minimig is available under the [MIT License](https://github.com/Jaxelr/Minimig/b
 
 [build-img]: https://ci.appveyor.com/api/projects/status/v0tvqedqw4nuwpk4/branch/master?svg=true
 [build]: https://ci.appveyor.com/project/Jaxelr/minimig/branch/master
+[nuget-mig-img]: https://img.shields.io/nuget/v/Minimig.svg
+[nuget-mig]: https://www.nuget.org/packages/Minimig
+[myget-mig-img]: https://img.shields.io/myget/minimig/v/Minimig.svg
+[myget-mig]: https://www.myget.org/feed/minimig/package/nuget/Minimig
