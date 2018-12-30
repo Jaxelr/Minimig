@@ -90,7 +90,7 @@ Usage: mig [OPTIONS]+
       --count                Print the number of outstanding migrations.
 ```
 
-#### Programmatic
+#### Programmatically
 
 If you'd prefer, Minimig can be called via code. Minimig.dll is included in the [nuget package](https://www.nuget.org/packages/Minimig/).
 
@@ -110,7 +110,7 @@ The `Options` class has equivalent properties to most of the command line option
 
 ### Reverting Migrations
 
-Many migration systems have a notion of reversing a migration or "downgrading" in some sense. Mayflower has no such concept. If you want to reverse the effects of one migration, then you write a new migration to do so. Mayflower lives in a forward-only world.
+Many migration systems have a notion of reversing a migration or "downgrading" in some sense. Minimig has no such concept. If you want to reverse the effects of one migration, then you write a new migration to do so. Minimig lives in a forward-only world.
 
 ## License
 
