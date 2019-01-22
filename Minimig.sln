@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.25302.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".SolutionItems", "{3A3CA428-B7A3-4E50-BB9C-0D2A131951E6}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
+		README.md = README.md
+		sampleinstallation.md = sampleinstallation.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimigLib", "src\MinimigLib\MinimigLib.csproj", "{7DED586A-754A-4555-A080-69A345B2D8AB}"

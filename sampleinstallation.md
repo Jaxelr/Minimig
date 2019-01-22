@@ -1,2 +1,2 @@
-dotnet tool install --global MayflowerCli --add-source .\
-dontet tool uninstall --global MayflowerCli
+dotnet tool install --global Minimig --add-source .\
+dotnet tool uninstall --global Minimig
