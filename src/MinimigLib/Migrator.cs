@@ -5,9 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("MinimigTests")]
 
 namespace Minimig
 {
+
+
     public class Migrator : IDisposable
     {
         public class MigrationResult
