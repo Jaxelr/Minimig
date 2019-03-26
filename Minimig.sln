@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimigLib", "src\MinimigLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minimig", "src\Minimig\Minimig.csproj", "{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimigTests", "tests\MinimigTests\MinimigTests.csproj", "{62A21921-5700-4B1D-8A0C-7B4A07B39953}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimigTests", "tests\MinimigTests.csproj", "{62A21921-5700-4B1D-8A0C-7B4A07B39953}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

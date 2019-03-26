@@ -132,3 +132,4 @@ node_modules
 .idea
 .vs
 src/Minimig/Properties/PublishProfiles/
+testcoverage/
