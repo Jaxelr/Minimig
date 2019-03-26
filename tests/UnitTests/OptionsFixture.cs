@@ -1,4 +1,5 @@
 ﻿using Minimig;
+using System;
 using Xunit;
 
 namespace MinimigTests.UnitTests
@@ -10,7 +11,7 @@ namespace MinimigTests.UnitTests
         public void Get_migration_table_with_value(string inputTable)
         {
             //Arrange
-            Options options = new Options() { MigrationsTable = inputTable };
+            var options = new Options() { MigrationsTable = inputTable };
 
             //Act
             string table = options.GetMigrationsTable();
@@ -24,7 +25,7 @@ namespace MinimigTests.UnitTests
         {
             //Arrange
             const string inputTable = "Migrations";
-            Options options = new Options();
+            var options = new Options();
 
             //Act
             string table = options.GetMigrationsTable();
@@ -38,7 +39,7 @@ namespace MinimigTests.UnitTests
         public void Get_migration_folder_with_value(string inputFolder)
         {
             //Arrange
-            Options options = new Options() { MigrationsFolder = inputFolder };
+            var options = new Options() { MigrationsFolder = inputFolder };
 
             //Act
             string folder = options.GetFolder();
@@ -52,7 +53,7 @@ namespace MinimigTests.UnitTests
         {
             //Arrange
             string inputFolder = System.IO.Directory.GetCurrentDirectory();
-            Options options = new Options();
+            var options = new Options();
 
             //Act
             string folder = options.GetFolder();
@@ -66,7 +67,7 @@ namespace MinimigTests.UnitTests
         public void Get_migration_connection_string_with_value(string inputConnection)
         {
             //Arrange
-            Options options = new Options() { ConnectionString = inputConnection };
+            var options = new Options() { ConnectionString = inputConnection };
 
             //Act
             string conn = options.GetConnectionString(DatabaseProvider.SqlServer);
@@ -81,7 +82,7 @@ namespace MinimigTests.UnitTests
         {
             //Arrange
             string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server={inputServer}";
-            Options options = new Options() { Server = inputServer, Database = inputDatabase};
+            var options = new Options() { Server = inputServer, Database = inputDatabase };
 
             //Act
             string conn = options.GetConnectionString(DatabaseProvider.SqlServer);
@@ -90,20 +91,45 @@ namespace MinimigTests.UnitTests
             Assert.Equal(inputConnection, conn);
         }
 
-
         [Theory]
         [InlineData("myDb")]
         public void Get_connection_string_with_database(string inputDatabase)
         {
             //Arrange
             string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server=localhost";
-            Options options = new Options() { Database = inputDatabase };
+            var options = new Options() { Database = inputDatabase };
 
             //Act
             string conn = options.GetConnectionString(DatabaseProvider.SqlServer);
 
             //Assert
             Assert.Equal(inputConnection, conn);
+        }
+
+        [Fact]
+        public void Assert_valid_exception()
+        {
+            //Arrange
+            var options = new Options();
+
+            //Act
+            Action action = new Action(options.AssertValid);
+
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
+
+        [Fact]
+        public void Assert_valid_exception_migrations_table()
+        {
+            //Arrange
+            var options = new Options() { MigrationsTable = "$Inv@lid N@me" };
+
+            //Act
+            Action action = new Action(options.AssertValid);
+
+            //Assert
+            Assert.Throws<Exception>(action);
         }
     }
 }
