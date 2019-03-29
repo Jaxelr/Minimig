@@ -9,6 +9,7 @@ namespace Minimig
     public enum DatabaseProvider
     {
         SqlServer = 0,
+        Postgres = 1
     }
 
     class ConnectionContext : IDisposable
