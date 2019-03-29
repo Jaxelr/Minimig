@@ -16,6 +16,10 @@ Package | NuGet (Stable) | MyGet (Prerelease)
 | :--- | :---: | :---: |
 | Minimig | [![NuGet][nuget-mig-img]][nuget-mig] | [![MyGet][myget-mig-img]][myget-mig] |
 
+## Installation
+
+Easiest installation is via dotnet global tools running `dotnet tool install --global Minimig` from your terminal.
+
 ## Usage
 
 ### Creating Migrations
@@ -95,24 +99,6 @@ Usage: mig [OPTIONS]+
       --version              Print version number.
       --count                Print the number of outstanding migrations.
 ```
-
-#### Programmatically
-
-If you'd prefer, Minimig can be called via code. Minimig.dll is included in the [nuget package](https://www.nuget.org/packages/Minimig/).
-
-```csharp
-var options = new Options
-{
-    Database = "MyLocalDatabase",
-    MigrationsFolder = @"c:\path\to\migrations",
-    Output = Console.Out,
-};
-
-var result = Migrator.RunOutstandingMigrations(options);
-// result.Success indicates success or failure
-```
-
-The `Options` class has equivalent properties to most of the command line options.
 
 ### Reverting Migrations
 
