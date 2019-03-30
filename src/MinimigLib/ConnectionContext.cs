@@ -9,6 +9,7 @@ namespace Minimig
     public enum DatabaseProvider
     {
         SqlServer = 0,
+        Postgres = 1
     }
 
     class ConnectionContext : IDisposable
@@ -103,13 +104,14 @@ namespace Minimig
             {
                 while (rdr.Read())
                 {
-                    var row = new MigrationRow();
-
-                    row.Id = rdr.GetInt32(0);
-                    row.Filename = rdr.GetString(1);
-                    row.Hash = rdr.GetString(2);
-                    row.ExecutionDate = rdr.GetDateTime(3);
-                    row.Duration = rdr.GetInt32(4);
+                    var row = new MigrationRow
+                    {
+                        Id = rdr.GetInt32(0),
+                        Filename = rdr.GetString(1),
+                        Hash = rdr.GetString(2),
+                        ExecutionDate = rdr.GetDateTime(3),
+                        Duration = rdr.GetInt32(4)
+                    };
 
                     results.Add(row);
                 }
