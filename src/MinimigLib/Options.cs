@@ -16,7 +16,7 @@ namespace Minimig
         public string MigrationsTable { get; set; }
         public TextWriter Output { get; set; }
         public bool Force { get; set; }
-        public DatabaseProvider Provider { get; set; } // there's no command line param for this yet because there's only one provider
+        public DatabaseProvider Provider { get; set; } 
 
         public void AssertValid()
         {
