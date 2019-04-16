@@ -26,7 +26,7 @@ namespace MinimigTests.UnitTests
         {
             //Arrange
             var conn = new System.Data.SqlClient.SqlConnection();
-            string sql = "select * from sys.tables;";
+            string sql = "select count(*) from sys.tables;";
             int? timeout = 30;
 
             //Act
