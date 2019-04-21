@@ -3,7 +3,7 @@ using Xunit;
 
 namespace MinimigTests.UnitTests
 {
-    public class SqlExtensions
+    public class SqlExtensionsFixture
     {
         [Fact]
         public void Add_parameter_sql_command()
