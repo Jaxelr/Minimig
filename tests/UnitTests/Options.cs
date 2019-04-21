@@ -4,7 +4,7 @@ using Xunit;
 
 namespace MinimigTests.UnitTests
 {
-    public class OptionsFixture
+    public class Options
     {
         [Theory]
         [InlineData(@"MyMigration")]
