@@ -5,13 +5,19 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("MinimigTests")]
 
 namespace Minimig
 {
+
+
     public class Migrator : IDisposable
     {
         readonly ConnectionContext _db;
         bool _tableExists;
+        readonly string _inputSchema;
         readonly bool _isPreview;
         readonly bool _useGlobalTransaction;
         readonly TextWriter _output;
@@ -24,9 +30,10 @@ namespace Minimig
         Migrator(Options options)
         {
             _output = options.Output;
+            _inputSchema = options.MigrationsTableSchema;
 
             options.AssertValid();
-            
+
             _isPreview = options.IsPreview;
             _useGlobalTransaction = options.UseGlobalTransaction || _isPreview; // always run preview in a global transaction so previous migrations are seen
             _force = options.Force;
@@ -43,9 +50,13 @@ namespace Minimig
 
             Log("    Database:         " + _db.Database);
             _db.Open();
-            
+
             Log("    Transaction Mode: " + (_useGlobalTransaction ? "Global" : "Individual"));
-            
+
+            if (!ValidateMigrationsSchemaIsAvailable())
+            {
+                return;
+            }
             EnsureMigrationsTableExists();
 
             _alreadyRan = _tableExists ? _db.GetAlreadyRan() : new AlreadyRan(Enumerable.Empty<MigrationRow>());
@@ -186,12 +197,12 @@ namespace Minimig
                 RenameMigration(migration);
                 return mode;
             }
-            
+
             if (mode == MigrateMode.HashMismatch && !_force)
             {
                 throw new MigrationChangedException(migration);
             }
-            
+
             if (!migration.UseTransaction && _isPreview)
             {
                 Log($"  Skipping \"{migration.Filename}\". It cannot be run in preview mode because the no-transaction header is set.");
@@ -224,7 +235,7 @@ namespace Minimig
                 Log($"  {migration.Filename} has been modified since it was run. It is being run again because --force was used.");
             else
                 throw new Exception("Minimig bug: RunMigrationCommands called with mode: " + mode);
-            
+
             var sw = new Stopwatch();
             sw.Start();
             foreach (var cmd in migration.SqlCommands)
@@ -281,7 +292,7 @@ namespace Minimig
             {
                 if (_useGlobalTransaction)
                     _db.FilesInCurrentTransaction.Add(migration.Filename);
-                else 
+                else
                     _db.Commit();
             }
         }
@@ -341,6 +352,17 @@ namespace Minimig
 
             _db.CreateMigrationsTable();
             _tableExists = true;
+        }
+
+        bool ValidateMigrationsSchemaIsAvailable()
+        {
+            if (_db.SchemaMigrationTableExists())
+            {
+                return true;
+            }
+
+            Log($"No schema found (or no access given) that corresponds to the given input schema {_inputSchema}");
+            return false;
         }
     }
 }

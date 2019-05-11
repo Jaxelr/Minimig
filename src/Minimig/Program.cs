@@ -61,6 +61,7 @@ namespace Minimig
                 {"preview", "Run outstanding migrations, but roll them back.", v => optionsTmp.IsPreview = v != null },
                 {"global", "Run all outstanding migrations in a single transaction, if possible.", v => optionsTmp.UseGlobalTransaction = v != null },
                 {"table=", "Name of the table used to track migrations (default: Migrations)", v => optionsTmp.MigrationsTable = v },
+                {"schema=", "Name of the schema to be used to track migrations (default: dbo)", v => optionsTmp.MigrationsTableSchema = v },
                 {"force", "Will rerun modified migrations.", v => optionsTmp.Force = v != null },
                 {"version", "Print version number.", v => showVersion = v != null },
                 { "count", "Print the number of outstanding migrations.", v => getCount = v != null },

@@ -14,6 +14,7 @@ namespace Minimig
         public bool IsPreview { get; set; }
         public bool UseGlobalTransaction { get; set; }
         public string MigrationsTable { get; set; }
+        public string MigrationsTableSchema { get; set; }
         public TextWriter Output { get; set; }
         public bool Force { get; set; }
         public DatabaseProvider Provider { get; set; } 
@@ -47,14 +48,11 @@ namespace Minimig
             return $"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={server}";
         }
 
-        internal string GetMigrationsTable()
-        {
-            return string.IsNullOrEmpty(MigrationsTable) ? "Migrations" : MigrationsTable;
-        }
+        internal string GetMigrationsTable() => string.IsNullOrEmpty(MigrationsTable) ? "Migrations" : MigrationsTable;
+   
+        internal string GetMigrationsTableSchema() => string.IsNullOrEmpty(MigrationsTableSchema) ? "dbo" : MigrationsTableSchema;
 
-        internal string GetFolder()
-        {
-            return string.IsNullOrEmpty(MigrationsFolder) ? Directory.GetCurrentDirectory() : MigrationsFolder;
-        }
+        internal string GetFolder() => string.IsNullOrEmpty(MigrationsFolder) ? Directory.GetCurrentDirectory() : MigrationsFolder;
+        
     }
 }

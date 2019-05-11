@@ -38,7 +38,7 @@ namespace Minimig
             switch (Provider)
             {
                 case DatabaseProvider.SqlServer:
-                    _sql = new SqlServerStatements(options.GetMigrationsTable());
+                    _sql = new SqlServerStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     _connection = new SqlConnection(connStr);
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
@@ -84,6 +84,12 @@ namespace Minimig
         }
 
         internal bool MigrationTableExists()
+        {
+            var cmd = _connection.NewCommand(_sql.DoesMigrationsTableExist);
+            return (int)cmd.ExecuteScalar() == 1;
+        }
+
+        internal bool SchemaMigrationTableExists()
         {
             var cmd = _connection.NewCommand(_sql.DoesMigrationsTableExist);
             return (int)cmd.ExecuteScalar() == 1;
