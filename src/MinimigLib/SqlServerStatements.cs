@@ -6,18 +6,25 @@ namespace Minimig
     {
         public Regex CommandSplitter { get; } = new Regex(@"^\s*GO\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         public string DoesMigrationsTableExist { get; }
+        public string DoesSchemaMigrationTableExist { get; }
         public string CreateMigrationsTable { get; }
         public string RenameMigration { get; }
         public string UpdateMigrationHash { get; }
         public string InsertMigration { get; }
         public string GetAlreadyRan { get; }
 
-        internal SqlServerStatements(string migrationsTableName)
+        internal SqlServerStatements(string migrationsTableName, string schemaName = "dbo")
         {
-            DoesMigrationsTableExist = $"SELECT count(*) FROM sys.tables WHERE name = '{migrationsTableName}';";
+            DoesSchemaMigrationTableExist = $@"SELECT count(*) FROM sys.schemas WHERE s.name = '{schemaName}'";
+
+            DoesMigrationsTableExist = $@"
+                SELECT count(*) FROM sys.tables t
+                JOIN sys.schemas s
+                    ON  t.schema_id = t.schema_id
+                WHERE t.name = '{migrationsTableName}' AND s.name = '{schemaName}';";
 
             CreateMigrationsTable = $@"
-                CREATE TABLE [{migrationsTableName}]
+                CREATE TABLE [{schemaName}].[{migrationsTableName}]
                 (
                     Id int not null Identity(1,1),
                     Filename nvarchar(260) not null,
@@ -25,16 +32,15 @@ namespace Minimig
                     ExecutionDate datetime not null,
                     Duration int not null,
 
-                    constraint PK_{migrationsTableName} primary key clustered (Id),
-                    constraint UX_{migrationsTableName}_Filename unique (Filename),
-                    constraint UX_{migrationsTableName}_Hash unique (Hash)
-                );
-                ";
+                    constraint PK_{schemaName}_{migrationsTableName} primary key clustered (Id),
+                    constraint UX_{schemaName}_{migrationsTableName}_Filename unique (Filename),
+                    constraint UX_{schemaName}_{migrationsTableName}_Hash unique (Hash)
+                );";
 
-            RenameMigration = $"update [{migrationsTableName}] set Filename = @Filename where Hash = @Hash;";
-            UpdateMigrationHash = $"update [{migrationsTableName}] set Hash = @Hash, ExecutionDate = @ExecutionDate, Duration = @Duration where Filename = @Filename;";
-            InsertMigration = $"insert [{migrationsTableName}] (Filename, Hash, ExecutionDate, Duration) values (@Filename, @Hash, @ExecutionDate, @Duration);";
-            GetAlreadyRan = $"select * from [{migrationsTableName}] order by ExecutionDate, Id;";
+            RenameMigration = $"update [{schemaName}].[{migrationsTableName}] set Filename = @Filename where Hash = @Hash;";
+            UpdateMigrationHash = $"update [{schemaName}].[{migrationsTableName}] set Hash = @Hash, ExecutionDate = @ExecutionDate, Duration = @Duration where Filename = @Filename;";
+            InsertMigration = $"insert [{schemaName}].[{migrationsTableName}] (Filename, Hash, ExecutionDate, Duration) values (@Filename, @Hash, @ExecutionDate, @Duration);";
+            GetAlreadyRan = $"select * from [{schemaName}].[{migrationsTableName}] order by ExecutionDate, Id;";
         }
     }
 }
