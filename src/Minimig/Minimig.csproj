@@ -11,7 +11,7 @@
     <Title>Minimig</Title>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Product>Minimig</Product>
-    <Copyright>Copyright 2018</Copyright>
+    <Copyright>Copyright 2019</Copyright>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
