@@ -8,6 +8,8 @@ init:
   - cmd: git config --global core.autocrlf true
 configuration:
   - Release
+services:
+- mssql2017
 before_build:
   - cmd: dotnet --version
 build_script:
