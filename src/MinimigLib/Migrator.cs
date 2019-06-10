@@ -4,30 +4,28 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 [assembly: InternalsVisibleTo("MinimigTests")]
 
 namespace Minimig
 {
-
-
     public class Migrator : IDisposable
     {
-        readonly ConnectionContext _db;
-        bool _tableExists;
-        readonly string _inputSchema;
-        readonly bool _isPreview;
-        readonly bool _useGlobalTransaction;
-        readonly TextWriter _output;
-        readonly bool _force;
+        private readonly ConnectionContext _db;
+        private bool _tableExists;
+        private readonly string _inputSchema;
+        private readonly bool _isPreview;
+        private readonly bool _useGlobalTransaction;
+        private readonly TextWriter _output;
+        private readonly bool _force;
 
-        readonly AlreadyRan _alreadyRan;
+        private readonly AlreadyRan _alreadyRan;
 
         public List<Migration> Migrations { get; }
 
-        Migrator(Options options)
+        private Migrator(Options options)
         {
             _output = options.Output;
             _inputSchema = options.MigrationsTableSchema;
@@ -111,17 +109,17 @@ namespace Minimig
         }
 
         // this only exists because you don't expect a constructor to perform I/O, whereas calling Create() implies there might be some work being performed
-        static Migrator Create(Options options)
+        private static Migrator Create(Options options)
         {
             return new Migrator(options);
         }
 
-        static IEnumerable<Migration> GetAllMigrations(string directory, Regex commandSplitter)
+        private static IEnumerable<Migration> GetAllMigrations(string directory, Regex commandSplitter)
         {
             return Directory.GetFiles(directory, "*.sql").OrderBy(f => f).Select(f => new Migration(f, commandSplitter));
         }
 
-        MigrationResult RunOutstandingMigrations()
+        private MigrationResult RunOutstandingMigrations()
         {
             Log("Running migrations" + (_isPreview ? " (preview mode)" : ""));
             Log();
@@ -142,15 +140,19 @@ namespace Minimig
                         case MigrateMode.Skip:
                             result.Skipped++;
                             break;
+
                         case MigrateMode.Run:
                             result.Ran++;
                             break;
+
                         case MigrateMode.HashMismatch:
                             result.Forced++;
                             break;
+
                         case MigrateMode.Rename:
                             result.Renamed++;
                             break;
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -185,7 +187,7 @@ namespace Minimig
             return result;
         }
 
-        MigrateMode Migrate(Migration migration)
+        private MigrateMode Migrate(Migration migration)
         {
             var mode = migration.GetMigrateMode(_alreadyRan);
 
@@ -214,7 +216,7 @@ namespace Minimig
             return mode;
         }
 
-        void RenameMigration(Migration migration)
+        private void RenameMigration(Migration migration)
         {
             var existing = _alreadyRan.ByHash[migration.Hash];
             Log($"  Filename has changed (\"{existing.Filename}\" in the database, \"{migration.Filename}\" in file system) - updating.");
@@ -225,7 +227,7 @@ namespace Minimig
             EndMigration(migration);
         }
 
-        void RunMigrationCommands(Migration migration, MigrateMode mode)
+        private void RunMigrationCommands(Migration migration, MigrateMode mode)
         {
             BeginMigration(migration.UseTransaction);
 
@@ -265,7 +267,7 @@ namespace Minimig
             EndMigration(migration);
         }
 
-        void BeginMigration(bool useTransaction)
+        private void BeginMigration(bool useTransaction)
         {
             if (useTransaction)
             {
@@ -286,7 +288,7 @@ namespace Minimig
             }
         }
 
-        void EndMigration(Migration migration)
+        private void EndMigration(Migration migration)
         {
             if (_db.HasPendingTransaction)
             {
@@ -297,7 +299,7 @@ namespace Minimig
             }
         }
 
-        void MigrationFailed(Migration migration, Exception ex)
+        private void MigrationFailed(Migration migration, Exception ex)
         {
             Log();
             if (migration == null)
@@ -330,12 +332,12 @@ namespace Minimig
             }
         }
 
-        void Log(string str = "")
+        private void Log(string str = "")
         {
             _output?.WriteLine(str);
         }
 
-        void EnsureMigrationsTableExists()
+        private void EnsureMigrationsTableExists()
         {
             if (_db.MigrationTableExists())
             {
@@ -354,7 +356,7 @@ namespace Minimig
             _tableExists = true;
         }
 
-        bool ValidateMigrationsSchemaIsAvailable()
+        private bool ValidateMigrationsSchemaIsAvailable()
         {
             if (_db.SchemaMigrationTableExists())
             {

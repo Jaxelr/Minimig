@@ -37,10 +37,10 @@ namespace Minimig
                     constraint UX_{schemaName}_{migrationsTableName}_Hash unique (Hash)
                 );";
 
-            RenameMigration = $"update [{schemaName}].[{migrationsTableName}] set Filename = @Filename where Hash = @Hash;";
-            UpdateMigrationHash = $"update [{schemaName}].[{migrationsTableName}] set Hash = @Hash, ExecutionDate = @ExecutionDate, Duration = @Duration where Filename = @Filename;";
-            InsertMigration = $"insert [{schemaName}].[{migrationsTableName}] (Filename, Hash, ExecutionDate, Duration) values (@Filename, @Hash, @ExecutionDate, @Duration);";
-            GetAlreadyRan = $"select * from [{schemaName}].[{migrationsTableName}] order by ExecutionDate, Id;";
+            RenameMigration = $"UPDATE [{schemaName}].[{migrationsTableName}] SET Filename = @Filename WHERE Hash = @Hash;";
+            UpdateMigrationHash = $"UPDATE [{schemaName}].[{migrationsTableName}] SET Hash = @Hash, ExecutionDate = @ExecutionDate, Duration = @Duration WHERE Filename = @Filename;";
+            InsertMigration = $"INSERT [{schemaName}].[{migrationsTableName}] (Filename, Hash, ExecutionDate, Duration) values (@Filename, @Hash, @ExecutionDate, @Duration);";
+            GetAlreadyRan = $"SELECT * FROM [{schemaName}].[{migrationsTableName}] ORDER BY ExecutionDate, Id;";
         }
     }
 }
