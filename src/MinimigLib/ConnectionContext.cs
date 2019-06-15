@@ -14,97 +14,88 @@ namespace Minimig
 
     class ConnectionContext : IDisposable
     {
-        readonly IDbConnection _connection;
-        IDbTransaction _transaction;
-        readonly ISqlStatements _sql;
-        readonly int _timeout;
+        readonly IDbConnection connection;
+        IDbTransaction transaction;
+        readonly ISqlStatements sql;
+        readonly int timeout;
 
         internal bool IsPreview { get; }
         internal DatabaseProvider Provider { get; }
         internal string Database { get; }
         internal List<string> FilesInCurrentTransaction { get; } = new List<string>();
         
-        internal Regex CommandSplitter => _sql.CommandSplitter;
-        internal bool HasPendingTransaction => _transaction != null;
+        internal Regex CommandSplitter => sql.CommandSplitter;
+        internal bool HasPendingTransaction => transaction != null;
 
         internal ConnectionContext(Options options)
         {
-            _timeout = options.CommandTimeout;
+            timeout = options.CommandTimeout;
             IsPreview = options.IsPreview;
             Provider = options.Provider;
 
-            var connStr = options.GetConnectionString(Provider);
+            string connStr = options.GetConnectionString(Provider);
 
             switch (Provider)
             {
                 case DatabaseProvider.SqlServer:
-                    _sql = new SqlServerStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
-                    _connection = new SqlConnection(connStr);
+                    sql = new SqlServerStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
+                    connection = new SqlConnection(connStr);
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
                 default:
-                    throw new Exception("Unsupported DatabaseProvider " + options.Provider);
+                    throw new Exception($"Unsupported DatabaseProvider {options.Provider}");
             }
 
             if (string.IsNullOrEmpty(Database))
                 throw new Exception("No database was set in the connection string.");
         }
 
-        public void Dispose()
-        {
-            _connection?.Dispose();
-        }
+        public void Dispose() => connection?.Dispose();
 
-        internal void Open()
-        {
-            _connection.Open();
-        }
+        internal void Open() => connection.Open();
 
-        internal void BeginTransaction()
-        {
-            _transaction = _connection.BeginTransaction();
-        }
+        internal void BeginTransaction() => transaction = connection.BeginTransaction();
 
         internal void Commit()
         {
             if (IsPreview)
-                _transaction.Rollback();
+                transaction.Rollback();
             else
-                _transaction.Commit();
+                transaction.Commit();
 
-            _transaction = null;
+            transaction = null;
             FilesInCurrentTransaction.Clear();
         }
 
         internal void Rollback()
         {
-            _transaction.Rollback();
-            _transaction = null;
+            transaction.Rollback();
+            transaction = null;
             FilesInCurrentTransaction.Clear();
         }
 
         internal bool MigrationTableExists()
         {
-            var cmd = _connection.NewCommand(_sql.DoesMigrationsTableExist);
+            var cmd = connection.NewCommand(sql.DoesMigrationsTableExist);
             return (int)cmd.ExecuteScalar() == 1;
         }
 
         internal bool SchemaMigrationTableExists()
         {
-            var cmd = _connection.NewCommand(_sql.DoesMigrationsTableExist);
+            var cmd = connection.NewCommand(sql.DoesMigrationsTableExist);
             return (int)cmd.ExecuteScalar() == 1;
         }
 
         internal void CreateMigrationsTable()
         {
-            var cmd = _connection.NewCommand(_sql.CreateMigrationsTable);
+            var cmd = connection.NewCommand(sql.CreateMigrationsTable);
             cmd.ExecuteNonQuery();
         }
 
         internal AlreadyRan GetAlreadyRan()
         {
             var results = new List<MigrationRow>();
-            var cmd = _connection.NewCommand(_sql.GetAlreadyRan);
+            var cmd = connection.NewCommand(sql.GetAlreadyRan);
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -128,14 +119,14 @@ namespace Minimig
 
         public int ExecuteCommand(string sql)
         {
-            var cmd = _connection.NewCommand(sql, _transaction, _timeout);
+            var cmd = connection.NewCommand(sql, transaction, timeout);
             return cmd.ExecuteNonQuery();
 
         }
 
         internal void InsertMigrationRecord(MigrationRow row)
         {
-            var cmd = _connection.NewCommand(_sql.InsertMigration, _transaction);
+            var cmd = connection.NewCommand(sql.InsertMigration, transaction);
 
             cmd.AddParameter("Filename", row.Filename);
             cmd.AddParameter("Hash", row.Hash);
@@ -147,26 +138,26 @@ namespace Minimig
 
         internal void UpdateMigrationRecordHash(MigrationRow row)
         {
-            var cmd = _connection.NewCommand(_sql.UpdateMigrationHash, _transaction);
+            var cmd = connection.NewCommand(sql.UpdateMigrationHash, transaction);
 
             cmd.AddParameter("Hash", row.Hash);
             cmd.AddParameter("ExecutionDate", row.ExecutionDate);
             cmd.AddParameter("Duration", row.Duration);
             cmd.AddParameter("Filename", row.Filename);
 
-            var affected = cmd.ExecuteNonQuery();
+            int affected = cmd.ExecuteNonQuery();
             if (affected != 1)
                 throw new Exception($"Failure updating the migration record. {affected} rows affected. Expected 1.");
         }
 
         internal void RenameMigration(Migration migration)
         {
-            var cmd = _connection.NewCommand(_sql.RenameMigration, _transaction);
+            var cmd = connection.NewCommand(sql.RenameMigration, transaction);
 
             cmd.AddParameter("Filename", migration.Filename);
             cmd.AddParameter("Hash", migration.Hash);
 
-            var affected = cmd.ExecuteNonQuery();
+            int affected = cmd.ExecuteNonQuery();
             if (affected != 1)
                 throw new Exception($"Failure renaming the migration record. {affected} rows affected. Expected 1.");
         }

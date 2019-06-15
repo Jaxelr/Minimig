@@ -18,8 +18,8 @@ namespace Minimig
 
     public class Migration
     {
-        static readonly MD5CryptoServiceProvider s_md5Provider = new MD5CryptoServiceProvider();
-        static readonly Regex s_lineEndings = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
+        static readonly MD5CryptoServiceProvider Md5Provider = new MD5CryptoServiceProvider();
+        static readonly Regex LineEndings = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
 
         public List<string> SqlCommands { get; }
         public string Hash { get; }
@@ -28,7 +28,7 @@ namespace Minimig
 
         internal Migration(string filePath, Regex commandSplitter)
         {
-            var sql = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
+            string sql = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
             SqlCommands = commandSplitter.Split(sql).Where(s => s.Trim().Length > 0).ToList();
             Hash = GetHash(sql);
             Filename = Path.GetFileName(filePath);
@@ -53,21 +53,18 @@ namespace Minimig
 
         static string GetHash(string str)
         {
-            var normalized = NormalizeLineEndings(str);
-            var inputBytes = Encoding.Unicode.GetBytes(normalized);
+            string normalized = NormalizeLineEndings(str);
+            byte[] inputBytes = Encoding.Unicode.GetBytes(normalized);
 
             byte[] hashBytes;
-            lock (s_md5Provider)
+            lock (Md5Provider)
             {
-                hashBytes = s_md5Provider.ComputeHash(inputBytes);
+                hashBytes = Md5Provider.ComputeHash(inputBytes);
             }
 
             return new Guid(hashBytes).ToString();
         }
 
-        static string NormalizeLineEndings(string str)
-        {
-            return s_lineEndings.Replace(str, "\n");
-        }
+        static string NormalizeLineEndings(string str) => LineEndings.Replace(str, "\n");
     }
 }

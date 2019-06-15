@@ -44,7 +44,13 @@ namespace Minimig
             if (string.IsNullOrEmpty(Database))
                 throw new Exception("No database assign to infer Connection String");
 
-            var server = string.IsNullOrEmpty(Server) ? "localhost" : Server;
+            string server;
+
+            if (string.IsNullOrEmpty(Server))
+                server = "localhost";
+            else
+                server = Server;
+
             return $"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={server}";
         }
 

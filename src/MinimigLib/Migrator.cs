@@ -13,43 +13,44 @@ namespace Minimig
 {
     public class Migrator : IDisposable
     {
-        private readonly ConnectionContext _db;
-        private bool _tableExists;
-        private readonly string _inputSchema;
-        private readonly bool _isPreview;
-        private readonly bool _useGlobalTransaction;
-        private readonly TextWriter _output;
-        private readonly bool _force;
+        private readonly ConnectionContext db;
+        private bool tableExists;
+        private readonly string inputSchema;
+        private readonly bool isPreview;
+        private readonly bool useGlobalTransaction;
+        private readonly TextWriter output;
+        private readonly bool force;
 
-        private readonly AlreadyRan _alreadyRan;
+        private readonly AlreadyRan alreadyRan;
 
         public List<Migration> Migrations { get; }
 
         private Migrator(Options options)
         {
-            _output = options.Output;
-            _inputSchema = options.MigrationsTableSchema;
+            output = options.Output;
+            inputSchema = options.MigrationsTableSchema;
 
             options.AssertValid();
 
-            _isPreview = options.IsPreview;
-            _useGlobalTransaction = options.UseGlobalTransaction || _isPreview; // always run preview in a global transaction so previous migrations are seen
-            _force = options.Force;
+            isPreview = options.IsPreview;
+            useGlobalTransaction = options.UseGlobalTransaction || isPreview; // always run preview in a global transaction so previous migrations are seen
+            force = options.Force;
 
-            var dir = options.GetFolder();
+            string dir = options.GetFolder();
 
             Log("Minimig Migrator");
-            Log("    Directory:        " + dir);
-            Log("    Provider:         " + options.Provider);
+            Log($"    Directory:        {dir}");
+            Log($"    Provider:         {options.Provider}");
 
-            _db = new ConnectionContext(options);
+            db = new ConnectionContext(options);
 
-            Migrations = GetAllMigrations(dir, _db.CommandSplitter).ToList();
+            Migrations = GetAllMigrations(dir, db.CommandSplitter).ToList();
 
-            Log("    Database:         " + _db.Database);
-            _db.Open();
+            Log($"    Database:         {db.Database}");
 
-            Log("    Transaction Mode: " + (_useGlobalTransaction ? "Global" : "Individual"));
+            db.Open();
+
+            Log($"    Transaction Mode: {(useGlobalTransaction ? "Global" : "Individual")}");
 
             if (!ValidateMigrationsSchemaIsAvailable())
             {
@@ -57,27 +58,24 @@ namespace Minimig
             }
             EnsureMigrationsTableExists();
 
-            _alreadyRan = _tableExists ? _db.GetAlreadyRan() : new AlreadyRan(Enumerable.Empty<MigrationRow>());
-            Log("    Prior Migrations: " + _alreadyRan.Count);
-            if (_alreadyRan.Count > 0)
+            alreadyRan = tableExists ? db.GetAlreadyRan() : new AlreadyRan(Enumerable.Empty<MigrationRow>());
+            Log($"    Prior Migrations: {alreadyRan.Count}");
+            if (alreadyRan.Count > 0)
             {
-                var last = _alreadyRan.Last;
+                var last = alreadyRan.Last;
                 Log($"    Last Migration:   \"{last.Filename}\" on {last.ExecutionDate:u}");
             }
 
             Log();
 
-            if (_isPreview && !options.UseGlobalTransaction)
+            if (isPreview && !options.UseGlobalTransaction)
             {
                 Log("Using global transaction mode because of preview mode");
                 Log();
             }
         }
 
-        public void Dispose()
-        {
-            _db?.Dispose();
-        }
+        public void Dispose() => db?.Dispose();
 
         public static string GetVersion()
         {
@@ -89,10 +87,10 @@ namespace Minimig
         {
             using (var migrator = Create(options))
             {
-                var count = 0;
+                int count = 0;
                 foreach (var m in migrator.Migrations)
                 {
-                    if (m.GetMigrateMode(migrator._alreadyRan) != MigrateMode.Skip)
+                    if (m.GetMigrateMode(migrator.alreadyRan) != MigrateMode.Skip)
                         count++;
                 }
 
@@ -109,19 +107,14 @@ namespace Minimig
         }
 
         // this only exists because you don't expect a constructor to perform I/O, whereas calling Create() implies there might be some work being performed
-        private static Migrator Create(Options options)
-        {
-            return new Migrator(options);
-        }
+        private static Migrator Create(Options options) => new Migrator(options);
 
-        private static IEnumerable<Migration> GetAllMigrations(string directory, Regex commandSplitter)
-        {
-            return Directory.GetFiles(directory, "*.sql").OrderBy(f => f).Select(f => new Migration(f, commandSplitter));
-        }
+        private static IEnumerable<Migration> GetAllMigrations(string directory, Regex commandSplitter) =>
+            Directory.GetFiles(directory, "*.sql").OrderBy(f => f).Select(f => new Migration(f, commandSplitter));
 
         private MigrationResult RunOutstandingMigrations()
         {
-            Log("Running migrations" + (_isPreview ? " (preview mode)" : ""));
+            Log("Running migrations" + (isPreview ? " (preview mode)" : ""));
             Log();
 
             var result = new MigrationResult();
@@ -158,8 +151,8 @@ namespace Minimig
                     }
                 }
 
-                if (_db.HasPendingTransaction)
-                    _db.Commit();
+                if (db.HasPendingTransaction)
+                    db.Commit();
 
                 result.Success = true;
             }
@@ -173,23 +166,23 @@ namespace Minimig
 
             Log($"Attempted {result.Attempted} migrations.");
             if (result.Ran > 0)
-                Log("  Ran:     " + result.Ran);
+                Log($"  Ran:     {result.Ran}");
             if (result.Forced > 0)
-                Log("  Forced:  " + result.Forced);
+                Log($"  Forced:  {result.Forced}");
             if (result.Skipped > 0)
-                Log("  Skipped: " + result.Skipped);
+                Log($"  Skipped: {result.Skipped}");
             if (result.Renamed > 0)
-                Log("  Renamed: " + result.Renamed);
+                Log($"  Renamed: {result.Renamed}");
 
             Log();
-            Log((result.Success ? "SUCCESS" : "FAIL") + (_isPreview ? " (preview mode)" : ""));
+            Log((result.Success ? "SUCCESS" : "FAIL") + (isPreview ? " (preview mode)" : ""));
 
             return result;
         }
 
         private MigrateMode Migrate(Migration migration)
         {
-            var mode = migration.GetMigrateMode(_alreadyRan);
+            var mode = migration.GetMigrateMode(alreadyRan);
 
             if (mode == MigrateMode.Skip)
                 return mode;
@@ -200,12 +193,12 @@ namespace Minimig
                 return mode;
             }
 
-            if (mode == MigrateMode.HashMismatch && !_force)
+            if (mode == MigrateMode.HashMismatch && !force)
             {
                 throw new MigrationChangedException(migration);
             }
 
-            if (!migration.UseTransaction && _isPreview)
+            if (!migration.UseTransaction && isPreview)
             {
                 Log($"  Skipping \"{migration.Filename}\". It cannot be run in preview mode because the no-transaction header is set.");
                 Log();
@@ -218,12 +211,12 @@ namespace Minimig
 
         private void RenameMigration(Migration migration)
         {
-            var existing = _alreadyRan.ByHash[migration.Hash];
+            var existing = alreadyRan.ByHash[migration.Hash];
             Log($"  Filename has changed (\"{existing.Filename}\" in the database, \"{migration.Filename}\" in file system) - updating.");
             Log();
 
             BeginMigration(useTransaction: true);
-            _db.RenameMigration(migration);
+            db.RenameMigration(migration);
             EndMigration(migration);
         }
 
@@ -232,35 +225,35 @@ namespace Minimig
             BeginMigration(migration.UseTransaction);
 
             if (mode == MigrateMode.Run)
-                Log("  Running \"" + migration.Filename + "\"" + (migration.UseTransaction ? "" : " (NO TRANSACTION)"));
+                Log($"  Running \"{migration.Filename}\" {(migration.UseTransaction ? "" : " (NO TRANSACTION)")}");
             else if (mode == MigrateMode.HashMismatch)
                 Log($"  {migration.Filename} has been modified since it was run. It is being run again because --force was used.");
             else
-                throw new Exception("Minimig bug: RunMigrationCommands called with mode: " + mode);
+                throw new Exception($"Minimig bug: RunMigrationCommands called with mode: {mode}");
 
             var sw = new Stopwatch();
             sw.Start();
-            foreach (var cmd in migration.SqlCommands)
+            foreach (string cmd in migration.SqlCommands)
             {
-                var result = _db.ExecuteCommand(cmd);
+                int result = db.ExecuteCommand(cmd);
                 Log("    Result: " + (result == -1 ? "No Rows Affected" : result + " rows"));
             }
             sw.Stop();
 
-            if (!_isPreview || _tableExists)
+            if (!isPreview || tableExists)
             {
                 var recordRow = new MigrationRow()
                 {
                     Filename = migration.Filename,
                     Hash = migration.Hash,
                     ExecutionDate = DateTime.UtcNow,
-                    Duration = (int)sw.ElapsedMilliseconds,
+                    Duration = (int) sw.ElapsedMilliseconds,
                 };
 
                 if (mode == MigrateMode.Run)
-                    _db.InsertMigrationRecord(recordRow);
+                    db.InsertMigrationRecord(recordRow);
                 else
-                    _db.UpdateMigrationRecordHash(recordRow);
+                    db.UpdateMigrationRecordHash(recordRow);
             }
 
             Log();
@@ -271,18 +264,18 @@ namespace Minimig
         {
             if (useTransaction)
             {
-                if (!_db.HasPendingTransaction)
+                if (!db.HasPendingTransaction)
                 {
-                    _db.BeginTransaction();
+                    db.BeginTransaction();
                 }
             }
             else
             {
-                if (_db.HasPendingTransaction)
+                if (db.HasPendingTransaction)
                 {
                     Log("  Breaking up Global Transaction");
 
-                    if (_db.FilesInCurrentTransaction.Count > 0)
+                    if (db.FilesInCurrentTransaction.Count > 0)
                         Log("    Committing all migrations which have run up to this point...");
                 }
             }
@@ -290,12 +283,12 @@ namespace Minimig
 
         private void EndMigration(Migration migration)
         {
-            if (_db.HasPendingTransaction)
+            if (db.HasPendingTransaction)
             {
-                if (_useGlobalTransaction)
-                    _db.FilesInCurrentTransaction.Add(migration.Filename);
+                if (useGlobalTransaction)
+                    db.FilesInCurrentTransaction.Add(migration.Filename);
                 else
-                    _db.Commit();
+                    db.Commit();
             }
         }
 
@@ -308,62 +301,59 @@ namespace Minimig
             }
             else
             {
-                if (!_db.HasPendingTransaction && !migration.UseTransaction)
-                    Log("FAILED WITHOUT A TRANSACTION: " + migration.Filename);
+                if (!db.HasPendingTransaction && !migration.UseTransaction)
+                    Log($"FAILED WITHOUT A TRANSACTION: {migration.Filename}");
                 else
-                    Log("FAILED: " + migration.Filename);
+                    Log($"FAILED: {migration.Filename}");
             }
 
             Log(ex.Message);
             Log();
 
-            if (_db.HasPendingTransaction)
+            if (db.HasPendingTransaction)
             {
-                if (_db.FilesInCurrentTransaction.Count > 0)
+                if (db.FilesInCurrentTransaction.Count > 0)
                 {
                     Log(" Rolling back prior migrations:");
-                    foreach (var f in _db.FilesInCurrentTransaction)
+                    foreach (string f in db.FilesInCurrentTransaction)
                     {
                         Log("    " + f);
                     }
                 }
 
-                _db.Rollback();
+                db.Rollback();
             }
         }
 
-        private void Log(string str = "")
-        {
-            _output?.WriteLine(str);
-        }
+        private void Log(string str = "") => output?.WriteLine(str);
 
         private void EnsureMigrationsTableExists()
         {
-            if (_db.MigrationTableExists())
+            if (db.MigrationTableExists())
             {
-                _tableExists = true;
+                tableExists = true;
                 return;
             }
 
-            if (_isPreview)
+            if (isPreview)
             {
                 // don't want to create the table if this is just a preview
-                _tableExists = false;
+                tableExists = false;
                 return;
             }
 
-            _db.CreateMigrationsTable();
-            _tableExists = true;
+            db.CreateMigrationsTable();
+            tableExists = true;
         }
 
         private bool ValidateMigrationsSchemaIsAvailable()
         {
-            if (_db.SchemaMigrationTableExists())
+            if (db.SchemaMigrationTableExists())
             {
                 return true;
             }
 
-            Log($"No schema found (or no access given) that corresponds to the given input schema {_inputSchema}");
+            Log($"No schema found (or no access given) that corresponds to the given input schema {inputSchema}");
             return false;
         }
     }

@@ -34,8 +34,8 @@ namespace Minimig
                     break;
 
                 case Command.GetCount:
-                    var count = Migrator.GetOutstandingMigrationsCount(options);
-                    Console.WriteLine(count + " outstanding migrations");
+                    int count = Migrator.GetOutstandingMigrationsCount(options);
+                    Console.WriteLine($"{count} outstanding migrations");
                     Console.WriteLine();
                     break;
             }
@@ -45,10 +45,10 @@ namespace Minimig
 
         private static Command TryParseArgs(string[] args, out Options options)
         {
-            var showHelp = false;
-            var showVersion = false;
-            var getCount = false;
-            var optionsTmp = options = new Options();
+            bool showHelp = false;
+            bool showVersion = false;
+            bool getCount = false;
+            Options optionsTmp = options = new Options();
 
             var optionSet = new OptionSet()
             {
@@ -109,21 +109,19 @@ namespace Minimig
             optionSet.WriteOptionDescriptions(Console.Out);
         }
 
-        private static void SetupAssemblyResolving()
-        {
+        private static void SetupAssemblyResolving() =>
             // Load dependant assemblies from embedded resources so that we don't have to distribute them separate from the exe.
             // https://blogs.msdn.microsoft.com/microsoft_press/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition/
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
-                var resourceName = "MinimigCli." + new AssemblyName(args.Name).Name + ".dll";
+                string resourceName = $"MinimigCli.{new AssemblyName(args.Name).Name}.dll";
 
                 using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
                 {
-                    var assemblyData = new byte[stream.Length];
+                    byte[] assemblyData = new byte[stream.Length];
                     stream.Read(assemblyData, 0, assemblyData.Length);
                     return Assembly.Load(assemblyData);
                 }
             };
-        }
     }
 }
