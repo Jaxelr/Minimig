@@ -35,9 +35,6 @@ namespace Minimig
 
         internal string GetConnectionString(DatabaseProvider provider)
         {
-            if (provider != DatabaseProvider.SqlServer)
-                throw new Exception($"Unsupported DatabaseProvider " + provider);
-
             if (!string.IsNullOrEmpty(ConnectionString))
                 return ConnectionString;
 
