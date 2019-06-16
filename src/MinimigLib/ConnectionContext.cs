@@ -43,7 +43,7 @@ namespace Minimig
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
                 default:
-                    throw new Exception($"Unsupported DatabaseProvider {options.Provider}");
+                    throw new NotImplementedException($"Unsupported DatabaseProvider {options.Provider}");
             }
 
             if (string.IsNullOrEmpty(Database))
