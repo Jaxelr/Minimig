@@ -14,7 +14,7 @@ namespace Minimig
 
     class ConnectionContext : IDisposable
     {
-        readonly IDbConnection connection;
+        internal readonly IDbConnection Connection;
         IDbTransaction transaction;
         readonly ISqlStatements sql;
         readonly int timeout;
@@ -39,7 +39,7 @@ namespace Minimig
             {
                 case DatabaseProvider.SqlServer:
                     sql = new SqlServerStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
-                    connection = new SqlConnection(connStr);
+                    Connection = new SqlConnection(connStr);
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
                 default:
@@ -50,11 +50,11 @@ namespace Minimig
                 throw new Exception("No database was set in the connection string.");
         }
 
-        public void Dispose() => connection?.Dispose();
+        public void Dispose() => Connection?.Dispose();
 
-        internal void Open() => connection.Open();
+        internal void Open() => Connection.Open();
 
-        internal void BeginTransaction() => transaction = connection.BeginTransaction();
+        internal void BeginTransaction() => transaction = Connection.BeginTransaction();
 
         internal void Commit()
         {
@@ -76,26 +76,26 @@ namespace Minimig
 
         internal bool MigrationTableExists()
         {
-            var cmd = connection.NewCommand(sql.DoesMigrationsTableExist);
+            var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
             return (int)cmd.ExecuteScalar() == 1;
         }
 
         internal bool SchemaMigrationTableExists()
         {
-            var cmd = connection.NewCommand(sql.DoesMigrationsTableExist);
+            var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
             return (int)cmd.ExecuteScalar() == 1;
         }
 
         internal void CreateMigrationsTable()
         {
-            var cmd = connection.NewCommand(sql.CreateMigrationsTable);
+            var cmd = Connection.NewCommand(sql.CreateMigrationsTable);
             cmd.ExecuteNonQuery();
         }
 
         internal AlreadyRan GetAlreadyRan()
         {
             var results = new List<MigrationRow>();
-            var cmd = connection.NewCommand(sql.GetAlreadyRan);
+            var cmd = Connection.NewCommand(sql.GetAlreadyRan);
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -119,14 +119,14 @@ namespace Minimig
 
         public int ExecuteCommand(string sql)
         {
-            var cmd = connection.NewCommand(sql, transaction, timeout);
+            var cmd = Connection.NewCommand(sql, transaction, timeout);
             return cmd.ExecuteNonQuery();
 
         }
 
         internal void InsertMigrationRecord(MigrationRow row)
         {
-            var cmd = connection.NewCommand(sql.InsertMigration, transaction);
+            var cmd = Connection.NewCommand(sql.InsertMigration, transaction);
 
             cmd.AddParameter("Filename", row.Filename);
             cmd.AddParameter("Hash", row.Hash);
@@ -138,7 +138,7 @@ namespace Minimig
 
         internal void UpdateMigrationRecordHash(MigrationRow row)
         {
-            var cmd = connection.NewCommand(sql.UpdateMigrationHash, transaction);
+            var cmd = Connection.NewCommand(sql.UpdateMigrationHash, transaction);
 
             cmd.AddParameter("Hash", row.Hash);
             cmd.AddParameter("ExecutionDate", row.ExecutionDate);
@@ -152,7 +152,7 @@ namespace Minimig
 
         internal void RenameMigration(Migration migration)
         {
-            var cmd = connection.NewCommand(sql.RenameMigration, transaction);
+            var cmd = Connection.NewCommand(sql.RenameMigration, transaction);
 
             cmd.AddParameter("Filename", migration.Filename);
             cmd.AddParameter("Hash", migration.Hash);
