@@ -2,7 +2,7 @@
 using System;
 using Xunit;
 
-namespace MinimigTests.UnitTests
+namespace MinimigTests.Unit
 {
     public class SqlServerStatementsFixture
     {

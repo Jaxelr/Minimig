@@ -2,7 +2,7 @@
 using Minimig;
 using Xunit;
 
-namespace MinimigTests.UnitTests
+namespace MinimigTests.Unit
 {
     public class ConnectionContextFixture
     {
@@ -53,7 +53,7 @@ namespace MinimigTests.UnitTests
         {
             //Arrange
             var provider = DatabaseProvider.SqlServer;
-            var options = new Options() { ConnectionString = connectionString };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
