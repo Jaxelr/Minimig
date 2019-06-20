@@ -1,5 +1,5 @@
-﻿using Minimig;
-using System;
+﻿using System;
+using Minimig;
 using Xunit;
 
 namespace MinimigTests.Unit
@@ -128,6 +128,21 @@ namespace MinimigTests.Unit
         }
 
         [Fact]
+        public void Sql_server_statements_drop_migration()
+        {
+            //Arrange
+            string table = "MyMigration";
+            const string expected = "DROP";
+
+            //Act
+            var s = new SqlServerStatements(table);
+
+            //Assert
+            Assert.Contains(expected, s.DropMigrationsTable, StringComparison.InvariantCultureIgnoreCase);
+            Assert.Contains(table, s.DropMigrationsTable);
+        }
+
+        [Fact]
         public void Sql_server_statements_create_migration_with_schema()
         {
             //Arrange
@@ -142,6 +157,23 @@ namespace MinimigTests.Unit
             Assert.Contains(expected, s.CreateMigrationsTable, StringComparison.InvariantCultureIgnoreCase);
             Assert.Contains(table, s.CreateMigrationsTable);
             Assert.Contains(schema, s.CreateMigrationsTable);
+        }
+
+        [Fact]
+        public void Sql_server_statements_sql_server_command_splitter()
+        {
+            //Arrange
+            string value = "GO";
+            string lowerValue = "go";
+            string table = "MyMigration";
+            string schema = "tst";
+
+            //Act
+            var s = new SqlServerStatements(table, schema);
+
+            //Assert
+            Assert.True(s.CommandSplitter.Match(value).Success);
+            Assert.True(s.CommandSplitter.Match(lowerValue).Success);
         }
     }
 }
