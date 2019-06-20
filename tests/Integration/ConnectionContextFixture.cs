@@ -53,6 +53,56 @@ namespace MinimigTests.Integration
         }
 
         [Fact]
+        public void Connection_has_pending_transactions()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.True(context.HasPendingTransaction);
+        }
+
+        [Fact]
+        public void Connection_has_completed_transactions()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.Commit();
+
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.False(context.HasPendingTransaction);
+        }
+
+        [Fact]
+        public void Connection_has_rollback_transactions()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.Rollback();
+
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.False(context.HasPendingTransaction);
+        }
+
+        [Fact]
         public void Execute_command_connection()
         {
             //Arrange
