@@ -8,6 +8,7 @@ namespace Minimig
         public string DoesMigrationsTableExist { get; }
         public string DoesSchemaMigrationTableExist { get; }
         public string CreateMigrationsTable { get; }
+        public string DropMigrationsTable { get; }
         public string RenameMigration { get; }
         public string UpdateMigrationHash { get; }
         public string InsertMigration { get; }
@@ -37,6 +38,7 @@ namespace Minimig
                     constraint UX_{schemaName}_{migrationsTableName}_Hash unique (Hash)
                 );";
 
+            DropMigrationsTable = $@"DROP TABLE [{schemaName}].[{migrationsTableName}]";
             RenameMigration = $"UPDATE [{schemaName}].[{migrationsTableName}] SET Filename = @Filename WHERE Hash = @Hash;";
             UpdateMigrationHash = $"UPDATE [{schemaName}].[{migrationsTableName}] SET Hash = @Hash, ExecutionDate = @ExecutionDate, Duration = @Duration WHERE Filename = @Filename;";
             InsertMigration = $"INSERT [{schemaName}].[{migrationsTableName}] (Filename, Hash, ExecutionDate, Duration) values (@Filename, @Hash, @ExecutionDate, @Duration);";

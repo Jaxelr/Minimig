@@ -12,18 +12,18 @@ namespace Minimig
         Postgres = 1
     }
 
-    class ConnectionContext : IDisposable
+    internal class ConnectionContext : IDisposable
     {
         internal readonly IDbConnection Connection;
-        IDbTransaction transaction;
-        readonly ISqlStatements sql;
-        readonly int timeout;
+        private IDbTransaction transaction;
+        private readonly ISqlStatements sql;
+        private readonly int timeout;
 
         internal bool IsPreview { get; }
         internal DatabaseProvider Provider { get; }
         internal string Database { get; }
         internal List<string> FilesInCurrentTransaction { get; } = new List<string>();
-        
+
         internal Regex CommandSplitter => sql.CommandSplitter;
         internal bool HasPendingTransaction => transaction != null;
 
@@ -42,6 +42,7 @@ namespace Minimig
                     Connection = new SqlConnection(connStr);
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
+
                 default:
                     throw new NotImplementedException($"Unsupported DatabaseProvider {options.Provider}");
             }
@@ -77,18 +78,24 @@ namespace Minimig
         internal bool MigrationTableExists()
         {
             var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
-            return (int)cmd.ExecuteScalar() == 1;
+            return (int) cmd.ExecuteScalar() == 1;
         }
 
         internal bool SchemaMigrationTableExists()
         {
             var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
-            return (int)cmd.ExecuteScalar() == 1;
+            return (int) cmd.ExecuteScalar() == 1;
         }
 
         internal void CreateMigrationsTable()
         {
             var cmd = Connection.NewCommand(sql.CreateMigrationsTable);
+            cmd.ExecuteNonQuery();
+        }
+
+        internal void DropMigrationsTable()
+        {
+            var cmd = Connection.NewCommand(sql.DropMigrationsTable);
             cmd.ExecuteNonQuery();
         }
 
@@ -121,7 +128,6 @@ namespace Minimig
         {
             var cmd = Connection.NewCommand(sql, transaction, timeout);
             return cmd.ExecuteNonQuery();
-
         }
 
         internal void InsertMigrationRecord(MigrationRow row)

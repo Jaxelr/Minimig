@@ -19,6 +19,12 @@ namespace Minimig
         /// </summary>
         string CreateMigrationsTable { get; }
 
+
+        /// <summary>
+        /// Drops the migrations table. Does not take any parameters.
+        /// </summary>
+        string DropMigrationsTable { get; }
+
         /// <summary>
         /// Changes the Filename of a migration. Requires @Filename and @Hash parameters.
         /// </summary>
