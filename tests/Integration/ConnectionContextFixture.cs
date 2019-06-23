@@ -116,5 +116,79 @@ namespace MinimigTests.Integration
             //Assert
             Assert.Equal(ConnectionState.Open, context.Connection.State);
         }
+
+
+        [Fact]
+        public void Execute_create_and_drop_migration_table()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            bool exists = context.MigrationTableExists();
+            context.DropMigrationsTable();
+            bool existsAfter = context.MigrationTableExists();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.True(exists);
+            Assert.False(existsAfter);
+        }
+
+        [Theory]
+        [InlineData("minimigtest")]
+        public void Execute_create_and_drop_schema(string schema)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTableSchema = schema};
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.ExecuteCommand($"Create schema {schema}");
+            context.Commit();
+            bool existsSchema = context.SchemaMigrationExists();
+
+            //Clean Up
+            context.ExecuteCommand($"Drop schema {schema}");
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.True(existsSchema);
+        }
+
+        [Theory]
+        [InlineData("minimigtest", "minimigTableTest")]
+        public void Execute_create_and_drop_schema_table(string schema, string table)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTableSchema = schema, MigrationsTable = table };
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.ExecuteCommand($"Create schema {schema}");
+            context.Commit();
+            bool existsSchema = context.SchemaMigrationExists();
+            context.CreateMigrationsTable();
+            bool existsTable = context.SchemaMigrationExists();
+
+            //Clean Up
+            context.DropMigrationsTable();
+            context.ExecuteCommand($"Drop schema {schema}");
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.True(existsSchema);
+            Assert.True(existsTable);
+        }
     }
 }
