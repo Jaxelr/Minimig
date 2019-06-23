@@ -83,9 +83,9 @@ namespace Minimig
             return (int) cmd.ExecuteScalar() == 1;
         }
 
-        internal bool SchemaMigrationTableExists()
+        internal bool SchemaMigrationExists()
         {
-            var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
+            var cmd = Connection.NewCommand(sql.DoesSchemaMigrationExist);
             return (int) cmd.ExecuteScalar() == 1;
         }
 

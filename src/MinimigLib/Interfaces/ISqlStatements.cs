@@ -15,6 +15,11 @@ namespace Minimig
         string DoesMigrationsTableExist { get; }
 
         /// <summary>
+        /// Should return a single integer. 1 indicating the schema exists. 0 indicating it does not.
+        /// </summary>
+        string DoesSchemaMigrationExist { get; }
+
+        /// <summary>
         /// Creates the migrations table. Does not take any parameters.
         /// </summary>
         string CreateMigrationsTable { get; }

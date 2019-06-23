@@ -6,7 +6,7 @@ namespace Minimig
     {
         public Regex CommandSplitter { get; } = new Regex(@"^\s*GO\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         public string DoesMigrationsTableExist { get; }
-        public string DoesSchemaMigrationTableExist { get; }
+        public string DoesSchemaMigrationExist { get; }
         public string CreateMigrationsTable { get; }
         public string DropMigrationsTable { get; }
         public string RenameMigration { get; }
@@ -16,7 +16,7 @@ namespace Minimig
 
         internal SqlServerStatements(string migrationsTableName, string schemaName = "dbo")
         {
-            DoesSchemaMigrationTableExist = $@"SELECT count(*) FROM sys.schemas WHERE s.name = '{schemaName}'";
+            DoesSchemaMigrationExist = $@"SELECT count(*) FROM sys.schemas WHERE name = '{schemaName}'";
 
             DoesMigrationsTableExist = $@"
                 SELECT count(*) FROM sys.tables t

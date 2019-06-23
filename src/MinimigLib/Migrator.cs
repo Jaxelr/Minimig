@@ -56,6 +56,7 @@ namespace Minimig
             {
                 return;
             }
+
             EnsureMigrationsTableExists();
 
             alreadyRan = tableExists ? db.GetAlreadyRan() : new AlreadyRan(Enumerable.Empty<MigrationRow>());
@@ -348,7 +349,7 @@ namespace Minimig
 
         private bool ValidateMigrationsSchemaIsAvailable()
         {
-            if (db.SchemaMigrationTableExists())
+            if (db.SchemaMigrationExists())
             {
                 return true;
             }
