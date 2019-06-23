@@ -61,8 +61,10 @@ namespace Minimig
         {
             if (IsPreview)
                 transaction.Rollback();
-            else
+            else if (transaction is IDbTransaction)
                 transaction.Commit();
+            else
+                throw new InvalidOperationException("Cannot Commit a transaction without beginning");
 
             transaction = null;
             FilesInCurrentTransaction.Clear();
