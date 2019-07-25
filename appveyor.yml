@@ -10,8 +10,11 @@ configuration:
   - Release
 services:
 - mssql2017
+nuget:
+  disable_publish_on_pr: true  
 before_build:
   - cmd: dotnet --version
+  - choco install codecov  
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
