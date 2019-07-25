@@ -14,6 +14,10 @@ before_build:
   - cmd: dotnet --version
 build_script:
   - cmd: dotnet build . -v quiet
+test_script:
+  - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit"
+after_test:
+  - codecov -f "./tests/coverage.xml" -t $(codecov_token)
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
