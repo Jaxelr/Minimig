@@ -130,6 +130,11 @@ node_modules
 /artifacts
 # JetBrains IDE
 .idea
-.vs
+
+# Custom Added
+
+.vs/
 src/Minimig/Properties/PublishProfiles/
 testcoverage/
+.ionide/
+.vscode/
