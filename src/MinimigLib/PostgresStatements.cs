@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace Minimig
 {
-    internal class PostgreSqlStatements : ISqlStatements
+    internal class PostgresStatements : ISqlStatements
     {
         public Regex CommandSplitter { get; } = new Regex(@"^\s\S");
         public string DoesMigrationsTableExist { get; }
@@ -14,7 +14,7 @@ namespace Minimig
         public string InsertMigration { get; }
         public string GetAlreadyRan { get; }
 
-        internal PostgreSqlStatements(string migrationsTableName, string schemaName = "public")
+        internal PostgresStatements(string migrationsTableName, string schemaName = "public")
         {
             DoesSchemaMigrationExist = $@"SELECT count(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}';";
 
