@@ -26,3 +26,12 @@ artifacts:
 skip_commits:
   files:
     - '**/*.md'
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/minimig/api/v2/package
+  on:
+    branch: master
+    appveyor_repo_tag: true
+  api_key:
+    secure: 6xhHSsDvB9arsrSDLuynnbxaVS+BwaoJU96RfQenc5FOnUYvP8SHM6kbvrmpvja2
+  skip_symbols: true
