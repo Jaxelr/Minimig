@@ -21,6 +21,8 @@ Package | NuGet (Stable) | MyGet (Prerelease)
 
 Easiest installation is via dotnet global tools running `dotnet tool install --global Minimig` from your terminal.
 
+To install the prerelease version (from myget), you can add the option `--add-source https://www.myget.org/F/minimig/api/v3/index.json`
+
 ## Usage
 
 ### Creating Migrations
@@ -104,6 +106,10 @@ Usage: mig [OPTIONS]+
 ### Reverting Migrations
 
 Many migration systems have a notion of reversing a migration or "downgrading" in some sense. Minimig has no such concept. If you want to reverse the effects of one migration, then you write a new migration to do so. Minimig lives in a forward-only world.
+
+### Uninstallation
+
+For uninstallation execute `dotnet tool uninstall --global Minimig` from terminal.
 
 ## License
 
