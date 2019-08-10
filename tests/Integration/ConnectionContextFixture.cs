@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Minimig;
 using Xunit;
@@ -7,27 +8,34 @@ namespace MinimigTests.Integration
 {
     public class ConnectionContextFixture
     {
-        private string Database => "master";
-
-        private readonly string connectionString;
-
-        public ConnectionContextFixture()
+        public static IEnumerable<object[]> GetData()
         {
-            connectionString = $"Server=(local);Database={Database};Trusted_Connection=true;";
-
-            string connEnv = Environment.GetEnvironmentVariable("Sql_Connection");
-
-            if (!string.IsNullOrEmpty(connEnv)) //We do this to pass the connection from Appveyor or locally.
+            //We do this to pass the connection from Appveyor or locally
+            string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
+            if(string.IsNullOrEmpty(sqlServerConnEnv))
             {
-                connectionString = connEnv;
+                sqlServerConnEnv = $"Server=(local);Database=master;Trusted_Connection=true;";
             }
+
+            string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
+            if(string.IsNullOrEmpty(postgresConnEnv))
+            {
+                postgresConnEnv = $"Server=localhost;Port=5432;Database=postgres;Integrated Security=true;Username=postgres";
+            }
+
+            return new List<object[]>
+            {
+                new object[] { sqlServerConnEnv, DatabaseProvider.SqlServer },
+                new object[] { postgresConnEnv, DatabaseProvider.Postgres }
+            };
         }
 
-        [Fact]
-        public void Open_connection()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Open_connection(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
@@ -37,11 +45,12 @@ namespace MinimigTests.Integration
             Assert.Equal(ConnectionState.Open, context.Connection.State);
         }
 
-        [Fact]
-        public void Dispose_connection()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Dispose_connection(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
@@ -52,11 +61,12 @@ namespace MinimigTests.Integration
             Assert.Equal(ConnectionState.Closed, context.Connection.State);
         }
 
-        [Fact]
-        public void Connection_has_pending_transactions()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Connection_has_pending_transactions(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
@@ -68,11 +78,12 @@ namespace MinimigTests.Integration
             Assert.True(context.HasPendingTransaction);
         }
 
-        [Fact]
-        public void Connection_has_completed_transactions()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Connection_has_completed_transactions(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
@@ -85,11 +96,12 @@ namespace MinimigTests.Integration
             Assert.False(context.HasPendingTransaction);
         }
 
-        [Fact]
-        public void Connection_has_rollback_transactions()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Connection_has_rollback_transactions(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
@@ -102,11 +114,12 @@ namespace MinimigTests.Integration
             Assert.False(context.HasPendingTransaction);
         }
 
-        [Fact]
-        public void Execute_command_connection()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Execute_command_connection(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
@@ -117,12 +130,12 @@ namespace MinimigTests.Integration
             Assert.Equal(ConnectionState.Open, context.Connection.State);
         }
 
-
-        [Fact]
-        public void Execute_create_and_drop_migration_table()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Execute_create_and_drop_migration_table(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             var context = new ConnectionContext(options);
@@ -140,11 +153,12 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData("minimigtest")]
-        public void Execute_create_and_drop_schema(string schema)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_and_drop_schema(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTableSchema = schema};
+            string schema = "minimigtest";
+            var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema};
 
             //Act
             var context = new ConnectionContext(options);
@@ -164,11 +178,13 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData("minimigtest", "minimigTableTest")]
-        public void Execute_create_and_drop_schema_table(string schema, string table)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_and_drop_schema_table(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTableSchema = schema, MigrationsTable = table };
+            string schema = "minimigtest";
+            string table = "minimigtabletest";
+            var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema, MigrationsTable = table };
 
             //Act
             var context = new ConnectionContext(options);

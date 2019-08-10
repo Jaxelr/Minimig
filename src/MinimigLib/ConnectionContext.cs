@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using Npgsql;
 
 namespace Minimig
 {
     public enum DatabaseProvider
     {
         SqlServer = 0,
-        Postgres = 1
+        Postgres = 1,
+        MySql = 2
     }
 
     internal class ConnectionContext : IDisposable
@@ -41,6 +43,12 @@ namespace Minimig
                     sql = new SqlServerStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new SqlConnection(connStr);
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
+                    break;
+
+                case DatabaseProvider.Postgres:
+                    sql = new PostgresStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
+                    Connection = new NpgsqlConnection(connStr);
+                    Database = new NpgsqlConnectionStringBuilder(connStr).Database;
                     break;
 
                 default:
@@ -80,13 +88,29 @@ namespace Minimig
         internal bool MigrationTableExists()
         {
             var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
-            return (int) cmd.ExecuteScalar() == 1;
+
+            switch(Provider)
+            {
+                case DatabaseProvider.Postgres:
+                    var what = cmd.ExecuteScalar();
+                    return (long) what == 1;
+                default:
+                    return (int) cmd.ExecuteScalar() == 1;
+            }
         }
 
         internal bool SchemaMigrationExists()
         {
             var cmd = Connection.NewCommand(sql.DoesSchemaMigrationExist);
-            return (int) cmd.ExecuteScalar() == 1;
+            switch(Provider)
+            {
+                case(DatabaseProvider.SqlServer):
+                    return (int) cmd.ExecuteScalar() == 1;
+                case(DatabaseProvider.Postgres):
+                    return (long) cmd.ExecuteScalar() == 1;
+                default:
+                    return true; // idk
+            }
         }
 
         internal void CreateMigrationsTable()
