@@ -10,7 +10,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_insert()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             const string expected = "INSERT";
 
             //Act
@@ -25,7 +25,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_insert_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             string schema = "tst";
             const string expected = "INSERT";
 
@@ -42,7 +42,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_update()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             const string expected = "UPDATE";
 
             //Act
@@ -59,7 +59,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_update_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             string schema = "tst";
             const string expected = "UPDATE";
 
@@ -79,7 +79,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_migration_exists()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             const string expected = "SELECT";
 
             //Act
@@ -96,7 +96,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements__migration_exists_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             string schema = "tst";
             const string expected = "SELECT";
 
@@ -116,7 +116,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_create_migration()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             const string expected = "CREATE";
 
             //Act
@@ -131,7 +131,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_create_migration_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             string schema = "tst";
             const string expected = "CREATE";
 
@@ -148,7 +148,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_drop_migration()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             const string expected = "DROP";
 
             //Act
@@ -163,7 +163,7 @@ namespace MinimigTests.Unit
         public void PostgreSql_statements_drop_migration_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
+            string table = "mymigration";
             string schema = "tst";
             const string expected = "DROP";
 
@@ -182,7 +182,7 @@ namespace MinimigTests.Unit
             //Arrange
             string value = "GO";
             string lowerValue = "go";
-            string table = "MyMigration";
+            string table = "mymigration";
             string schema = "tst";
 
             //Act
