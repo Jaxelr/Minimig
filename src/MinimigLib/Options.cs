@@ -52,9 +52,24 @@ namespace Minimig
         }
 
         internal string GetMigrationsTable() => string.IsNullOrEmpty(MigrationsTable) ? "Migrations" : MigrationsTable;
-   
-        internal string GetMigrationsTableSchema() => string.IsNullOrEmpty(MigrationsTableSchema) ? "dbo" : MigrationsTableSchema;
-
+          
+        internal string GetMigrationsTableSchema()
+        {
+            if(string.IsNullOrEmpty(MigrationsTableSchema))
+            {
+                switch(Provider)
+                {
+                    case DatabaseProvider.Postgres:
+                        return "public";
+                    default:
+                        return "dbo";
+                }
+            }
+            else
+            {
+                return MigrationsTableSchema;
+            }
+        }
         internal string GetFolder() => string.IsNullOrEmpty(MigrationsFolder) ? Directory.GetCurrentDirectory() : MigrationsFolder;
         
     }
