@@ -16,12 +16,15 @@ namespace Minimig
 
         internal PostgresStatements(string migrationsTableName, string schemaName = "public")
         {
+            migrationsTableName = migrationsTableName.ToLower();
+            schemaName = schemaName.ToLower();
+            
             DoesSchemaMigrationExist = $@"SELECT count(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}';";
 
             DoesMigrationsTableExist = $@"
                 SELECT count(*) FROM information_schema.tables 
                 WHERE table_name = '{migrationsTableName}'
-                AND table_schema = '{schemaName};";
+                AND table_schema = '{schemaName}';";
 
             CreateMigrationsTable = $@"
                 CREATE TABLE {schemaName}.{migrationsTableName}
