@@ -98,6 +98,8 @@ Usage: mig [OPTIONS]+
                                transaction, if possible.
       --table=VALUE          Name of the table used to track migrations
                                (default: Migrations)
+      --schema=VALUE         Name of the schema used to track migrations
+                               (default: dbo)
       --force                Will rerun modified migrations.
       --version              Print version number.
       --count                Print the number of outstanding migrations.
