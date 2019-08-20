@@ -16,6 +16,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Jaxelr/Minimig/master/icon.png</PackageIconUrl>
     <PackageTags>migration;sql;database</PackageTags>
     <Version>0.2.0</Version>
     <Description>A simple database migrator for SQL</Description>
