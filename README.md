@@ -115,11 +115,11 @@ For uninstallation execute `dotnet tool uninstall --global Minimig` from termina
 
 ## License
 
-Minimig is available under the [MIT License](https://github.com/Jaxelr/Minimig/blob/master/LICENSE).
+Minimig is available under the [MIT License](https://github.com/Jaxelr/Minimig/blob/master/LICENSE)
 
 ## Logo license
 
-Minimig's icon was made by [Freepik](https://www.freepik.com/) under [Creative Commons license 3.0](http://creativecommons.org/licenses/by/3.0/)
+Minimig's icon was created by [Freepik](https://www.freepik.com/) under [Creative Commons license 3.0](http://creativecommons.org/licenses/by/3.0/)
 
 [build-master-img]: https://ci.appveyor.com/api/projects/status/t7e2n08lgqb4jvui/branch/master?svg=true
 [build-master]: https://ci.appveyor.com/project/Jaxelr/minimig/branch/master
