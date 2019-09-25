@@ -4,7 +4,7 @@
     <Authors>Jaxel Rojas</Authors>
     <ToolCommandName>mig</ToolCommandName>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <PackageId>Minimig</PackageId>
     <AssemblyTitle>Minimig</AssemblyTitle>
@@ -12,19 +12,22 @@
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Product>Minimig</Product>
     <Copyright>Copyright 2019</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/Jaxelr/Minimig/master/icon.png</PackageIconUrl>
     <PackageTags>migration;sql;database</PackageTags>
-    <Version>0.2.0</Version>
-    <Description>A simple database migrator for SQL</Description>
+    <Version>0.3.0</Version>
+    <Description>A simple database migrator for SQL Server</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>0.2.0</PackageVersion>
-    <PackageReleaseNotes>Initial import into .net core global tool.</PackageReleaseNotes>
+    <PackageVersion>0.3.0</PackageVersion>
+    <PackageReleaseNotes>Added target fx netcore app 3.0</PackageReleaseNotes>
+    <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <TieredCompilation>true</TieredCompilation>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,5 +37,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MinimigLib\MinimigLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>
