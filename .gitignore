@@ -138,3 +138,4 @@ src/Minimig/Properties/PublishProfiles/
 testcoverage/
 .ionide/
 .vscode/
+src/Minimig/Properties/
