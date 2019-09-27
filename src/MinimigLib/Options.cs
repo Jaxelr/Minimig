@@ -21,6 +21,11 @@ namespace Minimig
 
         public void AssertValid()
         {
+            if (!Directory.Exists(GetFolder()))
+            {
+                throw new Exception($"Invalid folder or possible unscaped \\; current folder argument {MigrationsFolder}");
+            }
+
             if (string.IsNullOrEmpty(ConnectionString) == string.IsNullOrEmpty(Database))
             {
                 throw new Exception("Either a connection string or a database must be specified.");
