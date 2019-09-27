@@ -132,9 +132,7 @@ node_modules
 .idea
 
 # Custom Added
-
 .vs/
-src/Minimig/Properties/PublishProfiles/
 testcoverage/
 .ionide/
 .vscode/
