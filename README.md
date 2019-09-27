@@ -70,14 +70,14 @@ mig --folder="c:\path\to\migrations" --connection="Persist Security Info=False;I
 If you use integrated auth, you can use the `--database` and `--server` arguments instead of supplying a connection string (server defaults to "localhost").
 
 ``` cmd
-mig --folder="c:\path\to\migrations" --database=MyLocalDatabase
+mig --folder="c:\\path\\to\\migrations" --database=MyLocalDatabase
 ```
 
 Use `mig --help` to show the complete set of options:
 
 ``` cmd
 Usage: mig [OPTIONS]+
-  Runs all *.sql files in the directory --dir=<directory>.
+  Runs all *.sql files in the folder --folder=<directory>.
   The databse connection can be specified using a full connection string
   with --connection, or Minimig can generate an integrated auth connection
   string using the --database and optional --server arguments.
