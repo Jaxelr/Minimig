@@ -23,7 +23,7 @@ namespace Minimig
         {
             if (!Directory.Exists(GetFolder()))
             {
-                throw new Exception($"Invalid folder or possible unscaped \\; current folder argument {MigrationsFolder}");
+                throw new Exception($"Invalid folder or possible unscaped \\; current folder argument \"{MigrationsFolder}\"");
             }
 
             if (string.IsNullOrEmpty(ConnectionString) == string.IsNullOrEmpty(Database))
