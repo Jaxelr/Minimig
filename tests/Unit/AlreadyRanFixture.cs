@@ -88,5 +88,29 @@ namespace MinimigTests.Unit
             Assert.Equal(row.Duration, found.Duration);
             Assert.Equal(row.ExecutionDate, found.ExecutionDate);
         }
+
+
+        [Fact]
+        public void Check_migration_row_count()
+        {
+            //Arrange
+            var row = new MigrationRow()
+            {
+                Id = 1,
+                Filename = "c:\\temp\\abc",
+                Duration = 0,
+                Hash = "uniqueKey",
+                ExecutionDate = DateTime.Now
+            };
+
+            var rows = new MigrationRow[1] { row };
+
+            //Act
+            var ran = new AlreadyRan(rows);
+            int count = ran.Count;
+
+            //Assert
+            Assert.Equal(1, count);
+        }
     }
 }
