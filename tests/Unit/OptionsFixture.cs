@@ -113,7 +113,7 @@ namespace MinimigTests.Unit
             var options = new Options();
 
             //Act
-            Action action = new Action(options.AssertValid);
+            var action = new Action(options.AssertValid);
 
             //Assert
             Assert.Throws<Exception>(action);
@@ -126,7 +126,20 @@ namespace MinimigTests.Unit
             var options = new Options() { MigrationsTable = "$Inv@lid N@me" };
 
             //Act
-            Action action = new Action(options.AssertValid);
+            var action = new Action(options.AssertValid);
+
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
+
+        [Fact]
+        public void Assert_valid_exception_migrations_table_empty()
+        {
+            //Arrange
+            var options = new Options() { MigrationsTable = "" };
+
+            //Act
+            var action = new Action(options.AssertValid);
 
             //Assert
             Assert.Throws<Exception>(action);
