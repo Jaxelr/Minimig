@@ -120,10 +120,23 @@ namespace MinimigTests.Unit
         }
 
         [Fact]
+        public void Assert_valid_exception_invalid_path()
+        {
+            //Arrange
+            var options = new Options() { MigrationsFolder = "C:\\randommissingpath\\" };
+
+            //Act
+            var action = new Action(options.AssertValid);
+
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
+
+        [Fact]
         public void Assert_valid_exception_migrations_table()
         {
             //Arrange
-            var options = new Options() { MigrationsTable = "$Inv@lid N@me" };
+            var options = new Options() { MigrationsTable = "$Inv@lid N@me", Database = "master" };
 
             //Act
             var action = new Action(options.AssertValid);
