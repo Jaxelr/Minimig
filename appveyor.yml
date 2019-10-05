@@ -20,7 +20,8 @@ build_script:
 test_script:
   - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit"
 after_test:
-  - codecov -f "./tests/coverage.xml" -t $(codecov_token)
+  - codecov -f "./tests/coverage.netcoreapp2.1.xml" -t $(codecov_token)
+  - codecov -f "./tests/coverage.nercoreapp3.0.xml" -t $(codecov_token)
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
@@ -35,3 +36,4 @@ deploy:
   api_key:
     secure: 6xhHSsDvB9arsrSDLuynnbxaVS+BwaoJU96RfQenc5FOnUYvP8SHM6kbvrmpvja2
   skip_symbols: true
+
