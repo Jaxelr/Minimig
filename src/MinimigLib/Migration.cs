@@ -43,7 +43,7 @@ namespace Minimig
                 return row.Hash == Hash ? MigrateMode.Skip : MigrateMode.HashMismatch;
             }
 
-            if (alreadyRan.ByHash.TryGetValue(Hash, out row))
+            if (alreadyRan.ByHash.TryGetValue(Hash, out _))
             {
                 return MigrateMode.Rename;
             }
