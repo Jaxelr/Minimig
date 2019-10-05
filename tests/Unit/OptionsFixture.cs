@@ -1,5 +1,5 @@
-﻿using Minimig;
-using System;
+﻿using System;
+using Minimig;
 using Xunit;
 
 namespace MinimigTests.Unit
@@ -77,7 +77,7 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("myServer", "myDb")]
+        [InlineData("localhost", "master")]
         public void Get_connection_string_with_server_and_database(string inputServer, string inputDatabase)
         {
             //Arrange
@@ -92,7 +92,7 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("myDb")]
+        [InlineData("master")]
         public void Get_connection_string_with_database(string inputDatabase)
         {
             //Arrange
@@ -104,6 +104,23 @@ namespace MinimigTests.Unit
 
             //Assert
             Assert.Equal(inputConnection, conn);
+        }
+
+        [Theory]
+        [InlineData("myMigrations", "master")]
+        public void Assert_valid_migrations_table(string table, string db)
+        {
+            //Arrange
+            var options = new Options() { MigrationsTable = table, Database = db };
+
+            //Act
+            var action = new Action(options.AssertValid);
+            var result = (Options) action.Target;
+
+            //Assert
+            Assert.Equal(result.MigrationsTable, table);
+            Assert.Equal(result.Database, db);
+            Assert.NotNull(result);
         }
 
         [Fact]
