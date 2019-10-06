@@ -51,7 +51,11 @@ namespace Minimig
                 throw new Exception("No database was set in the connection string.");
         }
 
-        public void Dispose() => Connection?.Dispose();
+        public void Dispose()
+        {
+            Connection?.Dispose();
+            transaction?.Dispose();
+        }
 
         internal void Open() => Connection.Open();
 
