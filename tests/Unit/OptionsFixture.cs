@@ -116,6 +116,7 @@ namespace MinimigTests.Unit
             //Act
             var action = new Action(options.AssertValid);
             var result = (Options) action.Target;
+            action.Invoke();
 
             //Assert
             Assert.Equal(result.MigrationsTable, table);
