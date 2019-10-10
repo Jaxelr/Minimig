@@ -30,11 +30,13 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+            };
         }
 
         [Fact]
@@ -59,13 +61,32 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.BeginTransaction();
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.BeginTransaction();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
-            Assert.True(context.HasPendingTransaction);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.True(context.HasPendingTransaction);
+            }
+        }
+
+        [Fact]
+        public void Connection_commit_without_begin_invalid_operation_exception()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+
+            //Act
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                void action() => context.Commit();
+
+                //Assert
+                Assert.Throws<InvalidOperationException>(action);
+            }
         }
 
         [Fact]
@@ -75,14 +96,17 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.BeginTransaction();
-            context.Commit();
+            using (var connectionContext = new ConnectionContext(options))
+            {
+                var context = connectionContext;
+                context.Open();
+                context.BeginTransaction();
+                context.Commit();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
-            Assert.False(context.HasPendingTransaction);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.False(context.HasPendingTransaction);
+            }
         }
 
         [Fact]
@@ -92,14 +116,16 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.BeginTransaction();
-            context.Rollback();
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.BeginTransaction();
+                context.Rollback();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
-            Assert.False(context.HasPendingTransaction);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.False(context.HasPendingTransaction);
+            }
         }
 
         [Fact]
@@ -109,14 +135,15 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.ExecuteCommand("SELECT 1");
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.ExecuteCommand("SELECT 1");
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+            }
         }
-
 
         [Fact]
         public void Execute_create_and_drop_migration_table()
@@ -144,7 +171,7 @@ namespace MinimigTests.Integration
         public void Execute_create_and_drop_schema(string schema)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTableSchema = schema};
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTableSchema = schema };
 
             //Act
             var context = new ConnectionContext(options);
