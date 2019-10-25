@@ -77,7 +77,7 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("localhost", "master")]
+        [InlineData(".", "master")]
         public void Get_connection_string_with_server_and_database(string inputServer, string inputDatabase)
         {
             //Arrange
@@ -96,7 +96,7 @@ namespace MinimigTests.Unit
         public void Get_connection_string_with_database(string inputDatabase)
         {
             //Arrange
-            string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server=localhost";
+            string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server=.";
             var options = new Options() { Database = inputDatabase };
 
             //Act
