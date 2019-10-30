@@ -59,7 +59,7 @@ namespace MinimigTests.Unit
             void action() => new ConnectionContext(options);
 
             //Assert
-            Assert.Throws<NotImplementedException>(action);
+            Assert.Throws<Exception>(action);
         }
 
         [Fact]
