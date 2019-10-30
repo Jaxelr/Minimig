@@ -110,6 +110,27 @@ namespace MinimigTests.Integration
         }
 
         [Fact]
+        public void Connection_has_completed_transactions_on_preview()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, IsPreview = true };
+
+            //Act
+            using (var connectionContext = new ConnectionContext(options))
+            {
+                var context = connectionContext;
+                context.Open();
+                context.BeginTransaction();
+                context.Commit();
+
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.False(context.HasPendingTransaction);
+            }
+        }
+
+
+        [Fact]
         public void Connection_has_rollback_transactions()
         {
             //Arrange

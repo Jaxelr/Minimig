@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Minimig;
 using Xunit;
 
@@ -49,6 +50,19 @@ namespace MinimigTests.Unit
         }
 
         [Fact]
+        public void Construct_connection_context_exception_missing_database()
+        {
+            //Arrange
+            var options = new Options() { Database = string.Empty, Provider = DatabaseProvider.SqlServer };
+
+            //Act
+            void action() => new ConnectionContext(options);
+
+            //Assert
+            Assert.Throws<NotImplementedException>(action);
+        }
+
+        [Fact]
         public void Construct_connection_context()
         {
             //Arrange
@@ -56,12 +70,31 @@ namespace MinimigTests.Unit
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            var context = new ConnectionContext(options);
+            using (var context = new ConnectionContext(options))
+            {
 
-            //Assert
-            Assert.Equal(context.Provider, provider);
-            Assert.False(context.IsPreview);
-            Assert.Equal(context.Database, Database);
+                //Assert
+                Assert.Equal(context.Provider, provider);
+                Assert.False(context.IsPreview);
+                Assert.Equal(context.Database, Database);
+            }
+        }
+
+        [Fact]
+        public void Verify_command_splitter_sql_server()
+        {
+            //Arrange
+            var provider = DatabaseProvider.SqlServer;
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
+
+            //Act
+            using (var context = new ConnectionContext(options))
+            {
+                //Assert
+                Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                Assert.Equal(@"^\s*GO\s*$", context.CommandSplitter.ToString());
+            }
+
         }
     }
 }
