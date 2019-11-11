@@ -238,5 +238,61 @@ namespace MinimigTests.Integration
             Assert.True(existsSchema);
             Assert.True(existsTable);
         }
+
+        [Theory]
+        [InlineData("minimigTableTest2")]
+        public void Execute_create_migration_table_and_insert_row(string table)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var row = new Fakes.FakeMigrationRow();
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            bool exists = context.MigrationTableExists();
+            context.InsertMigrationRecord(row);
+            context.DropMigrationsTable();
+            bool existsAfter = context.MigrationTableExists();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.True(exists);
+            Assert.False(existsAfter);
+        }
+
+        [Theory]
+        [InlineData("minimigTableTest3")]
+        public void Execute_create_migration_table_and_insert_check_row(string table)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var row = new Fakes.FakeMigrationRow();
+            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            bool exists = context.MigrationTableExists();
+            context.InsertMigrationRecord(row);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
+            bool existsAfter = context.MigrationTableExists();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.True(exists);
+            Assert.False(existsAfter);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
+
     }
 }
