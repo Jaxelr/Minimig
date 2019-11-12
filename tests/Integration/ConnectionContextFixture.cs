@@ -276,17 +276,13 @@ namespace MinimigTests.Integration
             var context = new ConnectionContext(options);
             context.Open();
             context.CreateMigrationsTable();
-            bool exists = context.MigrationTableExists();
             context.InsertMigrationRecord(row);
             var ran = context.GetAlreadyRan();
             context.DropMigrationsTable();
-            bool existsAfter = context.MigrationTableExists();
             context.Dispose();
 
             //Assert
             Assert.Equal(ConnectionState.Closed, context.Connection.State);
-            Assert.True(exists);
-            Assert.False(existsAfter);
             Assert.Equal(ran.Last.Hash, row.Hash);
             Assert.Equal(ran.Last.Id, row.Id);
             Assert.Equal(ran.Last.Filename, row.Filename);
@@ -309,20 +305,16 @@ namespace MinimigTests.Integration
             var context = new ConnectionContext(options);
             context.Open();
             context.CreateMigrationsTable();
-            bool exists = context.MigrationTableExists();
             context.InsertMigrationRecord(row);
             row.Duration = newDuration;
             row.Hash = newHash;
             context.UpdateMigrationRecordHash(row);
             var ran = context.GetAlreadyRan();
             context.DropMigrationsTable();
-            bool existsAfter = context.MigrationTableExists();
             context.Dispose();
 
             //Assert
             Assert.Equal(ConnectionState.Closed, context.Connection.State);
-            Assert.True(exists);
-            Assert.False(existsAfter);
             Assert.Equal(ran.Last.Hash, row.Hash);
             Assert.Equal(ran.Last.Id, row.Id);
             Assert.Equal(ran.Last.Filename, row.Filename);
@@ -330,5 +322,27 @@ namespace MinimigTests.Integration
             Assert.Equal(ran.Last.Duration, row.Duration);
         }
 
+        [Fact]
+        public void Rename_migration_without_record()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var row = new Fakes.FakeMigrationRow();
+
+            //Act
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.CreateMigrationsTable();
+                void action() => context.UpdateMigrationRecordHash(row);
+
+                //Assert
+                Assert.Throws<Exception>(action);
+
+                //Cleanup
+                context.DropMigrationsTable();
+                context.Dispose();
+            }
+        }
     }
 }
