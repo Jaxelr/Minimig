@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using Minimig;
+using MinimigTests.Fakes;
 using Xunit;
 
 namespace MinimigTests.Integration
@@ -245,7 +246,7 @@ namespace MinimigTests.Integration
         {
             //Arrange
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
 
             //Act
             var context = new ConnectionContext(options);
@@ -269,7 +270,7 @@ namespace MinimigTests.Integration
         {
             //Arrange
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
             string dateFormat = "yyyy-MM-dd hh:mm:ss";
 
             //Act
@@ -296,7 +297,7 @@ namespace MinimigTests.Integration
         {
             //Arrange
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
             int newDuration = 20;
             string newHash = Guid.NewGuid().ToString();
             string dateFormat = "yyyy-MM-dd hh:mm:ss";
@@ -323,11 +324,11 @@ namespace MinimigTests.Integration
         }
 
         [Fact]
-        public void Rename_migration_without_record()
+        public void Update_migration_without_record()
         {
             //Arrange
             var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
 
             //Act
             using (var context = new ConnectionContext(options))
@@ -335,6 +336,59 @@ namespace MinimigTests.Integration
                 context.Open();
                 context.CreateMigrationsTable();
                 void action() => context.UpdateMigrationRecordHash(row);
+
+                //Assert
+                Assert.Throws<Exception>(action);
+
+                //Cleanup
+                context.DropMigrationsTable();
+                context.Dispose();
+            }
+        }
+
+        [Theory]
+        [InlineData("minimigTestTable5", "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
+        public void Execute_create_migration_table_and_update_filename_row(string table, string filePath)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var migration = new FakeMigration(filePath);
+            var row = new FakeMigrationRow(migration.Filename, migration.Hash);
+            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            context.InsertMigrationRecord(row);
+            context.RenameMigration(migration);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
+
+        [Theory]
+        [InlineData("..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
+        public void Rename_migration_without_record(string filePath)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var migration = new FakeMigration(filePath);
+
+            //Act
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.CreateMigrationsTable();
+                void action() => context.RenameMigration(migration);
 
                 //Assert
                 Assert.Throws<Exception>(action);
