@@ -13,5 +13,14 @@ namespace MinimigTests.Fakes
             Hash = Guid.NewGuid().ToString();
             ExecutionDate = DateTime.Now;
         }
+
+        public FakeMigrationRow(string filename, string hash)
+        {
+            Id = 1;
+            Filename = filename;
+            Duration = 0;
+            Hash = hash;
+            ExecutionDate = DateTime.Now;
+        }
     }
 }
