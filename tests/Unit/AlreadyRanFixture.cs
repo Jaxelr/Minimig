@@ -1,5 +1,5 @@
 ﻿using Minimig;
-using System;
+using MinimigTests.Fakes;
 using Xunit;
 
 namespace MinimigTests.Unit
@@ -10,9 +10,9 @@ namespace MinimigTests.Unit
         public void Check_if_migration_row_already_ran_last()
         {
             //Arrange
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
             var rows = new MigrationRow[1] { row };
-            
+
             //Act
             var ran = new AlreadyRan(rows);
             var found = ran.Last;
@@ -29,7 +29,7 @@ namespace MinimigTests.Unit
         public void Check_if_migration_row_already_ran_by_filename()
         {
             //Arrange
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
             var rows = new MigrationRow[1] { row };
 
             //Act
@@ -48,7 +48,7 @@ namespace MinimigTests.Unit
         public void Check_if_migration_row_already_ran_by_hash()
         {
             //Arrange
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
             var rows = new MigrationRow[1] { row };
 
             //Act
@@ -63,12 +63,11 @@ namespace MinimigTests.Unit
             Assert.Equal(row.ExecutionDate, found.ExecutionDate);
         }
 
-
         [Fact]
         public void Check_migration_row_count()
         {
             //Arrange
-            var row = new Fakes.FakeMigrationRow();
+            var row = new FakeMigrationRow();
             var rows = new MigrationRow[1] { row };
 
             //Act
