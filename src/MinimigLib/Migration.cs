@@ -21,7 +21,7 @@ namespace Minimig
         static readonly MD5CryptoServiceProvider Md5Provider = new MD5CryptoServiceProvider();
         static readonly Regex LineEndings = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
 
-        public List<string> SqlCommands { get; }
+        public IEnumerable<string> SqlCommands { get; }
         public string Hash { get; }
         public string Filename { get; }
         public bool UseTransaction { get; }
@@ -29,7 +29,7 @@ namespace Minimig
         internal Migration(string filePath, Regex commandSplitter)
         {
             string sql = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
-            SqlCommands = commandSplitter.Split(sql).Where(s => s.Trim().Length > 0).ToList();
+            SqlCommands = commandSplitter.Split(sql).Where(s => s.Trim().Length > 0);
             Hash = GetHash(sql);
             Filename = Path.GetFileName(filePath);
 
