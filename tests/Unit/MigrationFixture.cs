@@ -1,8 +1,8 @@
-﻿using System.Text.RegularExpressions;
-using Minimig;
-using Xunit;
+﻿using System;
 using System.IO;
-using System;
+using Minimig;
+using MinimigTests.Fakes;
+using Xunit;
 
 namespace MinimigTests.Unit
 {
@@ -10,14 +10,13 @@ namespace MinimigTests.Unit
     {
         [Theory]
         [InlineData("..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
-        public void Get_migration(string filePath)
+        public void Get_migration(string filepath)
         {
             //Arrange
-            var regex = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
-            string filename = Path.GetFileName(filePath);
+            string filename = Path.GetFileName(filepath);
 
             //Act
-            var migration = new Migration(filePath, regex);
+            var migration = new FakeMigration(filepath);
 
             //Assert
             Assert.Equal(migration.Filename, filename);
@@ -27,14 +26,13 @@ namespace MinimigTests.Unit
 
         [Theory]
         [InlineData("..\\..\\..\\..\\sampleMigrations\\0003 - Insert Three data.sql")]
-        public void Get_migration_no_transaction(string filePath)
+        public void Get_migration_no_transaction(string filepath)
         {
             //Arrange
-            var regex = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
-            string filename = Path.GetFileName(filePath);
+            string filename = Path.GetFileName(filepath);
 
             //Act
-            var migration = new Migration(filePath, regex);
+            var migration = new FakeMigration(filepath);
 
             //Assert
             Assert.Equal(migration.Filename, filename);
@@ -43,26 +41,15 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("..\\..\\..\\..\\sampleMigrations\\0003 - Insert Three data.sql")]
-        public void Get_migration_mode_run(string filePath)
+        [InlineData("..\\..\\..\\..\\sampleMigrations\\0003 - Insert Three data.sql", "uniqueKey", "c:\\temp\\abc")]
+        public void Get_migration_mode_run(string filepath, string key, string filename)
         {
             //Arrange
-            var regex = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
-            string key = "uniqueKey";
-            var row = new MigrationRow()
-            {
-                Id = 1,
-                Filename = "c:\\temp\\abc",
-                Duration = 0,
-                Hash = key,
-                ExecutionDate = DateTime.Now
-            };
-
-            var rows = new MigrationRow[1] { row };
-            var ran = new AlreadyRan(rows);
+            var row = new FakeMigrationRow(filename, key);
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var migration = new Migration(filePath, regex);
+            var migration = new FakeMigration(filepath);
             var mode = migration.GetMigrateMode(ran);
 
             //Assert
@@ -70,52 +57,31 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("..\\..\\..\\..\\sampleMigrations\\0003 - Insert Three data.sql", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92")]
-        public void Get_migration_mode_run_renamed(string filePath, string key)
+        [InlineData("..\\..\\..\\..\\sampleMigrations\\0003 - Insert Three data.sql", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92", "c:\\temp\\abc")]
+        public void Get_migration_mode_run_renamed(string filepath, string key, string filename)
         {
             //Arrange
-            var regex = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
-            var row = new MigrationRow()
-            {
-                Id = 1,
-                Filename = "c:\\temp\\abc",
-                Duration = 0,
-                Hash = key,
-                ExecutionDate = DateTime.Now
-            };
-
-            var rows = new MigrationRow[1] { row };
-            var ran = new AlreadyRan(rows);
+            var row = new FakeMigrationRow(filename, key);
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var migration = new Migration(filePath, regex);
+            var migration = new FakeMigration(filepath);
             var mode = migration.GetMigrateMode(ran);
 
             //Assert
             Assert.Equal(MigrateMode.Rename, mode);
         }
 
-
         [Theory]
-        [InlineData("..\\..\\..\\..\\sampleMigrations\\", "0003 - Insert Three data.sql", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92")]
-        public void Get_migration_mode_run_skip(string filePath, string fileName, string key)
+        [InlineData("..\\..\\..\\..\\sampleMigrations\\", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92", "0003 - Insert Three data.sql")]
+        public void Get_migration_mode_run_skip(string filepath, string key, string filename)
         {
             //Arrange
-            var regex = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
-            var row = new MigrationRow()
-            {
-                Id = 1,
-                Filename = fileName,
-                Duration = 0,
-                Hash = key,
-                ExecutionDate = DateTime.Now
-            };
-
-            var rows = new MigrationRow[1] { row };
-            var ran = new AlreadyRan(rows);
+            var row = new FakeMigrationRow(filename, key);
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var migration = new Migration(Path.Combine(filePath, fileName), regex);
+            var migration = new FakeMigration(Path.Combine(filepath, filename));
             var mode = migration.GetMigrateMode(ran);
 
             //Assert
@@ -123,25 +89,15 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("..\\..\\..\\..\\sampleMigrations\\", "0003 - Insert Three data.sql")]
-        public void Get_migration_mode_run_has_mismatch(string filePath, string fileName)
+        [InlineData("..\\..\\..\\..\\sampleMigrations\\", "00000-000", "0003 - Insert Three data.sql")]
+        public void Get_migration_mode_run_has_mismatch(string filepath, string key, string filename)
         {
             //Arrange
-            var regex = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
-            var row = new MigrationRow()
-            {
-                Id = 1,
-                Filename = fileName,
-                Duration = 0,
-                Hash = "00000-000",
-                ExecutionDate = DateTime.Now
-            };
-
-            var rows = new MigrationRow[1] { row };
-            var ran = new AlreadyRan(rows);
+            var row = new FakeMigrationRow(filename, key);
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var migration = new Migration(Path.Combine(filePath, fileName), regex);
+            var migration = new FakeMigration(Path.Combine(filepath, filename));
             var mode = migration.GetMigrateMode(ran);
 
             //Assert
