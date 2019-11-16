@@ -1,5 +1,4 @@
-﻿using Minimig;
-using MinimigTests.Fakes;
+﻿using MinimigTests.Fakes;
 using Xunit;
 
 namespace MinimigTests.Unit
@@ -11,10 +10,9 @@ namespace MinimigTests.Unit
         {
             //Arrange
             var row = new FakeMigrationRow();
-            var rows = new MigrationRow[1] { row };
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var ran = new AlreadyRan(rows);
             var found = ran.Last;
 
             //Assert
@@ -30,10 +28,9 @@ namespace MinimigTests.Unit
         {
             //Arrange
             var row = new FakeMigrationRow();
-            var rows = new MigrationRow[1] { row };
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var ran = new AlreadyRan(rows);
             var found = ran.ByFilename[row.Filename];
 
             //Assert
@@ -49,10 +46,9 @@ namespace MinimigTests.Unit
         {
             //Arrange
             var row = new FakeMigrationRow();
-            var rows = new MigrationRow[1] { row };
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var ran = new AlreadyRan(rows);
             var found = ran.ByHash[row.Hash];
 
             //Assert
@@ -68,10 +64,9 @@ namespace MinimigTests.Unit
         {
             //Arrange
             var row = new FakeMigrationRow();
-            var rows = new MigrationRow[1] { row };
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var ran = new AlreadyRan(rows);
             int count = ran.Count;
 
             //Assert
