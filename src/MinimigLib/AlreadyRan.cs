@@ -2,7 +2,7 @@
 
 namespace Minimig
 {
-    class AlreadyRan
+    internal class AlreadyRan
     {
         public int Count => ByFilename.Count;
         public Dictionary<string, MigrationRow> ByFilename { get; } = new Dictionary<string, MigrationRow>();
