@@ -1,5 +1,6 @@
 ﻿using Minimig;
 using Xunit;
+using System.Data.SqlClient;
 
 namespace MinimigTests.Unit
 {
@@ -9,7 +10,7 @@ namespace MinimigTests.Unit
         public void Add_parameter_sql_command()
         {
             //Arrange
-            var command = new System.Data.SqlClient.SqlCommand();
+            var command = new SqlCommand();
             string myParam = nameof(myParam);
             string myValue = nameof(myValue);
 
@@ -25,7 +26,7 @@ namespace MinimigTests.Unit
         public void Add_command_to_connection()
         {
             //Arrange
-            var conn = new System.Data.SqlClient.SqlConnection();
+            var conn = new SqlConnection();
             string sql = "select count(*) from sys.tables;";
             int? timeout = 30;
 
