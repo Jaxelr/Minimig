@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using Minimig;
+﻿using Minimig;
+using MinimigTests.Fakes;
 using Xunit;
 
 namespace MinimigTests.Unit
@@ -12,8 +12,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             const string modified = "has been modified since it was run";
-            var regex = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
-            var mig = new Migration(filePath, regex);
+            var mig = new FakeMigration(filePath);
 
             //Act
             var exception = new MigrationChangedException(mig);
