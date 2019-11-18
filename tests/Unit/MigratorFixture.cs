@@ -17,5 +17,20 @@ namespace MinimigTests.Unit
             //Assert
             Assert.Equal(version, result);
         }
+
+        [Theory]
+        [InlineData(".", "master", true)]
+        public void Migrator_instantiation(string server, string database, bool isPreview)
+        {
+            //Arrange
+            var option = new Options() { Server = server, Database = database, IsPreview = isPreview };
+
+            //Act
+            using (var mig = new Migrator(option))
+            {
+                //Assert
+                Assert.Empty(mig.Migrations);
+            }
+        }
     }
 }
