@@ -25,7 +25,7 @@ namespace Minimig
 
         public List<Migration> Migrations { get; }
 
-        private Migrator(Options options)
+        internal Migrator(Options options)
         {
             output = options.Output;
             inputSchema = options.MigrationsTableSchema;
