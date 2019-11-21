@@ -9,20 +9,6 @@ namespace MinimigTests.Unit
     {
         private string Database => "master";
 
-        private readonly string connectionString;
-
-        public ConnectionContextFixture()
-        {
-            connectionString = $"Server=(local);Database={Database};Trusted_Connection=true;";
-
-            string connEnv = Environment.GetEnvironmentVariable("Sql_Connection");
-
-            if (!string.IsNullOrEmpty(connEnv)) //We do this to pass the connection from Appveyor or locally.
-            {
-                connectionString = connEnv;
-            }
-        }
-
         [Fact]
         public void Construct_connection_context_exception()
         {
@@ -66,6 +52,7 @@ namespace MinimigTests.Unit
         public void Construct_connection_context()
         {
             //Arrange
+            string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
             var provider = DatabaseProvider.SqlServer;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
@@ -84,6 +71,7 @@ namespace MinimigTests.Unit
         public void Verify_command_splitter_sql_server()
         {
             //Arrange
+            string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
             var provider = DatabaseProvider.SqlServer;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
