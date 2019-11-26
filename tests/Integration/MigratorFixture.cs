@@ -48,5 +48,33 @@ namespace MinimigTests.Integration
             connection.DropMigrationsTable();
             connection.Dispose();
         }
+
+
+        [Theory]
+        [InlineData(".", "master", "missingSchema", "customTableB", "..\\..\\..\\..\\sampleMigrations")]
+        public void Migrator_instantiation_with_migrations_and_missing_schema(string server, string database, string schema, string table, string migrationsFolder)
+        {
+            //Arrange
+            var option = new Options()
+            {
+                Server = server,
+                Database = database,
+                MigrationsTableSchema = schema,
+                MigrationsTable = table,
+                MigrationsFolder = migrationsFolder
+            };
+            var connection = new ConnectionContext(option);
+          
+            //Act
+            using (var mig = new Migrator(option))
+            {
+                //Assert
+                Assert.Equal(5, mig.Migrations.Count);
+            }
+
+            //Cleanup
+            connection.Open();
+            connection.Dispose();
+        }
     }
 }
