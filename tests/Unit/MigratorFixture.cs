@@ -9,7 +9,7 @@ namespace MinimigTests.Unit
         public void Migrator_get_version()
         {
             //Arrange
-            string version = "0.3.0";
+            string version = "0.4.0";
 
             //Act
             string result = Migrator.GetVersion();
