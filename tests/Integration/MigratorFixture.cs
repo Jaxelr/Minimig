@@ -1,4 +1,5 @@
-﻿using Minimig;
+﻿using System.Linq;
+using Minimig;
 using Xunit;
 
 namespace MinimigTests.Integration
@@ -40,7 +41,7 @@ namespace MinimigTests.Integration
             {
                 //Assert
                 Assert.Equal(5, outstanding);
-                Assert.Equal(5, mig.Migrations.Count);
+                Assert.Equal(5, mig.Migrations.Count());
             }
 
             //Cleanup
@@ -48,7 +49,6 @@ namespace MinimigTests.Integration
             connection.DropMigrationsTable();
             connection.Dispose();
         }
-
 
         [Theory]
         [InlineData(".", "master", "missingSchema", "customTableB", "..\\..\\..\\..\\sampleMigrations")]
@@ -64,12 +64,12 @@ namespace MinimigTests.Integration
                 MigrationsFolder = migrationsFolder
             };
             var connection = new ConnectionContext(option);
-          
+
             //Act
             using (var mig = new Migrator(option))
             {
                 //Assert
-                Assert.Equal(5, mig.Migrations.Count);
+                Assert.Equal(5, mig.Migrations.Count());
             }
 
             //Cleanup
