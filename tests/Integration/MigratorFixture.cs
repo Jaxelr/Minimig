@@ -76,5 +76,31 @@ namespace MinimigTests.Integration
             connection.Open();
             connection.Dispose();
         }
+
+        [Theory]
+        [InlineData(".", "master", "customTableC", "..\\..\\..\\..\\sampleMigrations")]
+        public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations(string server, string database, string table, string migrationsFolder)
+        {
+            //Arrange
+            var option = new Options() { Server = server, Database = database, MigrationsTable = table, MigrationsFolder = migrationsFolder };
+            var connection = new ConnectionContext(option);
+            var result = Migrator.RunOutstandingMigrations(option);
+
+            //Act
+            using (var mig = new Migrator(option))
+            {
+                //Assert
+                Assert.Equal(5, result.Attempted);
+                Assert.Equal(5, result.Ran);
+                Assert.True(result.Success);
+                Assert.Equal(5, mig.Migrations.Count());
+            }
+
+            //Cleanup
+            connection.Open();
+            connection.DropMigrationsTable();
+            connection.Dispose();
+        }
+
     }
 }
