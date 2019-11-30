@@ -4,5 +4,5 @@ GO
 drop table Two
 GO
 
-drop table Three
+drop table One
 GO
