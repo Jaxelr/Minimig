@@ -42,8 +42,8 @@ namespace MinimigTests.Integration
             using (var mig = new Migrator(option))
             {
                 //Assert
-                Assert.Equal(5, outstanding);
-                Assert.Equal(5, mig.Migrations.Count());
+                Assert.Equal(migrationCount, outstanding);
+                Assert.Equal(migrationCount, mig.Migrations.Count());
             }
 
             //Cleanup
@@ -71,7 +71,7 @@ namespace MinimigTests.Integration
             using (var mig = new Migrator(option))
             {
                 //Assert
-                Assert.Equal(5, mig.Migrations.Count());
+                Assert.Equal(migrationCount, mig.Migrations.Count());
             }
 
             //Cleanup
@@ -92,10 +92,10 @@ namespace MinimigTests.Integration
             using (var mig = new Migrator(option))
             {
                 //Assert
-                Assert.Equal(5, result.Attempted);
-                Assert.Equal(5, result.Ran);
+                Assert.Equal(migrationCount, result.Attempted);
+                Assert.Equal(migrationCount, result.Ran);
                 Assert.True(result.Success);
-                Assert.Equal(5, mig.Migrations.Count());
+                Assert.Equal(migrationCount, mig.Migrations.Count());
             }
 
             //Cleanup
