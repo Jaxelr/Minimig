@@ -6,6 +6,8 @@ namespace MinimigTests.Integration
 {
     public class MigratorFixture
     {
+        private readonly int migrationCount = 5;
+
         [Theory]
         [InlineData(".", "master", false, "customTableA")]
         public void Migrator_instantiation(string server, string database, bool isPreview, string table)
@@ -102,5 +104,35 @@ namespace MinimigTests.Integration
             connection.Dispose();
         }
 
+        [Theory]
+        [InlineData(".", "master", "customTableD", "..\\..\\..\\..\\sampleMigrations")]
+        public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations_twice(string server, string database, string table, string migrationsFolder)
+        {
+            //Arrange
+            var option = new Options() { Server = server, Database = database, MigrationsTable = table, MigrationsFolder = migrationsFolder };
+            var connection = new ConnectionContext(option);
+            var result = Migrator.RunOutstandingMigrations(option);
+            var result2 = Migrator.RunOutstandingMigrations(option);
+
+            //Act
+            using (var mig = new Migrator(option))
+            {
+                //Assert
+                Assert.Equal(migrationCount, result.Attempted);
+                Assert.Equal(migrationCount, result2.Attempted);
+                Assert.Equal(migrationCount, result.Ran);
+                Assert.Equal(migrationCount, result2.Skipped);
+                Assert.True(result.Success);
+                Assert.True(result2.Success);
+                Assert.Equal(migrationCount, mig.Migrations.Count());
+            }
+
+
+
+            //Cleanup
+            connection.Open();
+            connection.DropMigrationsTable();
+            connection.Dispose();
+        }
     }
 }
