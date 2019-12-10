@@ -4,7 +4,7 @@
     <Authors>Jaxel Rojas</Authors>
     <ToolCommandName>mig</ToolCommandName>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <PackageId>Minimig</PackageId>
     <AssemblyTitle>Minimig</AssemblyTitle>
@@ -18,10 +18,10 @@
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
     <PackageTags>migration;sql;database</PackageTags>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Description>A simple database migrator for SQL Server</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>0.3.0</PackageVersion>
+    <PackageVersion>0.4.0</PackageVersion>
     <PackageReleaseNotes>Added target fx netcore app 3.0</PackageReleaseNotes>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
