@@ -25,19 +25,28 @@ namespace Minimig
         {
             var cmd = TryParseArgs(args, out Options options);
 
-            switch (cmd)
+            try
             {
-                case Command.RunMigrations:
-                    var result = Migrator.RunOutstandingMigrations(options);
-                    if (!result.Success)
-                        Environment.Exit(1);
-                    break;
+                switch (cmd)
+                {
+                    case Command.RunMigrations:
+                        var result = Migrator.RunOutstandingMigrations(options);
+                        if (!result.Success)
+                            Environment.Exit(1);
+                        break;
 
-                case Command.GetCount:
-                    int count = Migrator.GetOutstandingMigrationsCount(options);
-                    Console.WriteLine($"{count} outstanding migrations");
-                    Console.WriteLine();
-                    break;
+                    case Command.GetCount:
+                        int count = Migrator.GetOutstandingMigrationsCount(options);
+                        Console.WriteLine($"{count} outstanding migrations");
+                        Console.WriteLine();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine();
+                Environment.Exit(1);
             }
 
             Environment.Exit(0);
