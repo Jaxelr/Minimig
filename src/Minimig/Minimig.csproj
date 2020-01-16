@@ -11,7 +11,7 @@
     <Title>Minimig</Title>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Product>Minimig</Product>
-    <Copyright>Copyright 2019</Copyright>
+    <Copyright>Copyright 2020</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -22,7 +22,7 @@
     <Description>A simple database migrator for SQL Server</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageVersion>0.4.0</PackageVersion>
-    <PackageReleaseNotes>Added target fx netcore app 3.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Added target fx netcore app 3.1</PackageReleaseNotes>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TieredCompilation>true</TieredCompilation>
