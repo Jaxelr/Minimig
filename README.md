@@ -1,8 +1,6 @@
 # Minimig
 
-*** This library is a fork from Mayflower.net which seems to be [inactive](https://github.com/bretcope/Mayflower.NET)
-
-Minimig is a simple, forward-only, db migrator for SQL Server.
+Minimig is a forward-only, database migrator for SQL Server.
 
 ## Build Status
 
@@ -112,6 +110,10 @@ Many migration systems have a notion of reversing a migration or "downgrading" i
 ### Uninstallation
 
 For uninstallation execute `dotnet tool uninstall --global Minimig` from terminal.
+
+## Credit
+
+This library is a fork from Mayflower.net which seems to be [inactive](https://github.com/bretcope/Mayflower.NET)
 
 ## License
 
