@@ -44,7 +44,7 @@ namespace Minimig
             DropMigrationsTable = $@"DROP TABLE {schemaName}.{migrationsTableName}";
             RenameMigration = $"UPDATE {schemaName}.{migrationsTableName} SET Filename = @Filename WHERE Hash = @Hash;";
             UpdateMigrationHash = $"UPDATE {schemaName}.{migrationsTableName} SET Hash = @Hash, ExecutionDate = @ExecutionDate, Duration = @Duration WHERE Filename = @Filename;";
-            InsertMigration = $"INSERT {schemaName}.{migrationsTableName} (Filename, Hash, ExecutionDate, Duration) VALUES (@Filename, @Hash, @ExecutionDate, @Duration);";
+            InsertMigration = $"INSERT INTO {schemaName}.{migrationsTableName} (Filename, Hash, ExecutionDate, Duration) VALUES (@Filename, @Hash, @ExecutionDate, @Duration);";
             GetAlreadyRan = $"SELECT * FROM {schemaName}.{migrationsTableName} ORDER BY ExecutionDate, Id;";
         }
     }
