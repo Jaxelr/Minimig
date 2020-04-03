@@ -129,9 +129,7 @@ namespace Minimig
                 {
                     current = m;
                     result.Attempted++;
-                    var mode = Migrate(m);
-
-                    switch (mode)
+                    switch (Migrate(m))
                     {
                         case MigrateMode.Skip:
                             result.Skipped++;

@@ -16,7 +16,7 @@ namespace Minimig
 
         internal SqlServerStatements(string migrationsTableName, string schemaName = "dbo")
         {
-            DoesSchemaMigrationExist = $@"SELECT count(*) FROM sys.schemas WHERE name = '{schemaName}'";
+            DoesSchemaMigrationExist = $"SELECT count(*) FROM sys.schemas WHERE name = '{schemaName}'";
 
             DoesMigrationsTableExist = $@"
                 SELECT count(*) FROM sys.tables t
@@ -38,7 +38,7 @@ namespace Minimig
                     constraint UX_{schemaName}_{migrationsTableName}_Hash unique (Hash)
                 );";
 
-            DropMigrationsTable = $@"DROP TABLE [{schemaName}].[{migrationsTableName}]";
+            DropMigrationsTable = $"DROP TABLE [{schemaName}].[{migrationsTableName}]";
             RenameMigration = $"UPDATE [{schemaName}].[{migrationsTableName}] SET Filename = @Filename WHERE Hash = @Hash;";
             UpdateMigrationHash = $"UPDATE [{schemaName}].[{migrationsTableName}] SET Hash = @Hash, ExecutionDate = @ExecutionDate, Duration = @Duration WHERE Filename = @Filename;";
             InsertMigration = $"INSERT [{schemaName}].[{migrationsTableName}] (Filename, Hash, ExecutionDate, Duration) values (@Filename, @Hash, @ExecutionDate, @Duration);";

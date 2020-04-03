@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Minimig
 {
-    enum MigrateMode
+    internal enum MigrateMode
     {
         Skip,
         Run,
@@ -18,8 +18,8 @@ namespace Minimig
 
     public class Migration
     {
-        static readonly MD5CryptoServiceProvider Md5Provider = new MD5CryptoServiceProvider();
-        static readonly Regex LineEndings = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
+        private static readonly MD5CryptoServiceProvider Md5Provider = new MD5CryptoServiceProvider();
+        private static readonly Regex LineEndings = new Regex("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
 
         public IEnumerable<string> SqlCommands { get; }
         public string Hash { get; }
@@ -51,7 +51,7 @@ namespace Minimig
             return MigrateMode.Run;
         }
 
-        static string GetHash(string str)
+        private static string GetHash(string str)
         {
             string normalized = NormalizeLineEndings(str);
             byte[] inputBytes = Encoding.Unicode.GetBytes(normalized);
@@ -65,6 +65,6 @@ namespace Minimig
             return new Guid(hashBytes).ToString();
         }
 
-        static string NormalizeLineEndings(string str) => LineEndings.Replace(str, "\n");
+        private static string NormalizeLineEndings(string str) => LineEndings.Replace(str, "\n");
     }
 }

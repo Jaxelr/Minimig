@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Minimig
 {
-    internal class Program
+    internal static class Program
     {
         private enum Command
         {
@@ -121,7 +121,7 @@ namespace Minimig
         private static void SetupAssemblyResolving() =>
             // Load dependant assemblies from embedded resources so that we don't have to distribute them separate from the exe.
             // https://blogs.msdn.microsoft.com/microsoft_press/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition/
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            AppDomain.CurrentDomain.AssemblyResolve += (_, args) =>
             {
                 string resourceName = $"MinimigCli.{new AssemblyName(args.Name).Name}.dll";
 

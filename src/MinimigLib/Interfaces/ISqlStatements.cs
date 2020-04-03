@@ -24,7 +24,6 @@ namespace Minimig
         /// </summary>
         string CreateMigrationsTable { get; }
 
-
         /// <summary>
         /// Drops the migrations table. Does not take any parameters.
         /// </summary>

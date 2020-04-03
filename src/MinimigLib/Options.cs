@@ -17,7 +17,7 @@ namespace Minimig
         public string MigrationsTableSchema { get; set; }
         public TextWriter Output { get; set; }
         public bool Force { get; set; }
-        public DatabaseProvider Provider { get; set; } 
+        public DatabaseProvider Provider { get; set; }
 
         public void AssertValid()
         {

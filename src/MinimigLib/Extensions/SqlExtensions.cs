@@ -2,7 +2,7 @@
 
 namespace Minimig
 {
-    static class SqlExtensions
+    internal static class SqlExtensions
     {
         internal static IDbCommand NewCommand(this IDbConnection conn, string sql, IDbTransaction transaction = null, int? commandTimeout = null)
         {
