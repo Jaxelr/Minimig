@@ -1,7 +1,6 @@
-﻿using CommandLine.Options;
-using System;
-using System.Reflection;
+﻿using System;
 using System.Runtime.CompilerServices;
+using CommandLine.Options;
 
 namespace Minimig
 {
@@ -14,11 +13,7 @@ namespace Minimig
             GetCount,
         }
 
-        private static void Main(string[] args)
-        {
-            SetupAssemblyResolving();
-            Run(args);
-        }
+        private static void Main(string[] args) => Run(args);
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void Run(string[] args)
@@ -75,7 +70,7 @@ namespace Minimig
                 {"version", "Print version number.", v => showVersion = v != null },
                 { "count", "Print the number of outstanding migrations.", v => getCount = v != null },
             };
-            
+
             try
             {
                 optionSet.Parse(args);
@@ -117,20 +112,5 @@ namespace Minimig
             Console.WriteLine();
             optionSet.WriteOptionDescriptions(Console.Out);
         }
-
-        private static void SetupAssemblyResolving() =>
-            // Load dependant assemblies from embedded resources so that we don't have to distribute them separate from the exe.
-            // https://blogs.msdn.microsoft.com/microsoft_press/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition/
-            AppDomain.CurrentDomain.AssemblyResolve += (_, args) =>
-            {
-                string resourceName = $"MinimigCli.{new AssemblyName(args.Name).Name}.dll";
-
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-                {
-                    byte[] assemblyData = new byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    return Assembly.Load(assemblyData);
-                }
-            };
     }
 }
