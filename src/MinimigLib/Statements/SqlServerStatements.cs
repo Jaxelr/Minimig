@@ -16,13 +16,13 @@ namespace Minimig
 
         internal SqlServerStatements(string migrationsTableName, string schemaName = "dbo")
         {
-            DoesSchemaMigrationExist = $"SELECT count(*) FROM sys.schemas WHERE name = '{schemaName}'";
+            DoesSchemaMigrationExist = $"SELECT 1 FROM information_schema.schemata WHERE schema_name = '{schemaName}';";
 
             DoesMigrationsTableExist = $@"
-                SELECT count(*) FROM sys.tables t
-                JOIN sys.schemas s
-                    ON  t.schema_id = t.schema_id
-                WHERE t.name = '{migrationsTableName}' AND s.name = '{schemaName}';";
+                SELECT 1 FROM information_schema.tables t 
+                INNER JOIN information_schema.schemata s
+                    ON t.table_schema = s.schema_name
+                WHERE t.table_name = '{migrationsTableName}' AND s.schema_name = '{schemaName}';";
 
             CreateMigrationsTable = $@"
                 CREATE TABLE [{schemaName}].[{migrationsTableName}]
