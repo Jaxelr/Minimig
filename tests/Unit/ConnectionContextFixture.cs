@@ -26,7 +26,7 @@ namespace MinimigTests.Unit
         public void Construct_connection_context_exception_with_provider()
         {
             //Arrange
-            var options = new Options() { Database = Database, Provider = DatabaseProvider.Postgres };
+            var options = new Options() { Database = Database, Provider = DatabaseProvider.MySql };
 
             //Act
             void action() => new ConnectionContext(options);
