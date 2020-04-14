@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using Npgsql;
 
 namespace Minimig
 {
@@ -43,7 +44,11 @@ namespace Minimig
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
 
-
+                case DatabaseProvider.Postgres:
+                    sql = new NpgSqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
+                    Connection = new NpgsqlConnection(connStr);
+                    Database = new NpgsqlConnectionStringBuilder(connStr).Database;
+                    break;
 
                 default:
                     throw new NotImplementedException($"Unsupported DatabaseProvider {options.Provider}");
