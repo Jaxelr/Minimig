@@ -1,5 +1,5 @@
-version: '0.2.0.{build}'
-image: Visual Studio 2017
+version: '0.4.0.{build}'
+image: Visual Studio 2019
 branches:
   only:
   - master
@@ -20,9 +20,20 @@ build_script:
 test_script:
   - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit"
 after_test:
-  - codecov -f "./tests/coverage.xml" -t $(codecov_token)
+  - codecov -f "./tests/coverage.netcoreapp2.1.xml" -t $(codecov_token)
+  - codecov -f "./tests/coverage.netcoreapp3.1.xml" -t $(codecov_token)
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
   files:
     - '**/*.md'
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/minimig/api/v2/package
+  on:
+    branch: develop
+    appveyor_repo_tag: true
+  api_key:
+    secure: 6xhHSsDvB9arsrSDLuynnbxaVS+BwaoJU96RfQenc5FOnUYvP8SHM6kbvrmpvja2
+  skip_symbols: true
+

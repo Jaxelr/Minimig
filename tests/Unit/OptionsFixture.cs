@@ -1,5 +1,5 @@
-﻿using Minimig;
-using System;
+﻿using System;
+using Minimig;
 using Xunit;
 
 namespace MinimigTests.Unit
@@ -77,7 +77,7 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("myServer", "myDb")]
+        [InlineData(".", "master")]
         public void Get_connection_string_with_server_and_database(string inputServer, string inputDatabase)
         {
             //Arrange
@@ -92,11 +92,11 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("myDb")]
+        [InlineData("master")]
         public void Get_connection_string_with_database(string inputDatabase)
         {
             //Arrange
-            string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server=localhost";
+            string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server=.";
             var options = new Options() { Database = inputDatabase };
 
             //Act
@@ -106,6 +106,24 @@ namespace MinimigTests.Unit
             Assert.Equal(inputConnection, conn);
         }
 
+        [Theory]
+        [InlineData("myMigrations", "master")]
+        public void Assert_valid_migrations_table(string table, string db)
+        {
+            //Arrange
+            var options = new Options() { MigrationsTable = table, Database = db };
+
+            //Act
+            var action = new Action(options.AssertValid);
+            var result = (Options) action.Target;
+            action.Invoke();
+
+            //Assert
+            Assert.Equal(result.MigrationsTable, table);
+            Assert.Equal(result.Database, db);
+            Assert.NotNull(result);
+        }
+
         [Fact]
         public void Assert_valid_exception()
         {
@@ -113,7 +131,20 @@ namespace MinimigTests.Unit
             var options = new Options();
 
             //Act
-            Action action = new Action(options.AssertValid);
+            var action = new Action(options.AssertValid);
+
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
+
+        [Fact]
+        public void Assert_valid_exception_invalid_path()
+        {
+            //Arrange
+            var options = new Options() { MigrationsFolder = "C:\\randommissingpath\\" };
+
+            //Act
+            var action = new Action(options.AssertValid);
 
             //Assert
             Assert.Throws<Exception>(action);
@@ -123,10 +154,23 @@ namespace MinimigTests.Unit
         public void Assert_valid_exception_migrations_table()
         {
             //Arrange
-            var options = new Options() { MigrationsTable = "$Inv@lid N@me" };
+            var options = new Options() { MigrationsTable = "$Inv@lid N@me", Database = "master" };
 
             //Act
-            Action action = new Action(options.AssertValid);
+            var action = new Action(options.AssertValid);
+
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
+
+        [Fact]
+        public void Assert_valid_exception_migrations_table_empty()
+        {
+            //Arrange
+            var options = new Options() { MigrationsTable = "" };
+
+            //Act
+            var action = new Action(options.AssertValid);
 
             //Assert
             Assert.Throws<Exception>(action);

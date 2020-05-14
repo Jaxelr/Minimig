@@ -1,5 +1,4 @@
-﻿using Minimig;
-using System;
+﻿using MinimigTests.Fakes;
 using Xunit;
 
 namespace MinimigTests.Unit
@@ -10,19 +9,10 @@ namespace MinimigTests.Unit
         public void Check_if_migration_row_already_ran_last()
         {
             //Arrange
-            var row = new MigrationRow()
-            {
-                Id = 1,
-                Filename = "c:\\temp\\abc",
-                Duration = 0,
-                Hash = "uniqueKey",
-                ExecutionDate = DateTime.Now
-            };
+            var row = new FakeMigrationRow();
+            var ran = new FakeAlreadyRan(row);
 
-            var rows = new MigrationRow[1] { row };
-            
             //Act
-            var ran = new AlreadyRan(rows);
             var found = ran.Last;
 
             //Assert
@@ -37,21 +27,11 @@ namespace MinimigTests.Unit
         public void Check_if_migration_row_already_ran_by_filename()
         {
             //Arrange
-            string Filename = "c:\\temp\\abc";
-            var row = new MigrationRow()
-            {
-                Id = 1,
-                Filename = Filename,
-                Duration = 0,
-                Hash = "uniqueKey",
-                ExecutionDate = DateTime.Now
-            };
-
-            var rows = new MigrationRow[1] { row };
+            var row = new FakeMigrationRow();
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var ran = new AlreadyRan(rows);
-            var found = ran.ByFilename[Filename];
+            var found = ran.ByFilename[row.Filename];
 
             //Assert
             Assert.Equal(row.Id, found.Id);
@@ -65,21 +45,11 @@ namespace MinimigTests.Unit
         public void Check_if_migration_row_already_ran_by_hash()
         {
             //Arrange
-            string key = "uniqueKey";
-            var row = new MigrationRow()
-            {
-                Id = 1,
-                Filename = "c:\\temp\\abc",
-                Duration = 0,
-                Hash = key,
-                ExecutionDate = DateTime.Now
-            };
-
-            var rows = new MigrationRow[1] { row };
+            var row = new FakeMigrationRow();
+            var ran = new FakeAlreadyRan(row);
 
             //Act
-            var ran = new AlreadyRan(rows);
-            var found = ran.ByHash[key];
+            var found = ran.ByHash[row.Hash];
 
             //Assert
             Assert.Equal(row.Id, found.Id);
@@ -87,6 +57,20 @@ namespace MinimigTests.Unit
             Assert.Equal(row.Filename, found.Filename);
             Assert.Equal(row.Duration, found.Duration);
             Assert.Equal(row.ExecutionDate, found.ExecutionDate);
+        }
+
+        [Fact]
+        public void Check_migration_row_count()
+        {
+            //Arrange
+            var row = new FakeMigrationRow();
+            var ran = new FakeAlreadyRan(row);
+
+            //Act
+            int count = ran.Count;
+
+            //Assert
+            Assert.Equal(1, count);
         }
     }
 }

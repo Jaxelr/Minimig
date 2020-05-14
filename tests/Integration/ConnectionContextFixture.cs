@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using Minimig;
+using MinimigTests.Fakes;
 using Xunit;
 
 namespace MinimigTests.Integration
@@ -38,11 +39,13 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+            };
         }
 
         [Theory]
@@ -69,13 +72,32 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.BeginTransaction();
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.BeginTransaction();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
-            Assert.True(context.HasPendingTransaction);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.True(context.HasPendingTransaction);
+            }
+        }
+
+        [Fact]
+        public void Connection_commit_without_begin_invalid_operation_exception()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+
+            //Act
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                void action() => context.Commit();
+
+                //Assert
+                Assert.Throws<InvalidOperationException>(action);
+            }
         }
 
         [Theory]
@@ -86,14 +108,37 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.BeginTransaction();
-            context.Commit();
+            using (var connectionContext = new ConnectionContext(options))
+            {
+                var context = connectionContext;
+                context.Open();
+                context.BeginTransaction();
+                context.Commit();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
-            Assert.False(context.HasPendingTransaction);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.False(context.HasPendingTransaction);
+            }
+        }
+
+        [Fact]
+        public void Connection_has_completed_transactions_on_preview()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, IsPreview = true };
+
+            //Act
+            using (var connectionContext = new ConnectionContext(options))
+            {
+                var context = connectionContext;
+                context.Open();
+                context.BeginTransaction();
+                context.Commit();
+
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.False(context.HasPendingTransaction);
+            }
         }
 
         [Theory]
@@ -104,14 +149,16 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.BeginTransaction();
-            context.Rollback();
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.BeginTransaction();
+                context.Rollback();
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
-            Assert.False(context.HasPendingTransaction);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+                Assert.False(context.HasPendingTransaction);
+            }
         }
 
         [Theory]
@@ -122,12 +169,14 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            var context = new ConnectionContext(options);
-            context.Open();
-            context.ExecuteCommand("SELECT 1");
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.ExecuteCommand("SELECT 1");
 
-            //Assert
-            Assert.Equal(ConnectionState.Open, context.Connection.State);
+                //Assert
+                Assert.Equal(ConnectionState.Open, context.Connection.State);
+            }
         }
 
         [Theory]
@@ -205,6 +254,165 @@ namespace MinimigTests.Integration
             Assert.Equal(ConnectionState.Closed, context.Connection.State);
             Assert.True(existsSchema);
             Assert.True(existsTable);
+        }
+
+        [Theory]
+        [InlineData("minimigTableTest2")]
+        public void Execute_create_migration_table_and_insert_row(string table)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var row = new FakeMigrationRow();
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            bool exists = context.MigrationTableExists();
+            context.InsertMigrationRecord(row);
+            context.DropMigrationsTable();
+            bool existsAfter = context.MigrationTableExists();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.True(exists);
+            Assert.False(existsAfter);
+        }
+
+        [Theory]
+        [InlineData("minimigTableTest3")]
+        public void Execute_create_migration_table_and_insert_check_row(string table)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var row = new FakeMigrationRow();
+            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            context.InsertMigrationRecord(row);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
+
+        [Theory]
+        [InlineData("minimigTableTest4")]
+        public void Execute_create_migration_table_and_update_check_row(string table)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var row = new FakeMigrationRow();
+            int newDuration = 20;
+            string newHash = Guid.NewGuid().ToString();
+            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            context.InsertMigrationRecord(row);
+            row.Duration = newDuration;
+            row.Hash = newHash;
+            context.UpdateMigrationRecordHash(row);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
+
+        [Fact]
+        public void Update_migration_without_record()
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var row = new FakeMigrationRow();
+
+            //Act
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.CreateMigrationsTable();
+                void action() => context.UpdateMigrationRecordHash(row);
+
+                //Assert
+                Assert.Throws<Exception>(action);
+
+                //Cleanup
+                context.DropMigrationsTable();
+                context.Dispose();
+            }
+        }
+
+        [Theory]
+        [InlineData("minimigTestTable5", "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
+        public void Execute_create_migration_table_and_update_filename_row(string table, string filePath)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var migration = new FakeMigration(filePath);
+            var row = new FakeMigrationRow(migration.Filename, migration.Hash);
+            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            context.InsertMigrationRecord(row);
+            context.RenameMigration(migration);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
+
+        [Theory]
+        [InlineData("..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
+        public void Rename_migration_without_record(string filePath)
+        {
+            //Arrange
+            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var migration = new FakeMigration(filePath);
+
+            //Act
+            using (var context = new ConnectionContext(options))
+            {
+                context.Open();
+                context.CreateMigrationsTable();
+                void action() => context.RenameMigration(migration);
+
+                //Assert
+                Assert.Throws<Exception>(action);
+
+                //Cleanup
+                context.DropMigrationsTable();
+                context.Dispose();
+            }
         }
     }
 }

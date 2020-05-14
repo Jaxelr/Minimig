@@ -4,34 +4,42 @@
     <Authors>Jaxel Rojas</Authors>
     <ToolCommandName>mig</ToolCommandName>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <PackageId>Minimig</PackageId>
     <AssemblyTitle>Minimig</AssemblyTitle>
     <Title>Minimig</Title>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Product>Minimig</Product>
-    <Copyright>Copyright 2019</Copyright>
+    <Copyright>Copyright 2020</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
     <PackageTags>migration;sql;database</PackageTags>
-    <Version>0.2.0</Version>
-    <Description>A simple database migrator for SQL</Description>
+    <Version>0.4.0</Version>
+    <Description>A simple database migrator for SQL Server</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>0.2.0</PackageVersion>
-    <PackageReleaseNotes>Initial import into .net core global tool.</PackageReleaseNotes>
+    <PackageVersion>0.4.0</PackageVersion>
+    <PackageReleaseNotes>Added target fx netcore app 3.1</PackageReleaseNotes>
+    <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <TieredCompilation>true</TieredCompilation>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLine.Options" Version="0.0.2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MinimigLib\MinimigLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

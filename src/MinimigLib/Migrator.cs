@@ -23,9 +23,9 @@ namespace Minimig
 
         private readonly AlreadyRan alreadyRan;
 
-        public List<Migration> Migrations { get; }
+        public IEnumerable<Migration> Migrations { get; }
 
-        private Migrator(Options options)
+        internal Migrator(Options options)
         {
             output = options.Output;
             inputSchema = options.MigrationsTableSchema;
@@ -44,7 +44,7 @@ namespace Minimig
 
             db = new ConnectionContext(options);
 
-            Migrations = GetAllMigrations(dir, db.CommandSplitter).ToList();
+            Migrations = GetAllMigrations(dir, db.CommandSplitter);
 
             Log($"    Database:         {db.Database}");
 
@@ -111,7 +111,9 @@ namespace Minimig
         private static Migrator Create(Options options) => new Migrator(options);
 
         private static IEnumerable<Migration> GetAllMigrations(string directory, Regex commandSplitter) =>
-            Directory.GetFiles(directory, "*.sql").OrderBy(f => f).Select(f => new Migration(f, commandSplitter));
+            Directory.GetFiles(directory, "*.sql")
+                     .OrderBy(f => f)
+                     .Select(f => new Migration(f, commandSplitter));
 
         private MigrationResult RunOutstandingMigrations()
         {

@@ -1,8 +1,6 @@
 # Minimig
 
-*** This library is a fork from Mayflower.net which seems to be [inactive](https://github.com/bretcope/Mayflower.NET)
-
-Minimig is a simple, forward-only, db migrator for SQL Server.
+Minimig is a forward-only, database migrator for SQL Server.
 
 ## Build Status
 
@@ -20,6 +18,8 @@ Package | NuGet (Stable) | MyGet (Prerelease)
 ## Installation
 
 Easiest installation is via dotnet global tools running `dotnet tool install --global Minimig` from your terminal.
+
+To install the prerelease version (from myget), you can add the option `--add-source https://www.myget.org/F/minimig/api/v3/index.json`
 
 ## Usage
 
@@ -68,14 +68,14 @@ mig --folder="c:\path\to\migrations" --connection="Persist Security Info=False;I
 If you use integrated auth, you can use the `--database` and `--server` arguments instead of supplying a connection string (server defaults to "localhost").
 
 ``` cmd
-mig --folder="c:\path\to\migrations" --database=MyLocalDatabase
+mig --folder="c:\\path\\to\\migrations" --database=MyLocalDatabase
 ```
 
 Use `mig --help` to show the complete set of options:
 
 ``` cmd
 Usage: mig [OPTIONS]+
-  Runs all *.sql files in the directory --dir=<directory>.
+  Runs all *.sql files in the folder --folder=<directory>.
   The databse connection can be specified using a full connection string
   with --connection, or Minimig can generate an integrated auth connection
   string using the --database and optional --server arguments.
@@ -96,6 +96,8 @@ Usage: mig [OPTIONS]+
                                transaction, if possible.
       --table=VALUE          Name of the table used to track migrations
                                (default: Migrations)
+      --schema=VALUE         Name of the schema used to track migrations
+                               (default: dbo)
       --force                Will rerun modified migrations.
       --version              Print version number.
       --count                Print the number of outstanding migrations.
@@ -105,9 +107,21 @@ Usage: mig [OPTIONS]+
 
 Many migration systems have a notion of reversing a migration or "downgrading" in some sense. Minimig has no such concept. If you want to reverse the effects of one migration, then you write a new migration to do so. Minimig lives in a forward-only world.
 
+### Uninstallation
+
+For uninstallation execute `dotnet tool uninstall --global Minimig` from terminal.
+
+## Credit
+
+This library is a fork from Mayflower.net which seems to be [inactive](https://github.com/bretcope/Mayflower.NET)
+
 ## License
 
-Minimig is available under the [MIT License](https://github.com/Jaxelr/Minimig/blob/master/LICENSE).
+Minimig is available under the [MIT License](https://github.com/Jaxelr/Minimig/blob/master/LICENSE)
+
+## Logo license
+
+Minimig's icon was created by [Freepik](https://www.freepik.com/) under [Creative Commons license 3.0](http://creativecommons.org/licenses/by/3.0/)
 
 [build-master-img]: https://ci.appveyor.com/api/projects/status/t7e2n08lgqb4jvui/branch/master?svg=true
 [build-master]: https://ci.appveyor.com/project/Jaxelr/minimig/branch/master
