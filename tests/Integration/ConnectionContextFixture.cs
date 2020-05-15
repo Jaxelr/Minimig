@@ -45,7 +45,7 @@ namespace MinimigTests.Integration
 
                 //Assert
                 Assert.Equal(ConnectionState.Open, context.Connection.State);
-            };
+            }
         }
 
         [Theory]
@@ -83,11 +83,12 @@ namespace MinimigTests.Integration
             }
         }
 
-        [Fact]
-        public void Connection_commit_without_begin_invalid_operation_exception()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Connection_commit_without_begin_invalid_operation_exception(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
             using (var context = new ConnectionContext(options))
@@ -121,11 +122,12 @@ namespace MinimigTests.Integration
             }
         }
 
-        [Fact]
-        public void Connection_has_completed_transactions_on_preview()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Connection_has_completed_transactions_on_preview(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, IsPreview = true };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider, IsPreview = true };
 
             //Act
             using (var connectionContext = new ConnectionContext(options))
@@ -202,11 +204,10 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData))]
-        public void Execute_create_and_drop_schema(string connectionString, DatabaseProvider provider)
+        [MemberData(nameof(GetData), parameters: "minimigtest")]
+        public void Execute_create_and_drop_schema(string connectionString, DatabaseProvider provider, string schema)
         {
             //Arrange
-            string schema = "minimigtest";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema};
 
             //Act
@@ -227,12 +228,10 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData))]
-        public void Execute_create_and_drop_schema_table(string connectionString, DatabaseProvider provider)
+        [MemberData(nameof(GetData), parameters: new object[] { "minimigtest", "minimigtabletest" })]
+        public void Execute_create_and_drop_schema_table(string connectionString, DatabaseProvider provider, string schema, string table)
         {
             //Arrange
-            string schema = "minimigtest";
-            string table = "minimigtabletest";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema, MigrationsTable = table };
 
             //Act
@@ -257,11 +256,11 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData("minimigTableTest2")]
-        public void Execute_create_migration_table_and_insert_row(string table)
+        [MemberData(nameof(GetData), parameters: "minimigTableTest2")]
+        public void Execute_create_migration_table_and_insert_row(string connectionString, DatabaseProvider provider, string table)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var row = new FakeMigrationRow();
 
             //Act
@@ -281,13 +280,13 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData("minimigTableTest3")]
-        public void Execute_create_migration_table_and_insert_check_row(string table)
+        [MemberData(nameof(GetData), parameters: "minimigTableTest3")]
+        public void Execute_create_migration_table_and_insert_check_row(string connectionString, DatabaseProvider provider, string table)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var row = new FakeMigrationRow();
-            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+            const string dateFormat = "yyyy-MM-dd hh:mm:ss";
 
             //Act
             var context = new ConnectionContext(options);
@@ -308,15 +307,15 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData("minimigTableTest4")]
-        public void Execute_create_migration_table_and_update_check_row(string table)
+        [MemberData(nameof(GetData), parameters: "minimigTableTest4")]
+        public void Execute_create_migration_table_and_update_check_row(string connectionString, DatabaseProvider provider, string table)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var row = new FakeMigrationRow();
-            int newDuration = 20;
+            const int newDuration = 20;
             string newHash = Guid.NewGuid().ToString();
-            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+            const string dateFormat = "yyyy-MM-dd hh:mm:ss";
 
             //Act
             var context = new ConnectionContext(options);
@@ -339,11 +338,12 @@ namespace MinimigTests.Integration
             Assert.Equal(ran.Last.Duration, row.Duration);
         }
 
-        [Fact]
-        public void Update_migration_without_record()
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public void Update_migration_without_record(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
             var row = new FakeMigrationRow();
 
             //Act
@@ -363,14 +363,14 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData("minimigTestTable5", "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
-        public void Execute_create_migration_table_and_update_filename_row(string table, string filePath)
+        [MemberData(nameof(GetData), parameters: new object[] { "minimigTableTest5", "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql" })]
+        public void Execute_create_migration_table_and_update_filename_row(string connectionString, DatabaseProvider provider, string table, string filePath)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer, MigrationsTable = table };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var migration = new FakeMigration(filePath);
             var row = new FakeMigrationRow(migration.Filename, migration.Hash);
-            string dateFormat = "yyyy-MM-dd hh:mm:ss";
+            const string dateFormat = "yyyy-MM-dd hh:mm:ss";
 
             //Act
             var context = new ConnectionContext(options);
@@ -392,11 +392,11 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData("..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
-        public void Rename_migration_without_record(string filePath)
+        [MemberData(nameof(GetData), parameters: "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
+        public void Rename_migration_without_record(string connectionString, DatabaseProvider provider, string filePath)
         {
             //Arrange
-            var options = new Options() { ConnectionString = connectionString, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
             var migration = new FakeMigration(filePath);
 
             //Act
