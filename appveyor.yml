@@ -10,7 +10,7 @@ configuration:
   - Release
 services:
 - mssql2017
-- postgresql101
+- postgresql
 nuget:
   disable_publish_on_pr: true  
 before_build:
@@ -23,6 +23,9 @@ test_script:
 after_test:
   - codecov -f "./tests/coverage.netcoreapp2.1.xml" -t $(codecov_token)
   - codecov -f "./tests/coverage.netcoreapp3.1.xml" -t $(codecov_token)
+environment:
+  postgres_connection:
+    secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F1vGKkwyR8d3VzpAxYldjhp3PZCRzF8aoUNMrlz5GJXazO7KGxas4YWXP7OirDBibEC6Pn4MZM0XECIHWTkmUCc8mLa6sZRsWXcG5t+NRXa2w==
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
@@ -37,4 +40,3 @@ deploy:
   api_key:
     secure: 6xhHSsDvB9arsrSDLuynnbxaVS+BwaoJU96RfQenc5FOnUYvP8SHM6kbvrmpvja2
   skip_symbols: true
-
