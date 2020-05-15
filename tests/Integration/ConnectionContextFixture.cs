@@ -365,7 +365,6 @@ namespace MinimigTests.Integration
 
                 //Cleanup
                 context.DropMigrationsTable();
-                context.Dispose();
             }
         }
 
@@ -421,7 +420,6 @@ namespace MinimigTests.Integration
 
                 //Cleanup
                 context.DropMigrationsTable();
-                context.Dispose();
             }
         }
     }
