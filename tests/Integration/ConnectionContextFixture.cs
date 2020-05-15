@@ -21,7 +21,7 @@ namespace MinimigTests.Integration
             string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
             if(string.IsNullOrEmpty(postgresConnEnv))
             {
-                postgresConnEnv = $"Server=localhost;Port=5432;Database=postgres;Integrated Security=true;Username=postgres";
+                postgresConnEnv = $"Server=localhost;Port=5432;Database=postgres;Integrated Security=true;Username=postgres;Password=posgres";
             }
 
             return new List<object[]>
@@ -204,10 +204,11 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData), parameters: "minimigtest")]
-        public void Execute_create_and_drop_schema(string connectionString, DatabaseProvider provider, string schema)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_and_drop_schema(string connectionString, DatabaseProvider provider)
         {
             //Arrange
+            const string schema = "minimigtest";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema};
 
             //Act
@@ -228,10 +229,12 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData), parameters: new object[] { "minimigtest", "minimigtabletest" })]
-        public void Execute_create_and_drop_schema_table(string connectionString, DatabaseProvider provider, string schema, string table)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_and_drop_schema_table(string connectionString, DatabaseProvider provider)
         {
             //Arrange
+            const string schema = "minimigtest";
+            const string table = "minimigtabletest";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema, MigrationsTable = table };
 
             //Act
@@ -256,10 +259,11 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData), parameters: "minimigTableTest2")]
-        public void Execute_create_migration_table_and_insert_row(string connectionString, DatabaseProvider provider, string table)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_migration_table_and_insert_row(string connectionString, DatabaseProvider provider)
         {
             //Arrange
+            const string table = "minimigTableTest2";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var row = new FakeMigrationRow();
 
@@ -280,10 +284,11 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData), parameters: "minimigTableTest3")]
-        public void Execute_create_migration_table_and_insert_check_row(string connectionString, DatabaseProvider provider, string table)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_migration_table_and_insert_check_row(string connectionString, DatabaseProvider provider)
         {
             //Arrange
+            const string table = "minimigTableTest3";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var row = new FakeMigrationRow();
             const string dateFormat = "yyyy-MM-dd hh:mm:ss";
@@ -307,15 +312,17 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData), parameters: "minimigTableTest4")]
-        public void Execute_create_migration_table_and_update_check_row(string connectionString, DatabaseProvider provider, string table)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_migration_table_and_update_check_row(string connectionString, DatabaseProvider provider)
         {
             //Arrange
+            const string table = "minimigTableTest4";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var row = new FakeMigrationRow();
             const int newDuration = 20;
             string newHash = Guid.NewGuid().ToString();
             const string dateFormat = "yyyy-MM-dd hh:mm:ss";
+            
 
             //Act
             var context = new ConnectionContext(options);
@@ -363,10 +370,12 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData), parameters: new object[] { "minimigTableTest5", "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql" })]
-        public void Execute_create_migration_table_and_update_filename_row(string connectionString, DatabaseProvider provider, string table, string filePath)
+        [MemberData(nameof(GetData))]
+        public void Execute_create_migration_table_and_update_filename_row(string connectionString, DatabaseProvider provider)
         {
             //Arrange
+            const string table = "minimigTableTest5";
+            const string filePath = "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var migration = new FakeMigration(filePath);
             var row = new FakeMigrationRow(migration.Filename, migration.Hash);
@@ -392,10 +401,11 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [MemberData(nameof(GetData), parameters: "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
-        public void Rename_migration_without_record(string connectionString, DatabaseProvider provider, string filePath)
+        [MemberData(nameof(GetData))]
+        public void Rename_migration_without_record(string connectionString, DatabaseProvider provider)
         {
             //Arrange
+            const string filePath = "..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql";
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
             var migration = new FakeMigration(filePath);
 
