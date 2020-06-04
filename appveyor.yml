@@ -15,7 +15,9 @@ nuget:
   disable_publish_on_pr: true  
 before_build:
   - cmd: dotnet --version
-  - choco install codecov  
+  - choco install codecov
+  - cmd: echo %postgres_connection%
+  - cmd: echo %sql_connection%
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
@@ -25,7 +27,9 @@ after_test:
   - codecov -f "./tests/coverage.netcoreapp3.1.xml" -t $(codecov_token)
 environment:
   postgres_connection:
-    secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F1vGKkwyR8d3VzpAxYldjhp3PZCRzF8aoUNMrlz5GJXazO7KGxas4YWXP7OirDBibEC6Pn4MZM0XECIHWTkmUCc8mLa6sZRsWXcG5t+NRXa2w==
+    secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F2d/rxamWDJbfwQ7aI0FEfQ6YYPoafFf4Of9o0bYo1ls8w8DzT1xx9RIBZ5nSdnUR9yFIHo2imYYHD+w+4JMGHh
+  sql_connection:
+    secure: IDN3XLRl6oFBvm1ql3udiL77wdDcn+zDJHi3fV0rHByKD87DyilxrR78kvuhroAqEm57nDSMDt4/gjWhkcV6Z6+1hazXfVXk8JAtzSVSjMg=
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
