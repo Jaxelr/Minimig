@@ -19,7 +19,7 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData(".", "master", true)]
+        [InlineData("(local)", "master", true)]
         public void Migrator_instantiation_preview(string server, string database, bool isPreview)
         {
             //Arrange
