@@ -21,7 +21,7 @@ namespace MinimigTests.Integration
             string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
             if(string.IsNullOrEmpty(postgresConnEnv))
             {
-                postgresConnEnv = $"Server=localhost;Port=5432;Database=postgres;Integrated Security=true;Username=postgres;Password=posgres";
+                postgresConnEnv = $"Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
             }
 
             return new List<object[]>
