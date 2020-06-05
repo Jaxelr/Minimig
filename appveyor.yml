@@ -1,4 +1,4 @@
-version: '0.4.0.{build}'
+version: '0.5.0.{build}'
 image: Visual Studio 2019
 branches:
   only:
@@ -16,8 +16,6 @@ nuget:
 before_build:
   - cmd: dotnet --version
   - choco install codecov
-  - cmd: echo %postgres_connection%
-  - cmd: echo %sql_connection%
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:

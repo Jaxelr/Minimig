@@ -18,7 +18,7 @@
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
     <PackageTags>migration;sql;database</PackageTags>
-    <Version>0.4.0</Version>
+    <Version>0.5.0</Version>
     <Description>A simple database migrator for SQL Server</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageVersion>0.4.0</PackageVersion>
