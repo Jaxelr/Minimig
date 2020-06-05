@@ -45,13 +45,13 @@ namespace Minimig
 
             if (string.IsNullOrEmpty(Database))
                 throw new Exception("No database assign to infer Connection String");
-            
+
             return $@"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={
                 (string.IsNullOrEmpty(Server) ? "." : Server)}";
         }
 
         internal string GetMigrationsTable() => string.IsNullOrEmpty(MigrationsTable) ? "Migrations" : MigrationsTable;
-          
+
         internal string GetMigrationsTableSchema()
         {
             if(string.IsNullOrEmpty(MigrationsTableSchema))
@@ -70,6 +70,5 @@ namespace Minimig
             }
         }
         internal string GetFolder() => string.IsNullOrEmpty(MigrationsFolder) ? Directory.GetCurrentDirectory() : MigrationsFolder;
-        
     }
 }
