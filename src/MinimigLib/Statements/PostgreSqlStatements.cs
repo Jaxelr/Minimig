@@ -2,7 +2,7 @@
 
 namespace Minimig
 {
-    internal class NpgSqlStatements : ISqlStatements
+    internal class PostgreSqlStatements : ISqlStatements
     {
         public Regex CommandSplitter { get; } = new Regex(@"^\s*;\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         public string DoesMigrationsTableExist { get; }
@@ -14,7 +14,7 @@ namespace Minimig
         public string InsertMigration { get; }
         public string GetAlreadyRan { get; }
 
-        internal NpgSqlStatements(string migrationsTableName, string schemaName = "public")
+        internal PostgreSqlStatements(string migrationsTableName, string schemaName = "public")
         {
             DoesSchemaMigrationExist = $"SELECT 1 FROM information_schema.schemata WHERE schema_name = '{schemaName}'";
 

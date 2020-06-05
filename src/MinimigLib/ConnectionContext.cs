@@ -46,13 +46,15 @@ namespace Minimig
                     break;
 
                 case DatabaseProvider.Postgres:
-                    sql = new PostgresStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
+                    sql = new PostgreSqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new NpgsqlConnection(connStr);
                     Database = new NpgsqlConnectionStringBuilder(connStr).Database;
                     break;
 
                 default:
+#pragma warning disable RCS1079 // Throwing of new NotImplementedException.
                     throw new NotImplementedException($"Unsupported DatabaseProvider {options.Provider}");
+#pragma warning restore RCS1079 // Throwing of new NotImplementedException.
             }
 
             if (string.IsNullOrEmpty(Database))
@@ -96,7 +98,7 @@ namespace Minimig
             switch(Provider)
             {
                 case DatabaseProvider.Postgres:
-                    var what = cmd.ExecuteScalar();
+                    object what = cmd.ExecuteScalar();
                     return (long) what == 1;
                 default:
                     return (int) cmd.ExecuteScalar() == 1;

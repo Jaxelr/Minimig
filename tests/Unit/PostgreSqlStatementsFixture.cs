@@ -4,7 +4,7 @@ using Xunit;
 
 namespace MinimigTests.Unit
 {
-    public class PostgresStatementsFixture
+    public class PostgreSqlStatementsFixture
     {
         [Fact]
         public void PostgreSql_statements_insert()
@@ -14,7 +14,7 @@ namespace MinimigTests.Unit
             const string expected = "INSERT";
 
             //Act
-            var s = new PostgresStatements(table);
+            var s = new PostgreSqlStatements(table);
 
             //Assert
             Assert.Contains(expected, s.InsertMigration, StringComparison.InvariantCultureIgnoreCase);
@@ -30,7 +30,7 @@ namespace MinimigTests.Unit
             const string expected = "INSERT";
 
             //Act
-            var s = new PostgresStatements(table, schema);
+            var s = new PostgreSqlStatements(table, schema);
 
             //Assert
             Assert.Contains(expected, s.InsertMigration, StringComparison.InvariantCultureIgnoreCase);
@@ -46,7 +46,7 @@ namespace MinimigTests.Unit
             const string expected = "UPDATE";
 
             //Act
-            var s = new PostgresStatements(table);
+            var s = new PostgreSqlStatements(table);
 
             //Assert
             Assert.Contains(expected, s.UpdateMigrationHash, StringComparison.InvariantCultureIgnoreCase);
@@ -64,7 +64,7 @@ namespace MinimigTests.Unit
             const string expected = "UPDATE";
 
             //Act
-            var s = new PostgresStatements(table, schema);
+            var s = new PostgreSqlStatements(table, schema);
 
             //Assert
             Assert.Contains(expected, s.UpdateMigrationHash, StringComparison.InvariantCultureIgnoreCase);
@@ -83,7 +83,7 @@ namespace MinimigTests.Unit
             const string expected = "SELECT";
 
             //Act
-            var s = new PostgresStatements(table);
+            var s = new PostgreSqlStatements(table);
 
             //Assert
             Assert.Contains(expected, s.DoesMigrationsTableExist, StringComparison.InvariantCultureIgnoreCase);
@@ -101,7 +101,7 @@ namespace MinimigTests.Unit
             const string expected = "SELECT";
 
             //Act
-            var s = new PostgresStatements(table, schema);
+            var s = new PostgreSqlStatements(table, schema);
 
             //Assert
             Assert.Contains(expected, s.DoesMigrationsTableExist, StringComparison.InvariantCultureIgnoreCase);
@@ -120,7 +120,7 @@ namespace MinimigTests.Unit
             const string expected = "CREATE";
 
             //Act
-            var s = new PostgresStatements(table);
+            var s = new PostgreSqlStatements(table);
 
             //Assert
             Assert.Contains(expected, s.CreateMigrationsTable, StringComparison.InvariantCultureIgnoreCase);
@@ -136,7 +136,7 @@ namespace MinimigTests.Unit
             const string expected = "CREATE";
 
             //Act
-            var s = new PostgresStatements(table, schema);
+            var s = new PostgreSqlStatements(table, schema);
 
             //Assert
             Assert.Contains(expected, s.CreateMigrationsTable, StringComparison.InvariantCultureIgnoreCase);
@@ -152,7 +152,7 @@ namespace MinimigTests.Unit
             const string expected = "DROP";
 
             //Act
-            var s = new PostgresStatements(table);
+            var s = new PostgreSqlStatements(table);
 
             //Assert
             Assert.Contains(expected, s.DropMigrationsTable, StringComparison.InvariantCultureIgnoreCase);
@@ -168,7 +168,7 @@ namespace MinimigTests.Unit
             const string expected = "DROP";
 
             //Act
-            var s = new PostgresStatements(table, schema);
+            var s = new PostgreSqlStatements(table, schema);
 
             //Assert
             Assert.Contains(expected, s.DropMigrationsTable, StringComparison.InvariantCultureIgnoreCase);
@@ -186,7 +186,7 @@ namespace MinimigTests.Unit
             string schema = "tst";
 
             //Act
-            var s = new PostgresStatements(table, schema);
+            var s = new PostgreSqlStatements(table, schema);
 
             //Assert
             Assert.False(s.CommandSplitter.Match(value).Success);
