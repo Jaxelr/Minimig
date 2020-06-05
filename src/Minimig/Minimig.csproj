@@ -17,12 +17,12 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
-    <PackageTags>migration;sql;database</PackageTags>
+    <PackageTags>migration;sql;database;postgresql</PackageTags>
     <Version>0.5.0</Version>
-    <Description>A simple database migrator for SQL Server</Description>
+    <Description>A simple database migrator for SQL Server/Postgresql</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>0.4.0</PackageVersion>
-    <PackageReleaseNotes>Added target fx netcore app 3.1</PackageReleaseNotes>
+    <PackageVersion>0.5.0</PackageVersion>
+    <PackageReleaseNotes>Added support for Postgresql</PackageReleaseNotes>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TieredCompilation>true</TieredCompilation>
