@@ -7,7 +7,7 @@ namespace MinimigTests.Unit
     public class ExceptionFixture
     {
         [Theory]
-        [InlineData("..\\..\\..\\..\\sampleMigrations\\0001 - Add One and Two tables.sql")]
+        [InlineData("..\\..\\..\\..\\sampleMigrations\\SqlServer\\0001 - Add One and Two tables.sql")]
         public void Check_migration_exception(string filePath)
         {
             //Arrange
