@@ -97,11 +97,12 @@ namespace Minimig
 
             switch(Provider)
             {
-                case DatabaseProvider.Postgres:
-                    object what = cmd.ExecuteScalar();
-                    return (long) what == 1;
-                default:
+                case DatabaseProvider.SqlServer:
                     return (int) cmd.ExecuteScalar() == 1;
+                case DatabaseProvider.Postgres:
+                    return (long) cmd.ExecuteScalar()== 1;
+                default:
+                    return false;
             }
         }
 
@@ -110,12 +111,12 @@ namespace Minimig
             var cmd = Connection.NewCommand(sql.DoesSchemaMigrationExist);
             switch(Provider)
             {
-                case(DatabaseProvider.SqlServer):
+                case DatabaseProvider.SqlServer:
                     return (int) cmd.ExecuteScalar() == 1;
-                case(DatabaseProvider.Postgres):
+                case DatabaseProvider.Postgres:
                     return (long) cmd.ExecuteScalar() == 1;
                 default:
-                    return true; // idk
+                    return false;
             }
         }
 
