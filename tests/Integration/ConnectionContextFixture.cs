@@ -323,7 +323,6 @@ namespace MinimigTests.Integration
             string newHash = Guid.NewGuid().ToString();
             const string dateFormat = "yyyy-MM-dd hh:mm:ss";
 
-
             //Act
             var context = new ConnectionContext(options);
             context.Open();

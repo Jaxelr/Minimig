@@ -152,8 +152,6 @@ namespace MinimigTests.Integration
                 Assert.Equal(migrationCount, mig.Migrations.Count());
             }
 
-
-
             //Cleanup
             connection.Open();
             connection.DropMigrationsTable();
