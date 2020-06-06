@@ -53,7 +53,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
-            var provider = DatabaseProvider.SqlServer;
+            const DatabaseProvider provider = DatabaseProvider.SqlServer;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
@@ -72,7 +72,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             string connectionString = $"Server=.;Database=;Trusted_Connection=true;";
-            var provider = DatabaseProvider.SqlServer;
+            const DatabaseProvider provider = DatabaseProvider.SqlServer;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
@@ -87,7 +87,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
-            var provider = DatabaseProvider.SqlServer;
+            const DatabaseProvider provider = DatabaseProvider.SqlServer;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act

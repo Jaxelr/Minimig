@@ -19,11 +19,11 @@ namespace MinimigTests.Unit
         }
 
         [Theory]
-        [InlineData("(local)", "master", true)]
-        public void Migrator_instantiation_preview(string server, string database, bool isPreview)
+        [InlineData("(local)", "master", true, "previewTable")]
+        public void Migrator_instantiation_preview(string server, string database, bool isPreview, string table)
         {
             //Arrange
-            var option = new Options() { Server = server, Database = database, IsPreview = isPreview };
+            var option = new Options() { Server = server, Database = database, IsPreview = isPreview, MigrationsTable = table };
 
             //Act
             using (var mig = new Migrator(option))
