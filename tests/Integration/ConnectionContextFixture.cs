@@ -15,13 +15,13 @@ namespace MinimigTests.Integration
             string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
             if (string.IsNullOrEmpty(sqlServerConnEnv))
             {
-                sqlServerConnEnv = $"Server=(local);Database=master;Trusted_Connection=true;";
+                sqlServerConnEnv = "Server=(local);Database=master;Trusted_Connection=true;";
             }
 
             string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
             if (string.IsNullOrEmpty(postgresConnEnv))
             {
-                postgresConnEnv = $"Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
+                postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
             }
 
             return new List<object[]>
