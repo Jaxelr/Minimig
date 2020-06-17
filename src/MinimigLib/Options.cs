@@ -79,7 +79,7 @@ namespace Minimig
 
         public DatabaseProvider MapDatabaseProvider(string input)
         {
-            if (Enum.TryParse(input, out DatabaseProvider provider))
+            if (Enum.TryParse(input.ToLowerInvariant(), out DatabaseProvider provider))
             {
                 return provider;
             }
