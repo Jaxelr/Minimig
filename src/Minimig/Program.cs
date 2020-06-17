@@ -63,9 +63,10 @@ namespace Minimig
                 {"f|folder=", "The folder containing your .sql migration files (defaults to current working directory).", v => optionsTmp.MigrationsFolder = v },
                 {"timeout=", "Command timeout duration in seconds (default: 30)", v => optionsTmp.CommandTimeout = int.Parse(v) },
                 {"preview", "Run outstanding migrations, but roll them back.", v => optionsTmp.IsPreview = v != null },
+                {"p|provider=", "Use a specific database provider options: sqlserver (default), postgres", v => optionsTmp.Provider = optionsTmp.MapDatabaseProvider(v) },
                 {"global", "Run all outstanding migrations in a single transaction, if possible.", v => optionsTmp.UseGlobalTransaction = v != null },
                 {"table=", "Name of the table used to track migrations (default: Migrations)", v => optionsTmp.MigrationsTable = v },
-                {"schema=", "Name of the schema to be used to track migrations (default: dbo)", v => optionsTmp.MigrationsTableSchema = v },
+                {"schema=", "Name of the schema to be used to track migrations (default: dbo for sqlserver, public for postgres)", v => optionsTmp.MigrationsTableSchema = v },
                 {"force", "Will rerun modified migrations.", v => optionsTmp.Force = v != null },
                 {"version", "Print version number.", v => showVersion = v != null },
                 { "count", "Print the number of outstanding migrations.", v => getCount = v != null },
@@ -88,7 +89,7 @@ namespace Minimig
 
             if (showVersion)
             {
-                Console.WriteLine("Minimig --Version " + Migrator.GetVersion());
+                Console.WriteLine($"Minimig --Version {Migrator.GetVersion()}");
                 Console.WriteLine();
                 return Command.None;
             }
