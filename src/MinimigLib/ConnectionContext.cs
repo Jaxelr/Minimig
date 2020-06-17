@@ -9,9 +9,9 @@ namespace Minimig
 {
     public enum DatabaseProvider
     {
-        SqlServer = 0,
-        Postgres = 1,
-        MySql = 2
+        sqlserver = 0,
+        postgres = 1,
+        mysql = 2
     }
 
     internal class ConnectionContext : IDisposable
@@ -39,13 +39,13 @@ namespace Minimig
 
             switch (Provider)
             {
-                case DatabaseProvider.SqlServer:
+                case DatabaseProvider.sqlserver:
                     sql = new SqlServerStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new SqlConnection(connStr);
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
 
-                case DatabaseProvider.Postgres:
+                case DatabaseProvider.postgres:
                     sql = new PostgreSqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new NpgsqlConnection(connStr);
                     Database = new NpgsqlConnectionStringBuilder(connStr).Database;
@@ -97,9 +97,9 @@ namespace Minimig
 
             switch(Provider)
             {
-                case DatabaseProvider.SqlServer:
+                case DatabaseProvider.sqlserver:
                     return (int) cmd.ExecuteScalar() == 1;
-                case DatabaseProvider.Postgres:
+                case DatabaseProvider.postgres:
                     return (long) cmd.ExecuteScalar()== 1;
                 default:
                     return false;
@@ -111,9 +111,9 @@ namespace Minimig
             var cmd = Connection.NewCommand(sql.DoesSchemaMigrationExist);
             switch(Provider)
             {
-                case DatabaseProvider.SqlServer:
+                case DatabaseProvider.sqlserver:
                     return (int) cmd.ExecuteScalar() == 1;
-                case DatabaseProvider.Postgres:
+                case DatabaseProvider.postgres:
                     return (long) cmd.ExecuteScalar() == 1;
                 default:
                     return false;

@@ -26,7 +26,7 @@ namespace MinimigTests.Unit
         public void Construct_connection_context_exception_with_provider()
         {
             //Arrange
-            var options = new Options() { Database = Database, Provider = DatabaseProvider.MySql };
+            var options = new Options() { Database = Database, Provider = DatabaseProvider.mysql };
 
             //Act
             void action() => new ConnectionContext(options);
@@ -39,7 +39,7 @@ namespace MinimigTests.Unit
         public void Construct_connection_context_exception_missing_database()
         {
             //Arrange
-            var options = new Options() { Database = string.Empty, Provider = DatabaseProvider.SqlServer };
+            var options = new Options() { Database = string.Empty, Provider = DatabaseProvider.sqlserver };
 
             //Act
             void action() => new ConnectionContext(options);
@@ -53,7 +53,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
-            const DatabaseProvider provider = DatabaseProvider.SqlServer;
+            const DatabaseProvider provider = DatabaseProvider.sqlserver;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
@@ -72,7 +72,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             string connectionString = $"Server=.;Database=;Trusted_Connection=true;";
-            const DatabaseProvider provider = DatabaseProvider.SqlServer;
+            const DatabaseProvider provider = DatabaseProvider.sqlserver;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
@@ -87,7 +87,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
-            const DatabaseProvider provider = DatabaseProvider.SqlServer;
+            const DatabaseProvider provider = DatabaseProvider.sqlserver;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act

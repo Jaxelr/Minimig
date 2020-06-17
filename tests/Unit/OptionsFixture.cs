@@ -70,7 +70,7 @@ namespace MinimigTests.Unit
             var options = new Options() { ConnectionString = inputConnection };
 
             //Act
-            string conn = options.GetConnectionString(DatabaseProvider.SqlServer);
+            string conn = options.GetConnectionString(DatabaseProvider.sqlserver);
 
             //Assert
             Assert.Equal(inputConnection, conn);
@@ -85,7 +85,7 @@ namespace MinimigTests.Unit
             var options = new Options() { Server = inputServer, Database = inputDatabase };
 
             //Act
-            string conn = options.GetConnectionString(DatabaseProvider.SqlServer);
+            string conn = options.GetConnectionString(DatabaseProvider.sqlserver);
 
             //Assert
             Assert.Equal(inputConnection, conn);
@@ -100,7 +100,7 @@ namespace MinimigTests.Unit
             var options = new Options() { Database = inputDatabase };
 
             //Act
-            string conn = options.GetConnectionString(DatabaseProvider.SqlServer);
+            string conn = options.GetConnectionString(DatabaseProvider.sqlserver);
 
             //Assert
             Assert.Equal(inputConnection, conn);
