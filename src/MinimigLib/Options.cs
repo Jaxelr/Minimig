@@ -84,7 +84,7 @@ namespace Minimig
                 return provider;
             }
 
-            throw new Exception("The string provided doesnt correspond to one of the possible values (sqlserver, postgres)");
+            throw new Exception("The string provided as a provider doesnt correspond to one of the possible values (sqlserver, postgres)");
         }
 
         internal string GetFolder() => string.IsNullOrEmpty(MigrationsFolder) ? Directory.GetCurrentDirectory() : MigrationsFolder;
