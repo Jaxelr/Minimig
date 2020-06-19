@@ -21,7 +21,6 @@ build_script:
 test_script:
   - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit"
 after_test:
-  - codecov -f "./tests/coverage.netcoreapp2.1.xml" -t $(codecov_token)
   - codecov -f "./tests/coverage.netcoreapp3.1.xml" -t $(codecov_token)
 environment:
   postgres_connection:
