@@ -50,6 +50,7 @@ We recommend prefixing migration file names with a zero-padded number so that th
 0002 - Add Posts.sql
 0003 - Insert default users.sql
 0004 - Add auth columns to Users.sql
+0005 - Drop tables One To Three.sql
 ...
 ```
 
@@ -98,6 +99,8 @@ Usage: mig [OPTIONS]+
                                (default: Migrations)
       --schema=VALUE         Name of the schema used to track migrations
                                (default: dbo)
+  -p, --provider=VALUE         Use a specific database provider options:
+                               sqlserver (default), postgres                               
       --force                Will rerun modified migrations.
       --version              Print version number.
       --count                Print the number of outstanding migrations.
@@ -105,7 +108,7 @@ Usage: mig [OPTIONS]+
 
 ### Reverting Migrations
 
-Many migration systems have a notion of reversing a migration or "downgrading" in some sense. Minimig has no such concept. If you want to reverse the effects of one migration, then you write a new migration to do so. Minimig lives in a forward-only world.
+Minimig has no such concept. It is a forward-only tool. This is done to keep a minimalistic approach.
 
 ### Uninstallation
 
