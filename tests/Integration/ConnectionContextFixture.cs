@@ -181,7 +181,7 @@ namespace MinimigTests.Integration
             bool existsAfter = context.MigrationTableExists();
 
             //Assert
-            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
             Assert.True(exists);
             Assert.False(existsAfter);
         }
@@ -206,7 +206,7 @@ namespace MinimigTests.Integration
             context.ExecuteCommand($"Drop schema {schema}");
 
             //Assert
-            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
             Assert.True(existsSchema);
         }
 
@@ -220,7 +220,7 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema, MigrationsTable = table };
 
             //Act
-            var context = new ConnectionContext(options);
+            using var context = new ConnectionContext(options);
             context.Open();
             context.BeginTransaction();
             context.ExecuteCommand($"Create schema {schema}");
@@ -259,7 +259,7 @@ namespace MinimigTests.Integration
             bool existsAfter = context.MigrationTableExists();
 
             //Assert
-            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
             Assert.True(exists);
             Assert.False(existsAfter);
         }
@@ -283,7 +283,7 @@ namespace MinimigTests.Integration
             context.DropMigrationsTable();
 
             //Assert
-            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
             Assert.Equal(ran.Last.Hash, row.Hash);
             Assert.Equal(ran.Last.Id, row.Id);
             Assert.Equal(ran.Last.Filename, row.Filename);
@@ -367,7 +367,7 @@ namespace MinimigTests.Integration
             context.DropMigrationsTable();
 
             //Assert
-            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
             Assert.Equal(ran.Last.Hash, row.Hash);
             Assert.Equal(ran.Last.Id, row.Id);
             Assert.Equal(ran.Last.Filename, row.Filename);
