@@ -50,11 +50,6 @@ namespace Minimig
                     Connection = new NpgsqlConnection(connStr);
                     Database = new NpgsqlConnectionStringBuilder(connStr).Database;
                     break;
-
-                default:
-#pragma warning disable RCS1079 // Throwing of new NotImplementedException.
-                    throw new NotImplementedException($"Unsupported DatabaseProvider {options.Provider}");
-#pragma warning restore RCS1079 // Throwing of new NotImplementedException.
             }
 
             if (string.IsNullOrEmpty(Database))
