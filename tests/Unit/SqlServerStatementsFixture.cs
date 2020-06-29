@@ -10,7 +10,7 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_insert()
         {
             //Arrange
-            string table = "MyMigration";
+            const string table = "MyMigration";
             const string expected = "INSERT";
 
             //Act
@@ -25,8 +25,8 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_insert_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
-            string schema = "tst";
+            const string table = "MyMigration";
+            const string schema = "tst";
             const string expected = "INSERT";
 
             //Act
@@ -42,7 +42,7 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_update()
         {
             //Arrange
-            string table = "MyMigration";
+            const string table = "MyMigration";
             const string expected = "UPDATE";
 
             //Act
@@ -59,8 +59,8 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_update_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
-            string schema = "tst";
+            const string table = "MyMigration";
+            const string schema = "tst";
             const string expected = "UPDATE";
 
             //Act
@@ -79,7 +79,7 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_migration_exists()
         {
             //Arrange
-            string table = "MyMigration";
+            const string table = "MyMigration";
             const string expected = "SELECT";
 
             //Act
@@ -96,8 +96,8 @@ namespace MinimigTests.Unit
         public void Sql_server_statements__migration_exists_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
-            string schema = "tst";
+            const string table = "MyMigration";
+            const string schema = "tst";
             const string expected = "SELECT";
 
             //Act
@@ -116,7 +116,7 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_create_migration()
         {
             //Arrange
-            string table = "MyMigration";
+            const string table = "MyMigration";
             const string expected = "CREATE";
 
             //Act
@@ -131,7 +131,7 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_drop_migration()
         {
             //Arrange
-            string table = "MyMigration";
+            const string table = "MyMigration";
             const string expected = "DROP";
 
             //Act
@@ -146,8 +146,8 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_create_migration_with_schema()
         {
             //Arrange
-            string table = "MyMigration";
-            string schema = "tst";
+            const string table = "MyMigration";
+            const string schema = "tst";
             const string expected = "CREATE";
 
             //Act
@@ -163,10 +163,10 @@ namespace MinimigTests.Unit
         public void Sql_server_statements_sql_server_command_splitter()
         {
             //Arrange
-            string value = "GO";
-            string lowerValue = "go";
-            string table = "MyMigration";
-            string schema = "tst";
+            const string value = "GO";
+            const string lowerValue = "go";
+            const string table = "MyMigration";
+            const string schema = "tst";
 
             //Act
             var s = new SqlServerStatements(table, schema);

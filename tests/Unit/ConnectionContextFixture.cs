@@ -57,21 +57,19 @@ namespace MinimigTests.Unit
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            using (var context = new ConnectionContext(options))
-            {
+            using var context = new ConnectionContext(options);
 
-                //Assert
-                Assert.Equal(context.Provider, provider);
-                Assert.False(context.IsPreview);
-                Assert.Equal(context.Database, Database);
-            }
+            //Assert
+            Assert.Equal(context.Provider, provider);
+            Assert.False(context.IsPreview);
+            Assert.Equal(context.Database, Database);
         }
 
         [Fact]
         public void Construct_connection_context_exception_missing_database_on_connection_string()
         {
             //Arrange
-            string connectionString = $"Server=.;Database=;Trusted_Connection=true;";
+            const string connectionString = "Server=.;Database=;Trusted_Connection=true;";
             const DatabaseProvider provider = DatabaseProvider.sqlserver;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
@@ -91,13 +89,27 @@ namespace MinimigTests.Unit
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act
-            using (var context = new ConnectionContext(options))
-            {
-                //Assert
-                Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
-                Assert.Equal(@"^\s*GO\s*$", context.CommandSplitter.ToString());
-            }
+            using var context = new ConnectionContext(options);
 
+            //Assert
+            Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            Assert.Equal(@"^\s*GO\s*$", context.CommandSplitter.ToString());
+        }
+
+        [Fact]
+        public void Verify_command_splitter_postgres()
+        {
+            //Arrange
+            const string connectionString = "Server=localhost;Port=5432;Database=postgres;";
+            const DatabaseProvider provider = DatabaseProvider.postgres;
+            var options = new Options() { ConnectionString = connectionString, Provider = provider };
+
+            //Act
+            using var context = new ConnectionContext(options);
+
+            //Assert
+            Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            Assert.Equal(@"^\s*;\s*$", context.CommandSplitter.ToString());
         }
     }
 }

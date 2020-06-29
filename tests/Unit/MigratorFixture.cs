@@ -26,11 +26,10 @@ namespace MinimigTests.Unit
             var option = new Options() { Server = server, Database = database, IsPreview = isPreview, MigrationsTable = table };
 
             //Act
-            using (var mig = new Migrator(option))
-            {
-                //Assert
-                Assert.Empty(mig.Migrations);
-            }
+            using var mig = new Migrator(option);
+
+            //Assert
+            Assert.Empty(mig.Migrations);
         }
     }
 }

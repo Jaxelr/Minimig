@@ -11,8 +11,8 @@ namespace MinimigTests.Unit
         {
             //Arrange
             var command = new SqlCommand();
-            string myParam = nameof(myParam);
-            string myValue = nameof(myValue);
+            const string myParam = nameof(myParam);
+            const string myValue = nameof(myValue);
 
             //Act
             command.AddParameter(myParam, myValue);
@@ -27,7 +27,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             var conn = new SqlConnection();
-            string sql = "select count(*) from sys.tables;";
+            const string sql = "select count(*) from sys.tables;";
             int? timeout = 30;
 
             //Act

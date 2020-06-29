@@ -7,7 +7,7 @@ namespace MinimigTests.Unit
     public class OptionsFixture
     {
         [Theory]
-        [InlineData(@"MyMigration")]
+        [InlineData("MyMigration")]
         public void Get_migration_table_with_value(string inputTable)
         {
             //Arrange
