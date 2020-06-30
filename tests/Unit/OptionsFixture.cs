@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.VisualBasic.FileIO;
 using Minimig;
 using Xunit;
 
@@ -78,7 +79,7 @@ namespace MinimigTests.Unit
 
         [Theory]
         [InlineData(".", "master")]
-        public void Get_connection_string_with_server_and_database(string inputServer, string inputDatabase)
+        public void Get_connection_string_with_server_and_database_sqlserver(string inputServer, string inputDatabase)
         {
             //Arrange
             string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server={inputServer}";
@@ -86,6 +87,22 @@ namespace MinimigTests.Unit
 
             //Act
             string conn = options.GetConnectionString(DatabaseProvider.sqlserver);
+
+            //Assert
+            Assert.Equal(inputConnection, conn);
+        }
+
+
+        [Theory]
+        [InlineData("localhost", "postgres")]
+        public void Get_connection_string_with_server_and_database_postgres(string inputServer, string inputDatabase)
+        {
+            //Arrange
+            string inputConnection = $"Server={inputServer};Port=5432;Database={inputDatabase};Integrated Security=true;";
+            var options = new Options() { Server = inputServer, Database = inputDatabase };
+
+            //Act
+            string conn = options.GetConnectionString(DatabaseProvider.postgres);
 
             //Assert
             Assert.Equal(inputConnection, conn);
@@ -174,6 +191,47 @@ namespace MinimigTests.Unit
 
             //Assert
             Assert.Throws<Exception>(action);
+        }
+
+        [Fact]
+        public void Map_Database_Provider_postgres()
+        {
+            //Arrange
+            const string provider = "postgres";
+            var options = new Options();
+
+            //Act
+            var databaseProvider = options.MapDatabaseProvider(provider);
+
+            //Assert
+            Assert.Equal(DatabaseProvider.postgres, databaseProvider);
+            Assert.Equal(provider, databaseProvider.ToString());
+        }
+
+        [Fact]
+        public void Map_Database_Provider_sqlserver()
+        {
+            //Arrange
+            const string provider = "sqlserver";
+            var options = new Options();
+
+            //Act
+            var databaseProvider = options.MapDatabaseProvider(provider);
+
+            //Assert
+            Assert.Equal(DatabaseProvider.sqlserver, databaseProvider);
+            Assert.Equal(provider, databaseProvider.ToString());
+        }
+
+        [Fact]
+        public void Map_Database_Provider_invalid()
+        {
+            //Arrange
+            const string provider = "somethingelse";
+            var options = new Options();
+
+            //Act & Assert
+            Assert.Throws<Exception>(() => options.MapDatabaseProvider(provider));
         }
     }
 }
