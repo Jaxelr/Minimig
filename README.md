@@ -100,7 +100,7 @@ Usage: mig [OPTIONS]+
       --schema=VALUE         Name of the schema used to track migrations
                                (default: dbo)
   -p, --provider=VALUE         Use a specific database provider options:
-                               sqlserver (default), postgres                               
+                               sqlserver (default), postgres
       --force                Will rerun modified migrations.
       --version              Print version number.
       --count                Print the number of outstanding migrations.
