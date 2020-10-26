@@ -1,6 +1,6 @@
-﻿using Minimig;
+﻿using System.Data.SqlClient;
+using Minimig;
 using Xunit;
-using System.Data.SqlClient;
 
 namespace MinimigTests.Unit
 {

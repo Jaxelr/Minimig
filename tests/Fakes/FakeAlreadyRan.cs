@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Minimig;
+﻿using Minimig;
 
 namespace MinimigTests.Fakes
 {

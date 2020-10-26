@@ -1,10 +1,13 @@
 ﻿using System;
-using Microsoft.VisualBasic.FileIO;
 using Minimig;
 using Xunit;
 
 namespace MinimigTests.Unit
 {
+    /*
+     * Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
+     */
+
     public class OptionsFixture
     {
         [Theory]
@@ -91,7 +94,6 @@ namespace MinimigTests.Unit
             //Assert
             Assert.Equal(inputConnection, conn);
         }
-
 
         [Theory]
         [InlineData("localhost", "postgres")]
