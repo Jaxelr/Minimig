@@ -21,17 +21,3 @@ services:
     # Copy files from dbinit into the image so that they will be run on boot
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
-
-  sqlserver:
-    # For more details on configuring the Sql Server Docker image, see:
-    #   https://hub.docker.com/_/microsoft-mssql-server
-    image: mcr.microsoft.com/mssql/server:2019-latest
-
-    ports:
-      - '1433:1433'
-    network_mode: bridge
-    container_name: sqlserver
-
-    environment:
-      SA_PASSWORD: 'P@ssword123'
-      ACCEPT_EULA: 'Y'
