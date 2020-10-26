@@ -9,7 +9,6 @@
     <PackageId>Minimig</PackageId>
     <AssemblyTitle>Minimig</AssemblyTitle>
     <Title>Minimig</Title>
-    <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Product>Minimig</Product>
     <Copyright>Copyright 2020</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -17,11 +16,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
-    <PackageTags>migration;sql;database;postgresql</PackageTags>
-    <Version>0.5.0</Version>
+    <PackageTags>migration;sql;sqlserver;database;postgresql</PackageTags>
+    <Version>0.6.0</Version>
     <Description>A simple database migrator for SQL Server/Postgresql</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>0.5.0</PackageVersion>
     <PackageReleaseNotes>Added support for Postgresql</PackageReleaseNotes>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
