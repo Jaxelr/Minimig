@@ -90,12 +90,14 @@ namespace Minimig
         {
             var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
 
-            switch(Provider)
+            switch (Provider)
             {
                 case DatabaseProvider.sqlserver:
                     return (int) cmd.ExecuteScalar() == 1;
+
                 case DatabaseProvider.postgres:
-                    return (long) cmd.ExecuteScalar()== 1;
+                    return (long) cmd.ExecuteScalar() == 1;
+
                 default:
                     return false;
             }
@@ -104,12 +106,14 @@ namespace Minimig
         internal bool SchemaMigrationExists()
         {
             var cmd = Connection.NewCommand(sql.DoesSchemaMigrationExist);
-            switch(Provider)
+            switch (Provider)
             {
                 case DatabaseProvider.sqlserver:
                     return (int) cmd.ExecuteScalar() == 1;
+
                 case DatabaseProvider.postgres:
                     return (long) cmd.ExecuteScalar() == 1;
+
                 default:
                     return false;
             }

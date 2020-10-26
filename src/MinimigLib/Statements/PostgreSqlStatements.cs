@@ -19,7 +19,7 @@ namespace Minimig
             DoesSchemaMigrationExist = $"SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}'";
 
             DoesMigrationsTableExist = $@"
-                SELECT COUNT(*) FROM information_schema.tables t 
+                SELECT COUNT(*) FROM information_schema.tables t
                 INNER JOIN information_schema.schemata s
                     ON t.table_schema = s.schema_name
                 WHERE t.table_name = '{migrationsTableName}' AND s.schema_name = '{schemaName}';";

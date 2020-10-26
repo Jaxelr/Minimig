@@ -3,6 +3,7 @@
 namespace Minimig
 {
 #pragma warning disable RCS1194 // Implement exception constructors.
+
     public class MigrationChangedException : Exception
 #pragma warning restore RCS1194 // Implement exception constructors.
     {
