@@ -19,6 +19,9 @@ namespace Minimig
         public bool Force { get; set; }
         public DatabaseProvider Provider { get; set; }
 
+        /// <summary>
+        /// Determine if the current options satisfy a plausible execution of a migration
+        /// </summary>
         public void AssertValid()
         {
             if (!Directory.Exists(GetFolder()))
@@ -38,6 +41,11 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Construct a ConnectionString  based on the current options for the provider given.
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns>A valid ConnectionString</returns>
         internal string GetConnectionString(DatabaseProvider provider)
         {
             if (!string.IsNullOrEmpty(ConnectionString))
@@ -56,8 +64,16 @@ namespace Minimig
 #pragma warning restore RCS1079 // Throwing of new NotImplementedException.
         }
 
+        /// <summary>
+        /// Get the current migrations table
+        /// </summary>
+        /// <returns>The current migrations table</returns>
         internal string GetMigrationsTable() => string.IsNullOrEmpty(MigrationsTable) ? "Migrations" : MigrationsTable;
 
+        /// <summary>
+        /// Get the current migrations schema
+        /// </summary>
+        /// <returns>The current migrations schema</returns>
         internal string GetMigrationsTableSchema()
         {
             if (string.IsNullOrEmpty(MigrationsTableSchema))
@@ -77,6 +93,11 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Map the provider text into the plausible enums
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>An enum with the mapped provider</returns>
         public DatabaseProvider MapDatabaseProvider(string input)
         {
             if (Enum.TryParse(input.ToLowerInvariant(), out DatabaseProvider provider))
@@ -87,6 +108,10 @@ namespace Minimig
             throw new Exception("The string provided as a provider doesnt correspond to one of the possible values (sqlserver, postgres)");
         }
 
+        /// <summary>
+        /// Get the current migrations folder (defaults to current directory)
+        /// </summary>
+        /// <returns>A string with the directory requested</returns>
         internal string GetFolder() => string.IsNullOrEmpty(MigrationsFolder) ? Directory.GetCurrentDirectory() : MigrationsFolder;
     }
 }

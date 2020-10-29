@@ -36,6 +36,11 @@ namespace Minimig
             UseTransaction = !sql.StartsWith("-- no transaction --");
         }
 
+        /// <summary>
+        /// Classify migrations in order to determine action to take
+        /// </summary>
+        /// <param name="alreadyRan"></param>
+        /// <returns>An enum with the migration mode to execute</returns>
         internal MigrateMode GetMigrateMode(AlreadyRan alreadyRan)
         {
             if (alreadyRan.ByFilename.TryGetValue(Filename, out MigrationRow row))
@@ -51,6 +56,11 @@ namespace Minimig
             return MigrateMode.Run;
         }
 
+        /// <summary>
+        /// Get the md5 hash of the string provided
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>A new guid with the hashed bytes of the string provided</returns>
         private static string GetHash(string str)
         {
             string normalized = NormalizeLineEndings(str);
@@ -65,6 +75,11 @@ namespace Minimig
             return new Guid(hashBytes).ToString();
         }
 
+        /// <summary>
+        /// Standarize line endings with \n
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>A string standarized</returns>
         private static string NormalizeLineEndings(string str) => LineEndings.Replace(str, "\n");
     }
 }

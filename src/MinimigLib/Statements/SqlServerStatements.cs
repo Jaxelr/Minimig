@@ -14,6 +14,11 @@ namespace Minimig
         public string InsertMigration { get; }
         public string GetAlreadyRan { get; }
 
+        /// <summary>
+        /// Define the SqlServer statements needed to run migrations as based on the definition needed for the provider
+        /// </summary>
+        /// <param name="migrationsTableName"></param>
+        /// <param name="schemaName"></param>
         internal SqlServerStatements(string migrationsTableName, string schemaName = "dbo")
         {
             DoesSchemaMigrationExist = $"SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}';";
