@@ -46,7 +46,12 @@ namespace Minimig
 
             Environment.Exit(0);
         }
-
+        /// <summary>
+        /// Parse optional parameters passed from the console and return the action to perform
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="options"></param>
+        /// <returns>A Command enum that indicates which action will be performed</returns>
         private static Command TryParseArgs(string[] args, out Options options)
         {
             bool showHelp = false;
@@ -103,6 +108,10 @@ namespace Minimig
             return getCount ? Command.GetCount : Command.RunMigrations;
         }
 
+        /// <summary>
+        /// Show help message on the console
+        /// </summary>
+        /// <param name="optionSet"></param>
         private static void ShowHelpMessage(OptionSet optionSet)
         {
             Console.WriteLine("Usage: Minimig [OPTIONS]+");
