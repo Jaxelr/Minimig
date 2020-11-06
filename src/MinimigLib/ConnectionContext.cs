@@ -88,35 +88,32 @@ namespace Minimig
 
         internal bool MigrationTableExists()
         {
-            var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
+            object result = Connection
+                    .NewCommand(sql.DoesMigrationsTableExist)
+                    .ExecuteScalar();
 
-            switch (Provider)
+            //Depending on the provider the result might be type long instead of int
+            if (result is long longScalar)
             {
-                case DatabaseProvider.sqlserver:
-                    return (int) cmd.ExecuteScalar() == 1;
-
-                case DatabaseProvider.postgres:
-                    return (long) cmd.ExecuteScalar() == 1;
-
-                default:
-                    return false;
+                return longScalar == 1;
             }
+
+            return (int) result == 1;
         }
 
         internal bool SchemaMigrationExists()
         {
-            var cmd = Connection.NewCommand(sql.DoesSchemaMigrationExist);
-            switch (Provider)
+            object result = Connection
+                    .NewCommand(sql.DoesSchemaMigrationExist)
+                    .ExecuteScalar();
+
+            //Depending on the provider the result might be type long instead of int
+            if (result is long longScalar)
             {
-                case DatabaseProvider.sqlserver:
-                    return (int) cmd.ExecuteScalar() == 1;
-
-                case DatabaseProvider.postgres:
-                    return (long) cmd.ExecuteScalar() == 1;
-
-                default:
-                    return false;
+                return longScalar == 1;
             }
+
+            return (int) result == 1;
         }
 
         internal void CreateMigrationsTable()
