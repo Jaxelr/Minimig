@@ -17,7 +17,7 @@
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
     <PackageTags>migration;sql;sqlserver;database;postgresql</PackageTags>
-    <Version>0.6.0</Version>
+    <Version>0.6.1</Version>
     <Description>A simple database migrator for SQL Server/Postgresql</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>Added support for Postgresql</PackageReleaseNotes>
