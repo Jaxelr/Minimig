@@ -355,7 +355,7 @@ namespace MinimigTests.Integration
         {
             //Arrange
             const string table = "minimigTableTest5";
-            string filePath = $"..\\..\\..\\..\\sampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
+            string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var migration = new FakeMigration(filePath);
             var row = new FakeMigrationRow(migration.Filename, migration.Hash);
@@ -384,7 +384,7 @@ namespace MinimigTests.Integration
         public void Rename_migration_without_record(string connectionString, DatabaseProvider provider)
         {
             //Arrange
-            string filePath = $"..\\..\\..\\..\\sampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
+            string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
             var migration = new FakeMigration(filePath);
 

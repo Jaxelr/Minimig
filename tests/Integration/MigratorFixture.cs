@@ -34,7 +34,7 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData(".", "master", "customTableB", "..\\..\\..\\..\\sampleMigrations\\SqlServer")]
+        [InlineData(".", "master", "customTableB", "SampleMigrations\\SqlServer")]
         public void Migrator_instantiation_with_migrations(string server, string database, string table, string migrationsFolder)
         {
             //Arrange
@@ -57,7 +57,7 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData(".", "master", "missingSchema", "customTableB", "..\\..\\..\\..\\sampleMigrations\\SqlServer")]
+        [InlineData(".", "master", "missingSchema", "customTableB", "SampleMigrations\\SqlServer")]
         public void Migrator_instantiation_with_migrations_and_missing_schema(string server, string database, string schema, string table, string migrationsFolder)
         {
             //Arrange
@@ -84,7 +84,7 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData(".", "master", "customTableC", "..\\..\\..\\..\\sampleMigrations\\SqlServer")]
+        [InlineData(".", "master", "customTableC", "SampleMigrations\\SqlServer")]
         public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations(string server, string database, string table, string migrationsFolder)
         {
             //Arrange
@@ -109,7 +109,7 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData(".", "master", "customTableD", "..\\..\\..\\..\\sampleMigrations\\SqlServer")]
+        [InlineData(".", "master", "customTableD", "SampleMigrations\\SqlServer")]
         public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations_single_transaction(string server, string database, string table, string migrationsFolder)
         {
             //Arrange
@@ -134,7 +134,7 @@ namespace MinimigTests.Integration
         }
 
         [Theory]
-        [InlineData(".", "master", "customTableE", "..\\..\\..\\..\\sampleMigrations\\SqlServer")]
+        [InlineData(".", "master", "customTableE", "SampleMigrations\\SqlServer")]
         public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations_twice(string server, string database, string table, string migrationsFolder)
         {
             //Arrange
