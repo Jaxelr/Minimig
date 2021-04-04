@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="altcover" Version="7.1.782" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="altcover" Version="8.1.817" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
@@ -18,6 +18,39 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\MinimigLib\MinimigLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SampleMigrations\Postgres\0001 - Add One and Two tables.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\Postgres\0002 - Add Three Table.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\Postgres\0003 - Insert Three data.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\Postgres\0004 - Add FavoriteNumber to Two.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\Postgres\0005 - Drop tables One To Three.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\SqlServer\0001 - Add One and Two tables.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\SqlServer\0002 - Add Three table.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\SqlServer\0003 - Insert Three data.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\SqlServer\0004 - Add FavoriteNumber to Two.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleMigrations\SqlServer\0005 - Drop tables One To Three.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

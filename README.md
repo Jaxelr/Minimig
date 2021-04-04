@@ -1,6 +1,6 @@
 # Minimig
 
-Minimig is a forward-only, database migrator for SQL Server.
+Minimig is a forward-only, database migrator for SQL Server and Postgres.
 
 ## Build Status
 
@@ -58,9 +58,7 @@ We recommend prefixing migration file names with a zero-padded number so that th
 
 #### Command Line
 
-The easiest way to run migrations is with `mig` command. You obtain it from the Downloads section of [GitHub releases](https://github.com/jaxelr/Minimig/releases) or installable via [nuget](https://www.nuget.org/packages/Minimig/). It requires .NET Framework 4.5.2 or above.
-
-Typical usage is simply:
+To run migrations the typical usage is:
 
 ``` cmd
 mig --folder="c:\path\to\migrations" --connection="Persist Security Info=False;Integrated Security=true;Initial Catalog=MyDatabase;server=localhost"
