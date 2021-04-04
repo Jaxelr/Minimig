@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using MySql.Data.MySqlClient;
 using Npgsql;
 
 namespace Minimig
 {
     public enum DatabaseProvider
     {
+        unknown = -1,
         sqlserver = 0,
         postgres = 1,
         mysql = 2
@@ -53,6 +55,11 @@ namespace Minimig
                     sql = new PostgreSqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new NpgsqlConnection(connStr);
                     Database = new NpgsqlConnectionStringBuilder(connStr).Database;
+                    break;
+                case DatabaseProvider.mysql:
+                    //Missing statements
+                    Connection = new MySqlConnection(connStr);
+                    Database = new MySqlConnectionStringBuilder(connStr).Database;
                     break;
             }
 

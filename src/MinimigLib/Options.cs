@@ -58,6 +58,8 @@ namespace Minimig
                 return $"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={(string.IsNullOrEmpty(Server) ? "." : Server)}";
             else if (provider is DatabaseProvider.postgres)
                 return $"Server={(string.IsNullOrEmpty(Server) ? "localhost" : Server)};Port=5432;Database={Database};Integrated Security=true;";
+            else if (provider is DatabaseProvider.mysql)
+                return $"Server={(string.IsNullOrEmpty(Server) ? "localhost" : Server)};Port=3306;Database={Database};IntegratedSecurity=yes;";
             else
 #pragma warning disable RCS1079 // Throwing of new NotImplementedException.
                 throw new NotImplementedException($"Unsupported DatabaseProvider {Provider}");
@@ -82,7 +84,8 @@ namespace Minimig
                 {
                     case DatabaseProvider.postgres:
                         return "public";
-
+                    case DatabaseProvider.mysql:
+                        return "mydb";
                     default:
                         return "dbo";
                 }
