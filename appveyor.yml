@@ -11,6 +11,7 @@ configuration:
 services:
 - mssql2017
 - postgresql
+- mysql
 nuget:
   disable_publish_on_pr: true  
 before_build:
