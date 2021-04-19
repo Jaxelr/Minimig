@@ -9,12 +9,12 @@ init:
 configuration:
   - Release
 services:
-- mssql2017
 - postgresql
 nuget:
   disable_publish_on_pr: true  
 before_build:
   - cmd: dotnet --version
+  - cmd: net start MSSQL$SQL2019
   - choco install codecov
 build_script:
   - cmd: dotnet build . -v quiet
@@ -26,7 +26,7 @@ environment:
   postgres_connection:
     secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F2d/rxamWDJbfwQ7aI0FEfQ6YYPoafFf4Of9o0bYo1ls8w8DzT1xx9RIBZ5nSdnUR9yFIHo2imYYHD+w+4JMGHh
   sql_connection:
-    secure: IDN3XLRl6oFBvm1ql3udiL77wdDcn+zDJHi3fV0rHByKD87DyilxrR78kvuhroAqEm57nDSMDt4/gjWhkcV6Z6+1hazXfVXk8JAtzSVSjMg=
+    secure: ri3gBviRIIeUrsRGrkDXhOl1d/XbYv4PWOB1m+gx9gNpqeyG4wux4AOlTUOVMudkRWEg3wBHXB1OP1lxINn4xnBEcL75SeScWNOfJR89pyM=
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
