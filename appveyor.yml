@@ -6,6 +6,7 @@ branches:
   - develop
 init:
   - cmd: git config --global core.autocrlf true
+  - cmd: net start MSSQL$SQL2019
 configuration:
   - Release
 services:
@@ -14,7 +15,6 @@ nuget:
   disable_publish_on_pr: true  
 before_build:
   - cmd: dotnet --version
-  - cmd: net start MSSQL$SQL2019
   - choco install codecov
 build_script:
   - cmd: dotnet build . -v quiet
