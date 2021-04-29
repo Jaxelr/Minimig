@@ -27,6 +27,8 @@ environment:
     secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F2d/rxamWDJbfwQ7aI0FEfQ6YYPoafFf4Of9o0bYo1ls8w8DzT1xx9RIBZ5nSdnUR9yFIHo2imYYHD+w+4JMGHh
   sql_connection:
     secure: ri3gBviRIIeUrsRGrkDXhOl1d/XbYv4PWOB1m+gx9gNpqeyG4wux4AOlTUOVMudkRWEg3wBHXB1OP1lxINn4xnBEcL75SeScWNOfJR89pyM=
+  codecov_token:
+    secure: lUmWvr1PcJnFJ7tR5/Y+fpuIPkc0L822Dh/NQy6EACQHZa/KY//Vwkap4lZg3yAN
 artifacts:
   - path: '**/*.nupkg'
 skip_commits:
