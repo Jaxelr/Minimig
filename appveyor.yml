@@ -26,7 +26,7 @@ environment:
   postgres_connection:
     secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F2d/rxamWDJbfwQ7aI0FEfQ6YYPoafFf4Of9o0bYo1ls8w8DzT1xx9RIBZ5nSdnUR9yFIHo2imYYHD+w+4JMGHh
   sql_connection:
-    secure: ri3gBviRIIeUrsRGrkDXhOl1d/XbYv4PWOB1m+gx9gNpqeyG4wux4AOlTUOVMudkRWEg3wBHXB1OP1lxINn4xnBEcL75SeScWNOfJR89pyM=
+    secure: IDN3XLRl6oFBvm1ql3udiAXGfdZmk7Ve+EkWfyD6hbANvKgm39j2m+LOtrOXdlBn0l7uh/TENf51P5bNgS/Nn7OoKwXeu1lcMNvLUzx2+MA=
   codecov_token:
     secure: lUmWvr1PcJnFJ7tR5/Y+fpuIPkc0L822Dh/NQy6EACQHZa/KY//Vwkap4lZg3yAN
 artifacts:
