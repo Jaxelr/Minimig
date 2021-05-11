@@ -58,6 +58,7 @@ namespace Minimig
                     break;
                 case DatabaseProvider.mysql:
                     //Missing statements
+                    sql = new MySqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new MySqlConnection(connStr);
                     Database = new MySqlConnectionStringBuilder(connStr).Database;
                     break;
