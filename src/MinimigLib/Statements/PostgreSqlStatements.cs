@@ -16,7 +16,7 @@ namespace Minimig
 
         internal PostgreSqlStatements(string migrationsTableName, string schemaName = "public")
         {
-            DoesSchemaMigrationExist = $"SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}'";
+            DoesSchemaMigrationExist = $"SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}';";
 
             DoesMigrationsTableExist = $@"
                 SELECT COUNT(*) FROM information_schema.tables t
@@ -27,7 +27,7 @@ namespace Minimig
             CreateMigrationsTable = $@"
                 CREATE TABLE ""{schemaName}"".""{migrationsTableName}""
                 (
-	                Id SERIAL unique,
+	                Id serial unique,
 	                Filename varchar(260) not null unique,
 	                Hash varchar(40) not null unique,
 	                ExecutionDate timestamp not null,
