@@ -85,7 +85,7 @@ namespace Minimig
                     case DatabaseProvider.postgres:
                         return "public";
                     case DatabaseProvider.mysql:
-                        return "mydb";
+                        return "mysql";
                     default:
                         return "dbo";
                 }
