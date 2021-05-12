@@ -1,0 +1,1 @@
+docker-compose -f db-dependencies.yml up -d
