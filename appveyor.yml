@@ -10,7 +10,7 @@ configuration:
   - Release
 services:
 - mssql2017
-- postgresql
+- postgresql101
 - mysql
 nuget:
   disable_publish_on_pr: true
