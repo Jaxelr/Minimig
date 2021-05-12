@@ -10,8 +10,8 @@ init:
 configuration:
   - Release
 services:
-- postgresql101
-- mysql
+  - postgresql101
+  - mysql
 nuget:
   disable_publish_on_pr: true
 before_build:
@@ -25,7 +25,7 @@ after_test:
   - codecov -f "./tests/coverage.netcoreapp3.1.xml" -t $(codecov_token)
 environment:
   postgres_connection:
-    secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F2d/rxamWDJbfwQ7aI0FEfQ6YYPoafFf4Of9o0bYo1ls8w8DzT1xx9RIBZ5nSdnUR9yFIHo2imYYHD+w+4JMGHh
+    secure: 28ml2R0fwB3tgSzColeGvFJxnXUVcCmt5Hyly9Kf0zp8MoeUdD8NyoLOLAchBoEpF9V90sTngkMiQuttNFpdoPzd9DjHlxS910Y++CZx6LoQ/iM0E41J2VE2/MuqB5op
   sql_connection:
     secure: IDN3XLRl6oFBvm1ql3udiL77wdDcn+zDJHi3fV0rHByKD87DyilxrR78kvuhroAqEm57nDSMDt4/gjWhkcV6Z6+1hazXfVXk8JAtzSVSjMg=
   mysql_connection:
