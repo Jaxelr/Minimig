@@ -29,8 +29,8 @@ namespace Minimig
                 CREATE TABLE `{schemaName}`.`{migrationsTableName}`
                 (
                     Id INT primary key auto_increment not null,
-                    Hash varchar(44) not null unique,
                     Filename varchar(260) not null unique,
+                    Hash varchar(44) not null unique,
                     ExecutionDate timestamp not null,
                     Duration int not null
                 );";
