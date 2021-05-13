@@ -28,10 +28,18 @@ namespace MinimigTests.Integration
                 postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
             }
 
+            string mysqlConnEnv = Environment.GetEnvironmentVariable("MySql_Connection");
+            if (string.IsNullOrEmpty(mysqlConnEnv))
+            {
+                mysqlConnEnv = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;";
+            }
+
+
             return new List<object[]>
             {
                 new object[] { sqlServerConnEnv, DatabaseProvider.sqlserver },
-                new object[] { postgresConnEnv, DatabaseProvider.postgres }
+                new object[] { postgresConnEnv, DatabaseProvider.postgres },
+                new object[] { mysqlConnEnv, DatabaseProvider.mysql }
             };
         }
 
