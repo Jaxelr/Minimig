@@ -1,6 +1,6 @@
 # Minimig
 
-Minimig is a forward-only, database migrator for SQL Server and Postgres.
+Minimig is a forward-only, database migrator for SQL Server, MySql and Postgres.
 
 ## Build Status
 
@@ -25,7 +25,11 @@ To install the prerelease version (from myget), you can add the option `--add-so
 
 ### Creating Migrations
 
-A migration is just plain T-SQL saved in a .sql file. Individual commands are separated with the `GO` keyword, just like when using [SSMS](https://msdn.microsoft.com/en-us/library/mt238290.aspx). For example:
+A migration is just plain T-SQL saved in a .sql file. Individual commands are separated with the `GO` keyword for sql server, just like when using [SSMS](https://msdn.microsoft.com/en-us/library/mt238290.aspx). 
+
+> In the case of mysql and postgres, the separator used is the semicolon(;) since `GO` is not supported on those databases
+
+For example:
 
 ```sql
 CREATE TABLE One
@@ -37,11 +41,11 @@ CREATE TABLE One
 )
 GO
 
-INSERT INTO One (Name) VALUES ('Aidan')
+INSERT INTO One (Name) VALUES ('Person')
 GO
 ```
 
-> Migrations are run in a transaction by default, which allows them to be rolled back if any command fails. You can disable this transaction for a specific migration by beginning the file with `-- no transaction --`.
+> Migrations are executed as a transaction by default, which allows them to be rolled back if any command fails. You can disable this transaction for a specific migration by beginning the file with `-- no transaction --`.
 
 We recommend prefixing migration file names with a zero-padded number so that the migrations are listed in chronological order. For example, a directory of migrations might look like:
 
@@ -98,7 +102,7 @@ Usage: mig [OPTIONS]+
       --schema=VALUE         Name of the schema used to track migrations
                                (default: dbo)
   -p, --provider=VALUE         Use a specific database provider options:
-                               sqlserver (default), postgres
+                               sqlserver (default), postgres, mysql
       --force                Will rerun modified migrations.
       --version              Print version number.
       --count                Print the number of outstanding migrations.
@@ -114,7 +118,7 @@ For uninstallation execute `dotnet tool uninstall --global Minimig` from termina
 
 ## Credit
 
-This library is a fork from Mayflower.net which seems to be [inactive](https://github.com/bretcope/Mayflower.NET)
+This library started as a fork from Mayflower.net which is [inactive](https://github.com/bretcope/Mayflower.NET)
 
 ## License
 
