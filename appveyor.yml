@@ -29,7 +29,7 @@ environment:
   sql_connection:
     secure: IDN3XLRl6oFBvm1ql3udiAXGfdZmk7Ve+EkWfyD6hbANvKgm39j2m+LOtrOXdlBn0l7uh/TENf51P5bNgS/Nn7OoKwXeu1lcMNvLUzx2+MA=
   mysql_connection:
-    secure: YW0OmwTb/Q3byjNiJzsXcwixv3XkIVG7OMB6wafuFsiaRa+6iSbte5hUKrzoF7OvddMMTqtPiSnAHLCGtJLMTRfhnOmw4SJ2GFYdLAUA4nE=
+    secure: YW0OmwTb/Q3byjNiJzsXc+/yJTgGiZsxhlW9BfxN1WBoQ0FBS3hU4cg1fjxGrrN+SJojCuuJfG01uig9FF1O+g==
   codecov_token:
     secure: lUmWvr1PcJnFJ7tR5/Y+fpuIPkc0L822Dh/NQy6EACQHZa/KY//Vwkap4lZg3yAN
 artifacts:
