@@ -71,7 +71,7 @@ namespace Minimig
                 {"p|provider=", "Use a specific database provider options: sqlserver (default), postgres, mysql", v => optionsTmp.Provider = optionsTmp.MapDatabaseProvider(v) },
                 {"global", "Run all outstanding migrations in a single transaction, if possible.", v => optionsTmp.UseGlobalTransaction = v != null },
                 {"table=", "Name of the table used to track migrations (default: Migrations)", v => optionsTmp.MigrationsTable = v },
-                {"schema=", "Name of the schema to be used to track migrations (default: dbo for sqlserver, public for postgres, mydb for mysql)", v => optionsTmp.MigrationsTableSchema = v },
+                {"schema=", "Name of the schema to be used to track migrations (default: dbo for sqlserver, public for postgres, mysql for mysql)", v => optionsTmp.MigrationsTableSchema = v },
                 {"force", "Will rerun modified migrations.", v => optionsTmp.Force = v != null },
                 {"version", "Print version number.", v => showVersion = v != null },
                 { "count", "Print the number of outstanding migrations.", v => getCount = v != null },
