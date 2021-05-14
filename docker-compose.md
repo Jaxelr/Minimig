@@ -1,1 +1,3 @@
-docker-compose -f db-dependencies.yml up -d
+For localhost debugging:
+
+docker-compose -f docker-compose.yml up -d
