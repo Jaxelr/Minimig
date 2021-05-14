@@ -26,7 +26,7 @@ after_test:
 environment:
   sql_connection: Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!
   postgres_connection: Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;
-  mysql_connection: Server=localhost;Port=3306;User Id=root;Password=Password12!;
+  mysql_connection: Server=localhost;Port=3306;Database=mysql;User Id=root;Password=Password12!;
   codecov_token:
     secure: lUmWvr1PcJnFJ7tR5/Y+fpuIPkc0L822Dh/NQy6EACQHZa/KY//Vwkap4lZg3yAN
 artifacts:
