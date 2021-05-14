@@ -24,12 +24,9 @@ test_script:
 after_test:
   - codecov -f "./tests/coverage.netcoreapp3.1.xml" -t $(codecov_token)
 environment:
-  postgres_connection:
-    secure: YW0OmwTb/Q3byjNiJzsXc4UN5JJRbI3uYItkJPLB3F2d/rxamWDJbfwQ7aI0FEfQ6YYPoafFf4Of9o0bYo1ls8w8DzT1xx9RIBZ5nSdnUR9yFIHo2imYYHD+w+4JMGHh
-  sql_connection:
-    secure: IDN3XLRl6oFBvm1ql3udiAXGfdZmk7Ve+EkWfyD6hbANvKgm39j2m+LOtrOXdlBn0l7uh/TENf51P5bNgS/Nn7OoKwXeu1lcMNvLUzx2+MA=
-  mysql_connection:
-    secure: YW0OmwTb/Q3byjNiJzsXc+/yJTgGiZsxhlW9BfxN1WBoQ0FBS3hU4cg1fjxGrrN+SJojCuuJfG01uig9FF1O+g==
+  sql_connection: Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!
+  postgres_connection: Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;
+  mysql_connection: Server=localhost;Port=3306;User Id=root;Password=Password12!;
   codecov_token:
     secure: lUmWvr1PcJnFJ7tR5/Y+fpuIPkc0L822Dh/NQy6EACQHZa/KY//Vwkap4lZg3yAN
 artifacts:
