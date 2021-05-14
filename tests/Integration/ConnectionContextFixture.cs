@@ -34,6 +34,9 @@ namespace MinimigTests.Integration
                 mysqlConnEnv = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;";
             }
 
+            Console.WriteLine($"Sql Server Connection: {sqlServerConnEnv}");
+            Console.WriteLine($"Postgres Connection: {postgresConnEnv}");
+            Console.WriteLine($"MySql Connection: {mysqlConnEnv}");
 
             return new List<object[]>
             {
