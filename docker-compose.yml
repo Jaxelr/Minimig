@@ -1,4 +1,3 @@
-# run docker-compose -f db-dependencies.yml up -d
 version: '3'
 services:
 
@@ -18,6 +17,17 @@ services:
       POSTGRES_PASSWORD: 'postgres'
       POSTGRES_DB: 'postgres'
 
-    # Copy files from dbinit into the image so that they will be run on boot
-    volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
+  mysql:
+    # For more details on configuring the Mysql Docker image, see:
+    #   https://hub.docker.com/_/mysql
+    image: mysql/mysql-server:latest
+
+    # Expose the default Mysql port on localhost
+    ports:
+    - "3306:3306"
+    container_name: mysql
+
+    environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    - MYSQL_ROOT_HOST=%
+    - MYSQL_DATABASE=test

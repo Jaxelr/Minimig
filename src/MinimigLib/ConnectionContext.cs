@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using MySql.Data.MySqlClient;
 using Npgsql;
 
 namespace Minimig
 {
     public enum DatabaseProvider
     {
+        unknown = -1,
         sqlserver = 0,
         postgres = 1,
         mysql = 2
@@ -29,6 +31,10 @@ namespace Minimig
         internal Regex CommandSplitter => sql.CommandSplitter;
         internal bool HasPendingTransaction => transaction != null;
 
+        /// <summary>
+        /// Generate a new Connection Context with the options provided
+        /// </summary>
+        /// <param name="options"></param>
         internal ConnectionContext(Options options)
         {
             timeout = options.CommandTimeout;
@@ -50,6 +56,12 @@ namespace Minimig
                     Connection = new NpgsqlConnection(connStr);
                     Database = new NpgsqlConnectionStringBuilder(connStr).Database;
                     break;
+                case DatabaseProvider.mysql:
+                    //Missing statements
+                    sql = new MySqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
+                    Connection = new MySqlConnection(connStr);
+                    Database = new MySqlConnectionStringBuilder(connStr).Database;
+                    break;
             }
 
             if (string.IsNullOrEmpty(Database))
@@ -62,10 +74,19 @@ namespace Minimig
             transaction?.Dispose();
         }
 
+        /// <summary>
+        /// Open database connection
+        /// </summary>
         internal void Open() => Connection.Open();
 
+        /// <summary>
+        /// Begin transaction processing
+        /// </summary>
         internal void BeginTransaction() => transaction = Connection.BeginTransaction();
 
+        /// <summary>
+        /// Complete transaction processing
+        /// </summary>
         internal void Commit()
         {
             if (IsPreview)
@@ -79,6 +100,9 @@ namespace Minimig
             FilesInCurrentTransaction.Clear();
         }
 
+        /// <summary>
+        /// Rollback transaction processing
+        /// </summary>
         internal void Rollback()
         {
             transaction.Rollback();
@@ -86,51 +110,66 @@ namespace Minimig
             FilesInCurrentTransaction.Clear();
         }
 
+        /// <summary>
+        /// Verify if the existing migration table exists
+        /// </summary>
+        /// <returns>A bool indicating if it exists or not</returns>
         internal bool MigrationTableExists()
         {
-            var cmd = Connection.NewCommand(sql.DoesMigrationsTableExist);
+            object result = Connection
+                    .NewCommand(sql.DoesMigrationsTableExist)
+                    .ExecuteScalar();
 
-            switch (Provider)
+            //Depending on the provider the result might be type long instead of int
+            if (result is long longScalar)
             {
-                case DatabaseProvider.sqlserver:
-                    return (int) cmd.ExecuteScalar() == 1;
-
-                case DatabaseProvider.postgres:
-                    return (long) cmd.ExecuteScalar() == 1;
-
-                default:
-                    return false;
+                return longScalar == 1;
             }
+
+            return (int) result == 1;
         }
 
+        /// <summary>
+        /// Verify if the existing migration schema exists
+        /// </summary>
+        /// <returns>A bool indicating if it exists or not</returns>
         internal bool SchemaMigrationExists()
         {
-            var cmd = Connection.NewCommand(sql.DoesSchemaMigrationExist);
-            switch (Provider)
+            object result = Connection
+                    .NewCommand(sql.DoesSchemaMigrationExist)
+                    .ExecuteScalar();
+
+            //Depending on the provider the result might be type long instead of int
+            if (result is long longScalar)
             {
-                case DatabaseProvider.sqlserver:
-                    return (int) cmd.ExecuteScalar() == 1;
-
-                case DatabaseProvider.postgres:
-                    return (long) cmd.ExecuteScalar() == 1;
-
-                default:
-                    return false;
+                return longScalar == 1;
             }
+
+            return (int) result == 1;
         }
 
+        /// <summary>
+        /// Create migration table on the server
+        /// </summary>
         internal void CreateMigrationsTable()
         {
             var cmd = Connection.NewCommand(sql.CreateMigrationsTable);
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Drop migration table on the server
+        /// </summary>
         internal void DropMigrationsTable()
         {
             var cmd = Connection.NewCommand(sql.DropMigrationsTable);
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Get existing migrations from the server
+        /// </summary>
+        /// <returns>An AlreadyRan object with the existing migrations</returns>
         internal AlreadyRan GetAlreadyRan()
         {
             var results = new List<MigrationRow>();
@@ -156,12 +195,21 @@ namespace Minimig
             return new AlreadyRan(results);
         }
 
+        /// <summary>
+        /// Execute a sql command based on the string provided
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns>An integer indicating the result of the command</returns>
         public int ExecuteCommand(string sql)
         {
             var cmd = Connection.NewCommand(sql, transaction, timeout);
             return cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Inserts the migration record into the migration table
+        /// </summary>
+        /// <param name="row">A migration row description</param>
         internal void InsertMigrationRecord(MigrationRow row)
         {
             var cmd = Connection.NewCommand(sql.InsertMigration, transaction);
@@ -174,6 +222,10 @@ namespace Minimig
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Update the hash of the migration record
+        /// </summary>
+        /// <param name="row">A migration row description</param>
         internal void UpdateMigrationRecordHash(MigrationRow row)
         {
             var cmd = Connection.NewCommand(sql.UpdateMigrationHash, transaction);
@@ -184,10 +236,15 @@ namespace Minimig
             cmd.AddParameter("Filename", row.Filename);
 
             int affected = cmd.ExecuteNonQuery();
+
             if (affected != 1)
                 throw new Exception($"Failure updating the migration record. {affected} rows affected. Expected 1.");
         }
 
+        /// <summary>
+        /// Rename an existing migration
+        /// </summary>
+        /// <param name="migration">A migration object</param>
         internal void RenameMigration(Migration migration)
         {
             var cmd = Connection.NewCommand(sql.RenameMigration, transaction);
@@ -196,6 +253,7 @@ namespace Minimig
             cmd.AddParameter("Hash", migration.Hash);
 
             int affected = cmd.ExecuteNonQuery();
+
             if (affected != 1)
                 throw new Exception($"Failure renaming the migration record. {affected} rows affected. Expected 1.");
         }

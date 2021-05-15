@@ -25,6 +25,10 @@ namespace Minimig
 
         public IEnumerable<Migration> Migrations { get; }
 
+        /// <summary>
+        /// Create an instance of the migrator object after validation are completed
+        /// </summary>
+        /// <param name="options"></param>
         internal Migrator(Options options)
         {
             output = options.Output;
@@ -76,14 +80,26 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Dispose of the database connection context
+        /// </summary>
         public void Dispose() => db?.Dispose();
 
+        /// <summary>
+        /// Get minimig version
+        /// </summary>
+        /// <returns>A string detailing the version of the console</returns>
         public static string GetVersion()
         {
             var attr = typeof(Migrator).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
             return attr.InformationalVersion;
         }
 
+        /// <summary>
+        /// Get the amount of migrations left to process
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns>An int with the total of migrations left</returns>
         public static int GetOutstandingMigrationsCount(Options options)
         {
             using (var migrator = Create(options))
@@ -99,6 +115,11 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Execute the migrations left to process
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns>An object defining the migration result</returns>
         public static MigrationResult RunOutstandingMigrations(Options options)
         {
             using (var migrator = Create(options))
@@ -107,6 +128,11 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Create the migrator object instance
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns>An instance of the migrator class</returns>
         // this only exists because you don't expect a constructor to perform I/O, whereas calling Create() implies there might be some work being performed
         private static Migrator Create(Options options) => new Migrator(options);
 
@@ -115,6 +141,10 @@ namespace Minimig
                      .OrderBy(f => f)
                      .Select(f => new Migration(f, commandSplitter));
 
+        /// <summary>
+        /// Execute the migrations left
+        /// </summary>
+        /// <returns>An object defining the migration result</returns>
         private MigrationResult RunOutstandingMigrations()
         {
             Log("Running migrations" + (isPreview ? " (preview mode)" : ""));
@@ -181,6 +211,11 @@ namespace Minimig
             return result;
         }
 
+        /// <summary>
+        /// Calculate what must be done with the migration
+        /// </summary>
+        /// <param name="migration">A migration execution object</param>
+        /// <returns>An enum defining what to do with the migration</returns>
         private MigrateMode Migrate(Migration migration)
         {
             var mode = migration.GetMigrateMode(alreadyRan);
@@ -210,6 +245,10 @@ namespace Minimig
             return mode;
         }
 
+        /// <summary>
+        /// Rename the migration
+        /// </summary>
+        /// <param name="migration">A migration execution object</param>
         private void RenameMigration(Migration migration)
         {
             var existing = alreadyRan.ByHash[migration.Hash];
@@ -221,6 +260,11 @@ namespace Minimig
             EndMigration(migration);
         }
 
+        /// <summary>
+        /// Run the migrations commands as based on the migration mode
+        /// </summary>
+        /// <param name="migration">A migration execution object</param>
+        /// <param name="mode">An enum defining the migration mode</param>
         private void RunMigrationCommands(Migration migration, MigrateMode mode)
         {
             BeginMigration(migration.UseTransaction);
@@ -261,6 +305,10 @@ namespace Minimig
             EndMigration(migration);
         }
 
+        /// <summary>
+        /// Start the migration
+        /// </summary>
+        /// <param name="useTransaction">flag to determine if a transaciton is required or not</param>
         private void BeginMigration(bool useTransaction)
         {
             if (useTransaction)
@@ -282,6 +330,10 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Finish the migration
+        /// </summary>
+        /// <param name="migration">A migration execution object</param>
         private void EndMigration(Migration migration)
         {
             if (db.HasPendingTransaction)
@@ -293,6 +345,11 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Handle a failed migration
+        /// </summary>
+        /// <param name="migration">A migration execution object</param>
+        /// <param name="ex">An exception indicating what error ocurred</param>
         private void MigrationFailed(Migration migration, Exception ex)
         {
             Log();
@@ -326,8 +383,15 @@ namespace Minimig
             }
         }
 
+        /// <summary>
+        /// Write to the console the message sent
+        /// </summary>
+        /// <param name="str">A string to write into the console, defaults to empty string</param>
         private void Log(string str = "") => output?.WriteLine(str);
 
+        /// <summary>
+        /// Validate that the migration table exists prior to processing, if it doesnt, it creates it
+        /// </summary>
         private void EnsureMigrationsTableExists()
         {
             if (db.MigrationTableExists())
@@ -347,6 +411,10 @@ namespace Minimig
             tableExists = true;
         }
 
+        /// <summary>
+        /// Validate that the migration schema exists prior to processing
+        /// </summary>
+        /// <returns></returns>
         private bool ValidateMigrationsSchemaIsAvailable()
         {
             if (db.SchemaMigrationExists())

@@ -9,6 +9,10 @@ namespace Minimig
         public Dictionary<string, MigrationRow> ByHash { get; } = new Dictionary<string, MigrationRow>();
         public MigrationRow Last { get; }
 
+        /// <summary>
+        /// Populate the  properties needed to search migrations by filename or by hash
+        /// </summary>
+        /// <param name="rows"></param>
         internal AlreadyRan(IEnumerable<MigrationRow> rows)
         {
             MigrationRow last = null;

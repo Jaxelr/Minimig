@@ -28,10 +28,17 @@ namespace MinimigTests.Integration
                 postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
             }
 
+            string mysqlConnEnv = Environment.GetEnvironmentVariable("MySql_Connection");
+            if (string.IsNullOrEmpty(mysqlConnEnv))
+            {
+                mysqlConnEnv = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;";
+            }
+
             return new List<object[]>
             {
                 new object[] { sqlServerConnEnv, DatabaseProvider.sqlserver },
-                new object[] { postgresConnEnv, DatabaseProvider.postgres }
+                new object[] { postgresConnEnv, DatabaseProvider.postgres },
+                new object[] { mysqlConnEnv, DatabaseProvider.mysql }
             };
         }
 
@@ -276,7 +283,7 @@ namespace MinimigTests.Integration
             const string table = "minimigTableTest3";
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var row = new FakeMigrationRow();
-            const string dateFormat = "yyyy-MM-dd hh:mm:ss";
+            const string dateFormat = "yyyy-MM-dd hh:mm";
 
             //Act
             using var context = new ConnectionContext(options);
@@ -305,7 +312,7 @@ namespace MinimigTests.Integration
             var row = new FakeMigrationRow();
             const int newDuration = 20;
             string newHash = Guid.NewGuid().ToString();
-            const string dateFormat = "yyyy-MM-dd hh:mm:ss";
+            const string dateFormat = "yyyy-MM-dd hh:mm";
 
             //Act
             var context = new ConnectionContext(options);
@@ -359,7 +366,7 @@ namespace MinimigTests.Integration
             var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
             var migration = new FakeMigration(filePath);
             var row = new FakeMigrationRow(migration.Filename, migration.Hash);
-            const string dateFormat = "yyyy-MM-dd hh:mm:ss";
+            const string dateFormat = "yyyy-MM-dd hh:mm";
 
             //Act
             using var context = new ConnectionContext(options);
