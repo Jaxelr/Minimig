@@ -7,7 +7,6 @@ Minimig is a forward-only, database migrator for SQL Server, MySql and Postgres.
 | Appveyor  | Branch | Coverage |
 | :---:     | :---: | :--: |
 | [![Build status][build-master-img]][build-master] | master | [![CodeCov][codecov-master-img]][codecov-master] |
-| [![Build status][build-develop-img]][build-develop] | develop | [![CodeCov][codecov-develop-img]][codecov-develop] |
 
 ## Packages
 
@@ -130,13 +129,9 @@ Minimig's icon was created by [Freepik](https://www.freepik.com/) under [Creativ
 
 [build-master-img]: https://ci.appveyor.com/api/projects/status/t7e2n08lgqb4jvui/branch/master?svg=true
 [build-master]: https://ci.appveyor.com/project/Jaxelr/minimig/branch/master
-[build-develop-img]: https://ci.appveyor.com/api/projects/status/t7e2n08lgqb4jvui/branch/develop?svg=true
-[build-develop]: https://ci.appveyor.com/project/Jaxelr/minimig/branch/develop
 [nuget-mig-img]: https://img.shields.io/nuget/v/Minimig.svg
 [nuget-mig]: https://www.nuget.org/packages/Minimig
 [myget-mig-img]: https://img.shields.io/myget/minimig/v/Minimig.svg
 [myget-mig]: https://www.myget.org/feed/minimig/package/nuget/Minimig
 [codecov-master-img]: https://codecov.io/gh/Jaxelr/Minimig/branch/master/graph/badge.svg
 [codecov-master]: https://codecov.io/gh/Jaxelr/Minimig/branch/master
-[codecov-develop-img]: https://codecov.io/gh/Jaxelr/Minimig/branch/develop/graph/badge.svg
-[codecov-develop]: https://codecov.io/gh/Jaxelr/Minimig/branch/develop
