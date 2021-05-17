@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Authors>Jaxel Rojas</Authors>
     <ToolCommandName>mig</ToolCommandName>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
@@ -10,14 +9,12 @@
     <AssemblyTitle>Minimig</AssemblyTitle>
     <Title>Minimig</Title>
     <Product>Minimig</Product>
-    <Copyright>Copyright 2021</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Jaxelr/Minimig</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Jaxelr/Minimig</RepositoryUrl>
     <PackageTags>migration;sql;sqlserver;database;postgresql;mysql</PackageTags>
-    <Version>0.7.0</Version>
     <Description>A simple database migrator for SQL Server - Postgresql - MySql</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>Added support for MySql</PackageReleaseNotes>
