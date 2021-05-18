@@ -76,32 +76,33 @@ mig --folder="c:\\path\\to\\migrations" --database=MyLocalDatabase
 Use `mig --help` to show the complete set of options:
 
 ``` cmd
-Usage: mig [OPTIONS]+
-  Runs all *.sql files in the folder --folder=<directory>.
-  The databse connection can be specified using a full connection string
-  with --connection, or Minimig can generate an integrated auth connection
-  string using the --database and optional --server arguments.
+Usage: Minimig [OPTIONS]+
+  Runs all *.sql files in the directory --dir=<directory>.
+  The databse connection can be specified using a full connection string with --connection,
+  or Minimig can generate an integrated auth connection string using the --database and
+  optional --server arguments.
 
   -h, --help                 Shows this help message.
-  -c, --connection=VALUE     A SQL Server connection string. For integrated
-                               auth, you can use --database and --server
-                               instead.
-  -d, --database=VALUE       Generates an integrated auth connection string
+  -c, --connection=VALUE     A connection string (can be Postgresql or 
+                               SqlServer or MySql). For integrated auth, you 
+                               can use --database and --server instead.
+  -d, --database=VALUE       Generates an integrated auth connection string 
                                for the specified database.
-  -s, --server=VALUE         Generates an integrated auth connection string
+  -s, --server=VALUE         Generates an integrated auth connection string 
                                with the specified server (default: localhost).
-  -f, --folder=VALUE         The folder containing your .sql migration files
+  -f, --folder=VALUE         The folder containing your .sql migration files 
                                (defaults to current working directory).
       --timeout=VALUE        Command timeout duration in seconds (default: 30)
       --preview              Run outstanding migrations, but roll them back.
-      --global               Run all outstanding migrations in a single
-                               transaction, if possible.
-      --table=VALUE          Name of the table used to track migrations
-                               (default: Migrations)
-      --schema=VALUE         Name of the schema used to track migrations
-                               (default: dbo)
-  -p, --provider=VALUE         Use a specific database provider options:
+  -p, --provider=VALUE       Use a specific database provider options: 
                                sqlserver (default), postgres, mysql
+      --global               Run all outstanding migrations in a single 
+                               transaction, if possible.
+      --table=VALUE          Name of the table used to track migrations 
+                               (default: Migrations)
+      --schema=VALUE         Name of the schema to be used to track 
+                               migrations (default: dbo for sqlserver, public 
+                               for postgres, mysql for mysql)
       --force                Will rerun modified migrations.
       --version              Print version number.
       --count                Print the number of outstanding migrations.
