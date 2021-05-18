@@ -66,6 +66,7 @@ To run migrations the typical usage is:
 ``` cmd
 mig --folder="c:\path\to\migrations" --connection="Persist Security Info=False;Integrated Security=true;Initial Catalog=MyDatabase;server=localhost"
 ```
+> By default the provider used is Sql Server
 
 If you use integrated auth, you can use the `--database` and `--server` arguments instead of supplying a connection string (server defaults to "localhost").
 
