@@ -113,6 +113,10 @@ Usage: Minimig [OPTIONS]+
 
 Minimig has no such concept. It is a forward-only tool. This is done to keep a minimalistic approach.
 
+### Running Migrations on CI
+
+It is relatively trivial  to configure a docker sql image and run minimig on a ci in order to test your sql migrations, a sample is included on the [following repository](https://github.com/Jaxelr/ci-run-migrations)
+
 ### Uninstallation
 
 For uninstallation execute `dotnet tool uninstall --global Minimig` from terminal.
