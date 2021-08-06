@@ -26,7 +26,7 @@ To install the prerelease version (from myget), you can add the option `--add-so
 
 A migration is just plain T-SQL saved in a .sql file. Individual commands are separated with the `GO` keyword for sql server, just like when using [SSMS](https://msdn.microsoft.com/en-us/library/mt238290.aspx). 
 
-> In the case of mysql and postgres, the separator used is the semicolon(;) since `GO` is not supported on those databases
+> In the case of mysql and postgres, the separator used is the semicolon (;) since `GO` is not supported on those databases
 
 For example:
 
