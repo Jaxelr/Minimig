@@ -196,10 +196,10 @@ namespace MinimigTests.Unit
         }
 
         [Fact]
-        public void Map_Database_Provider_postgres()
+        public void Map_Database_Provider_postgresql()
         {
             //Arrange
-            const string provider = "postgres";
+            const string provider = "postgresql";
             var options = new Options();
 
             //Act
@@ -222,6 +222,21 @@ namespace MinimigTests.Unit
 
             //Assert
             Assert.Equal(DatabaseProvider.sqlserver, databaseProvider);
+            Assert.Equal(provider, databaseProvider.ToString());
+        }
+
+        [Fact]
+        public void Map_Database_Provider_mysql()
+        {
+            //Arrange
+            const string provider = "mysql";
+            var options = new Options();
+
+            //Act
+            var databaseProvider = options.MapDatabaseProvider(provider);
+
+            //Assert
+            Assert.Equal(DatabaseProvider.mysql, databaseProvider);
             Assert.Equal(provider, databaseProvider.ToString());
         }
 

@@ -97,7 +97,7 @@ namespace MinimigTests.Unit
         }
 
         [Fact]
-        public void Verify_command_splitter_postgres()
+        public void Verify_command_splitter_postgresql()
         {
             //Arrange
             const string connectionString = "Server=localhost;Port=5432;Database=postgres;";
