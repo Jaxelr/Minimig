@@ -12,7 +12,7 @@ namespace Minimig
     {
         unknown = -1,
         sqlserver = 0,
-        postgres = 1,
+        postgresql = 1,
         mysql = 2
     }
 
@@ -51,13 +51,12 @@ namespace Minimig
                     Database = new SqlConnectionStringBuilder(connStr).InitialCatalog;
                     break;
 
-                case DatabaseProvider.postgres:
+                case DatabaseProvider.postgresql:
                     sql = new PostgreSqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new NpgsqlConnection(connStr);
                     Database = new NpgsqlConnectionStringBuilder(connStr).Database;
                     break;
                 case DatabaseProvider.mysql:
-                    //Missing statements
                     sql = new MySqlStatements(options.GetMigrationsTable(), options.GetMigrationsTableSchema());
                     Connection = new MySqlConnection(connStr);
                     Database = new MySqlConnectionStringBuilder(connStr).Database;

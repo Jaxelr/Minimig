@@ -37,7 +37,7 @@ namespace MinimigTests.Integration
             return new List<object[]>
             {
                 new object[] { sqlServerConnEnv, DatabaseProvider.sqlserver },
-                new object[] { postgresConnEnv, DatabaseProvider.postgres },
+                new object[] { postgresConnEnv, DatabaseProvider.postgresql },
                 new object[] { mysqlConnEnv, DatabaseProvider.mysql }
             };
         }

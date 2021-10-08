@@ -101,7 +101,7 @@ namespace MinimigTests.Unit
         {
             //Arrange
             const string connectionString = "Server=localhost;Port=5432;Database=postgres;";
-            const DatabaseProvider provider = DatabaseProvider.postgres;
+            const DatabaseProvider provider = DatabaseProvider.postgresql;
             var options = new Options() { ConnectionString = connectionString, Provider = provider };
 
             //Act

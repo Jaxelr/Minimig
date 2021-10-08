@@ -104,7 +104,7 @@ namespace MinimigTests.Unit
             var options = new Options() { Server = inputServer, Database = inputDatabase };
 
             //Act
-            string conn = options.GetConnectionString(DatabaseProvider.postgres);
+            string conn = options.GetConnectionString(DatabaseProvider.postgresql);
 
             //Assert
             Assert.Equal(inputConnection, conn);
@@ -206,7 +206,7 @@ namespace MinimigTests.Unit
             var databaseProvider = options.MapDatabaseProvider(provider);
 
             //Assert
-            Assert.Equal(DatabaseProvider.postgres, databaseProvider);
+            Assert.Equal(DatabaseProvider.postgresql, databaseProvider);
             Assert.Equal(provider, databaseProvider.ToString());
         }
 

@@ -56,7 +56,7 @@ namespace Minimig
 
             if (provider is DatabaseProvider.sqlserver)
                 return $"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={(string.IsNullOrEmpty(Server) ? "." : Server)}";
-            else if (provider is DatabaseProvider.postgres)
+            else if (provider is DatabaseProvider.postgresql)
                 return $"Server={(string.IsNullOrEmpty(Server) ? "localhost" : Server)};Port=5432;Database={Database};Integrated Security=true;";
             else if (provider is DatabaseProvider.mysql)
                 return $"Server={(string.IsNullOrEmpty(Server) ? "localhost" : Server)};Port=3306;Database={Database};IntegratedSecurity=yes;";
@@ -82,7 +82,7 @@ namespace Minimig
             {
                 switch (Provider)
                 {
-                    case DatabaseProvider.postgres:
+                    case DatabaseProvider.postgresql:
                         return "public";
                     case DatabaseProvider.mysql:
                         return "mysql";
@@ -108,7 +108,7 @@ namespace Minimig
                 return provider;
             }
 
-            throw new Exception("The string provided as a provider doesnt correspond to one of the possible values (sqlserver, postgres)");
+            throw new Exception("The string provided as a provider doesnt correspond to one of the possible values (sqlserver, postgresql, mysql)");
         }
 
         /// <summary>
