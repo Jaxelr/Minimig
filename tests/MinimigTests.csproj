@@ -36,19 +36,19 @@
     <None Update="SampleMigrations\MySql\0005 - Drop tables One To Three.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SampleMigrations\Postgres\0001 - Add One and Two tables.sql">
+    <None Update="SampleMigrations\Postgresql\0001 - Add One and Two tables.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SampleMigrations\Postgres\0002 - Add Three Table.sql">
+    <None Update="SampleMigrations\Postgresql\0002 - Add Three Table.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SampleMigrations\Postgres\0003 - Insert Three data.sql">
+    <None Update="SampleMigrations\Postgresql\0003 - Insert Three data.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SampleMigrations\Postgres\0004 - Add FavoriteNumber to Two.sql">
+    <None Update="SampleMigrations\Postgresql\0004 - Add FavoriteNumber to Two.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SampleMigrations\Postgres\0005 - Drop tables One To Three.sql">
+    <None Update="SampleMigrations\Postgresql\0005 - Drop tables One To Three.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SampleMigrations\SqlServer\0001 - Add One and Two tables.sql">
