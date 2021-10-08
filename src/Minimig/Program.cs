@@ -62,16 +62,16 @@ namespace Minimig
             var optionSet = new OptionSet()
             {
                 { "h|help", "Shows this help message.", v => showHelp= v != null },
-                {"c|connection=", "A connection string (can be PostgreSQL or SQLServer or MySQL). For integrated auth, you can use --database and --server instead (only for.", v => optionsTmp.ConnectionString = v },
+                {"c|connection=", "A connection string (can be PostgreSQL or SQLServer or MySQL). For integrated auth, you can use --database and --server instead.", v => optionsTmp.ConnectionString = v },
                 {"d|database=", "Generates an integrated auth connection string for the specified database.", v => optionsTmp.Database = v },
                 {"s|server=", "Generates an integrated auth connection string with the specified server (default: localhost).", v => optionsTmp.Server = v },
                 {"f|folder=", "The folder containing your .sql migration files (defaults to current working directory).", v => optionsTmp.MigrationsFolder = v },
-                {"timeout=", "Command timeout duration in seconds (default: 30)", v => optionsTmp.CommandTimeout = int.Parse(v) },
+                {"timeout=", "Command timeout duration in seconds (default: 30).", v => optionsTmp.CommandTimeout = int.Parse(v) },
                 {"preview", "Run outstanding migrations, but roll them back.", v => optionsTmp.IsPreview = v != null },
-                {"p|provider=", "Use a specific database provider options: sqlserver (default), postgresql, mysql", v => optionsTmp.Provider = optionsTmp.MapDatabaseProvider(v) },
+                {"p|provider=", "Use a specific database provider options: sqlserver (default), postgresql, mysql.", v => optionsTmp.Provider = optionsTmp.MapDatabaseProvider(v) },
                 {"global", "Run all outstanding migrations in a single transaction, if possible.", v => optionsTmp.UseGlobalTransaction = v != null },
-                {"table=", "Name of the table used to track migrations (default: Migrations)", v => optionsTmp.MigrationsTable = v },
-                {"schema=", "Name of the schema to be used to track migrations (default: dbo for sqlserver, public for postgresql, mysql for mysql)", v => optionsTmp.MigrationsTableSchema = v },
+                {"table=", "Name of the table used to track migrations (default: Migrations).", v => optionsTmp.MigrationsTable = v },
+                {"schema=", "Name of the schema to be used to track migrations (default: dbo for sqlserver, public for postgresql, mysql for mysql).", v => optionsTmp.MigrationsTableSchema = v },
                 {"force", "Will rerun modified migrations.", v => optionsTmp.Force = v != null },
                 {"version", "Print version number.", v => showVersion = v != null },
                 { "count", "Print the number of outstanding migrations.", v => getCount = v != null },
@@ -117,10 +117,12 @@ namespace Minimig
             Console.WriteLine("Usage: Minimig [OPTIONS]+");
             Console.WriteLine("  Runs all *.sql files in the directory --f=<folder> specified.");
             Console.WriteLine("  The databse connection can be specified using the following combinations:");
-            Console.WriteLine("  - A connection string with the --connection along a --provider (sqlserver, postgresql, mysql)");
-            Console.WriteLine("    if no provider is specified, the program defaults to sqlserver");
-            Console.WriteLine("  - Minimig can generate an integrated auth connection string using the --database and");
-            Console.WriteLine("    optional --server arguments, while still requiring the --provider (sqlserver, postgresql, mysql).");
+            Console.WriteLine("  - A connection string with the --connection along a");
+            Console.WriteLine("      --provider (sqlserver, postgresql, mysql) if no provider is specified,");
+            Console.WriteLine("      the program defaults to sqlserver");
+            Console.WriteLine("  - Minimig can generate an integrated auth connection string using ");
+            Console.WriteLine("      the --database and optional --server arguments,");
+            Console.WriteLine("      along a --provider (sqlserver, postgresql, mysql).");
             Console.WriteLine();
             optionSet.WriteOptionDescriptions(Console.Out);
         }
