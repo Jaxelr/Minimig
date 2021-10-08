@@ -10,7 +10,7 @@ namespace Minimig
         public MigrationRow Last { get; }
 
         /// <summary>
-        /// Populate the  properties needed to search migrations by filename or by hash
+        /// Populate the properties needed to search migrations by filename or by hash
         /// </summary>
         /// <param name="rows"></param>
         internal AlreadyRan(IEnumerable<MigrationRow> rows)

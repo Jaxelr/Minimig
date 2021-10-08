@@ -136,6 +136,12 @@ namespace Minimig
         // this only exists because you don't expect a constructor to perform I/O, whereas calling Create() implies there might be some work being performed
         private static Migrator Create(Options options) => new Migrator(options);
 
+        /// <summary>
+        /// Get all the migrations available in a directory specified
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="commandSplitter"></param>
+        /// <returns>An generic Enumerable of Migrations</returns>
         private static IEnumerable<Migration> GetAllMigrations(string directory, Regex commandSplitter) =>
             Directory.GetFiles(directory, "*.sql")
                      .OrderBy(f => f)
@@ -384,12 +390,6 @@ namespace Minimig
         }
 
         /// <summary>
-        /// Write to the console the message sent
-        /// </summary>
-        /// <param name="str">A string to write into the console, defaults to empty string</param>
-        private void Log(string str = "") => output?.WriteLine(str);
-
-        /// <summary>
         /// Validate that the migration table exists prior to processing, if it doesnt, it creates it
         /// </summary>
         private void EnsureMigrationsTableExists()
@@ -414,7 +414,7 @@ namespace Minimig
         /// <summary>
         /// Validate that the migration schema exists prior to processing
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A boolean value indicating if the schema exists</returns>
         private bool ValidateMigrationsSchemaIsAvailable()
         {
             if (db.SchemaMigrationExists())
@@ -425,5 +425,11 @@ namespace Minimig
             Log($"No schema found (or no access given) that corresponds to the given input schema {inputSchema}");
             return false;
         }
+
+        /// <summary>
+        /// Write to the console the message sent
+        /// </summary>
+        /// <param name="str">A string to write into the console, defaults to empty string</param>
+        private void Log(string str = "") => output?.WriteLine(str);
     }
 }
