@@ -59,51 +59,56 @@ We recommend prefixing migration file names with a zero-padded number so that th
 
 ### Running Migrations
 
+Migrations run from the command line, in order to allow for automation to be used.
+
 #### Command Line
 
 To run migrations the typical usage is:
 
 ``` cmd
-mig --folder="c:\path\to\migrations" --connection="Persist Security Info=False;Integrated Security=true;Initial Catalog=MyDatabase;server=localhost"
+mig --folder="c:\path\to\migrations" --connection="Persist Security Info=False;Integrated Security=true;Initial Catalog=MyDatabase;server=localhost" --provider=sqlserver
 ```
 > By default the provider used is Sql Server
 
 If you use integrated auth, you can use the `--database` and `--server` arguments instead of supplying a connection string (server defaults to "localhost").
 
 ``` cmd
-mig --folder="c:\\path\\to\\migrations" --database=MyLocalDatabase
+mig --folder="c:\\path\\to\\migrations" --database=MyLocalDatabase --server=MyServer --provider=sqlserver
 ```
 
 Use `mig --help` to show the complete set of options:
 
 ``` cmd
 Usage: Minimig [OPTIONS]+
-  Runs all *.sql files in the directory --dir=<directory>.
-  The databse connection can be specified using a full connection string with --connection,
-  or Minimig can generate an integrated auth connection string using the --database and
-  optional --server arguments.
+Runs all *.sql files in the directory --f=<folder> specified.
+  The databse connection can be specified using the following combinations:
+  -A connection string with the --connection along a --provider
+      if no provider is specified, the program defaults to sqlserver.
+  -Minimig can generate an integrated auth connection string using
+      the --database and optional --server arguments, along a --provider.
 
   -h, --help                 Shows this help message.
-  -c, --connection=VALUE     A connection string (can be Postgresql or 
-                               SqlServer or MySql). For integrated auth, you 
+  -c, --connection=VALUE     A connection string (can be PostgreSQL or 
+                               SQLServer or MySQL). For integrated auth, you
                                can use --database and --server instead.
-  -d, --database=VALUE       Generates an integrated auth connection string 
+  -d, --database=VALUE       Generates an integrated auth connection string
                                for the specified database.
-  -s, --server=VALUE         Generates an integrated auth connection string 
+  -s, --server=VALUE         Generates an integrated auth connection string
                                with the specified server (default: localhost).
-  -f, --folder=VALUE         The folder containing your .sql migration files 
+  -f, --folder=VALUE         The folder containing your .sql migration files
                                (defaults to current working directory).
-      --timeout=VALUE        Command timeout duration in seconds (default: 30)
+      --timeout=VALUE        Command timeout duration in seconds (default:
+                               30).
       --preview              Run outstanding migrations, but roll them back.
-  -p, --provider=VALUE       Use a specific database provider options: 
-                               sqlserver (default), postgres, mysql
-      --global               Run all outstanding migrations in a single 
+  -p, --provider=VALUE       Use a specific database provider options:
+                               sqlserver (default), postgresql, mysql.
+      --global               Run all outstanding migrations in a single
                                transaction, if possible.
-      --table=VALUE          Name of the table used to track migrations 
-                               (default: Migrations)
-      --schema=VALUE         Name of the schema to be used to track 
-                               migrations (default: dbo for sqlserver, public 
-                               for postgres, mysql for mysql)
+      --table=VALUE          Name of the table used to track migrations
+                               (default: Migrations).
+      --schema=VALUE         Name of the schema to be used to track
+                               migrations (default: dbo for sqlserver, public
+                               for postgresql, mysql for mysql).
       --force                Will rerun modified migrations.
       --version              Print version number.
       --count                Print the number of outstanding migrations.
