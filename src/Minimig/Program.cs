@@ -117,12 +117,10 @@ namespace Minimig
             Console.WriteLine("Usage: Minimig [OPTIONS]+");
             Console.WriteLine("  Runs all *.sql files in the directory --f=<folder> specified.");
             Console.WriteLine("  The databse connection can be specified using the following combinations:");
-            Console.WriteLine("  - A connection string with the --connection along a");
-            Console.WriteLine("      --provider (sqlserver, postgresql, mysql) if no provider is specified,");
-            Console.WriteLine("      the program defaults to sqlserver");
-            Console.WriteLine("  - Minimig can generate an integrated auth connection string using ");
-            Console.WriteLine("      the --database and optional --server arguments,");
-            Console.WriteLine("      along a --provider (sqlserver, postgresql, mysql).");
+            Console.WriteLine("  -A connection string with the --connection along a --provider");
+            Console.WriteLine("      if no provider is specified, the program defaults to sqlserver.");
+            Console.WriteLine("  -Minimig can generate an integrated auth connection string using ");
+            Console.WriteLine("      the --database and optional --server arguments, along a --provider.");
             Console.WriteLine();
             optionSet.WriteOptionDescriptions(Console.Out);
         }
