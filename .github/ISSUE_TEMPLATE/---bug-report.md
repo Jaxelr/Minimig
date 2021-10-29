@@ -1,9 +1,9 @@
 ---
-name: Bug report
+name: "\U0001F41E Bug report"
 about: Report an issue you're experiencing
-title: 
-labels: ''
-assignees: ''
+title: ''
+labels: bug
+assignees: Jaxelr
 
 ---
 
@@ -17,8 +17,8 @@ assignees: ''
 
 ## Expected behavior
 
-<!-- What you expected to happen? -->
+<!-- What is expected to happen? -->
 
-- Dotnet version: [netcore2, dotnet472]
+- Dotnet version: [netcore3.1, dotnet472]
 - Library version: [0.1.0]
 - OS version: [windows, mac]

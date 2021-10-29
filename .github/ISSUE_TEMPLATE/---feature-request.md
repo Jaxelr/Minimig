@@ -1,9 +1,9 @@
 ---
-name: Feature request
+name: "\U0001F4A1 Feature request"
 about: Suggest a new feature or enhancement for this project
-title: 
-labels: ''
-assignees: ''
+title: ''
+labels: enhancement
+assignees: Jaxelr
 
 ---
 
