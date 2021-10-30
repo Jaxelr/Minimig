@@ -1,9 +1,9 @@
 ---
-name: Support
+name: "\U0001F4DA Support"
 about: Ask a question or request help with the library
-title: 
-labels: ''
-assignees: ''
+title: ''
+labels: question
+assignees: Jaxelr
 
 ---
 
