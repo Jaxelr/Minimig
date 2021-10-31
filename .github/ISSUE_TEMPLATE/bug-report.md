@@ -19,6 +19,6 @@ assignees: Jaxelr
 
 <!-- What is expected to happen? -->
 
-- Dotnet version: [netcore3.1, dotnet472]
+- Dotnet version: [net5.0, dotnet472]
 - Library version: [0.1.0]
 - OS version: [windows, mac]

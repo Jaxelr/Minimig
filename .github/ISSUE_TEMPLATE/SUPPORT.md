@@ -15,6 +15,6 @@ assignees: Jaxelr
 
 <!-- Enumerate the steps to reproduce the situation, if necessary. -->
 
-- Dotnet version: [netcore2, dotnet472]
+- Dotnet version: [net5.0, dotnet472]
 - Library version: [0.1.0]
 - OS version: [windows, mac]
