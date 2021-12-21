@@ -17,7 +17,7 @@
     <PackageTags>migration;sql;sqlserver;database;postgresql;mysql</PackageTags>
     <Description>A simple database migrator for SQL Server, PostgreSQL and MySQL</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added support for net5.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Added support for net6.0</PackageReleaseNotes>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TieredCompilation>true</TieredCompilation>
