@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace Minimig;
@@ -29,12 +29,12 @@ public class Migrator : IDisposable
     internal Migrator(Options options)
     {
         output = options.Output;
-        inputSchema = options.MigrationsTableSchema;
+        inputSchema = options.Schema;
 
         options.AssertValid();
 
-        isPreview = options.IsPreview;
-        useGlobalTransaction = options.UseGlobalTransaction || isPreview; // always run preview in a global transaction so previous migrations are seen
+        isPreview = options.Preview;
+        useGlobalTransaction = options.Global || isPreview; // always run preview in a global transaction so previous migrations are seen
         force = options.Force;
 
         string dir = options.GetFolder();
@@ -68,7 +68,7 @@ public class Migrator : IDisposable
 
         Log();
 
-        if (isPreview && !options.UseGlobalTransaction)
+        if (isPreview && !options.Global)
         {
             Log("Using global transaction mode because of preview mode");
             Log();
@@ -79,16 +79,6 @@ public class Migrator : IDisposable
     /// Dispose of the database connection context
     /// </summary>
     public void Dispose() => db?.Dispose();
-
-    /// <summary>
-    /// Get minimig version
-    /// </summary>
-    /// <returns>A string detailing the version of the console</returns>
-    public static string GetVersion()
-    {
-        var attr = typeof(Migrator).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-        return attr.InformationalVersion;
-    }
 
     /// <summary>
     /// Get the amount of migrations left to process

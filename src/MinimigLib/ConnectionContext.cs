@@ -37,11 +37,11 @@ internal class ConnectionContext : IDisposable
     /// <param name="options">Minimig custom option arguments</param>
     internal ConnectionContext(Options options)
     {
-        timeout = options.CommandTimeout;
-        IsPreview = options.IsPreview;
-        Provider = options.Provider;
+        timeout = options.Timeout;
+        IsPreview = options.Preview;
+        Provider = options.MapDatabaseProvider();
 
-        string connStr = options.GetConnectionString(Provider);
+        string connStr = options.GetConnectionString();
 
         switch (Provider)
         {
@@ -90,7 +90,7 @@ internal class ConnectionContext : IDisposable
     {
         if (IsPreview)
             transaction.Rollback();
-        else if (transaction is not null)
+        else if (transaction is IDbTransaction)
             transaction.Commit();
         else
             throw new InvalidOperationException("Cannot Commit a transaction without beginning");
