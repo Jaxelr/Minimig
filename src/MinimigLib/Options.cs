@@ -18,7 +18,7 @@ public class Options
     public TextWriter Output { get; set; }
     public bool Force { get; set; }
     public bool Count { get; set; }
-    public string Provider { get; set; }
+    public DatabaseProvider Provider { get; set; }
 
     /// <summary>
     /// Determine if the current options satisfy a plausible execution of a migration
@@ -47,15 +47,13 @@ public class Options
     /// </summary>
     /// <param name="provider"></param>
     /// <returns>A valid ConnectionString</returns>
-    internal string GetConnectionString()
+    internal string GetConnectionString(DatabaseProvider provider)
     {
         if (!string.IsNullOrEmpty(Connection))
             return Connection;
 
         if (string.IsNullOrEmpty(Database))
             throw new Exception("No database assign to infer Connection String");
-
-        var provider = MapDatabaseProvider();
 
         if (provider is DatabaseProvider.sqlserver)
             return $"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={(string.IsNullOrEmpty(Server) ? "." : Server)}";
@@ -81,32 +79,20 @@ public class Options
     {
         if (string.IsNullOrEmpty(Schema))
         {
-            return MapDatabaseProvider() switch
+            switch (Provider)
             {
-                DatabaseProvider.postgresql => "public",
-                DatabaseProvider.mysql => "mysql",
-                _ => "dbo",
-            };
+                case DatabaseProvider.postgresql:
+                    return "public";
+                case DatabaseProvider.mysql:
+                    return "mysql";
+                default:
+                    return "dbo";
+            }
         }
         else
         {
             return Schema;
         }
-    }
-
-    /// <summary>
-    /// Map the provider text into the plausible enums
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns>An enum with the mapped provider</returns>
-    public DatabaseProvider MapDatabaseProvider()
-    {
-        if (Enum.TryParse(Provider.ToLowerInvariant(), out DatabaseProvider provider))
-        {
-            return provider;
-        }
-
-        throw new Exception("The provider doesnt correspond to one of the possible values (sqlserver, postgresql, mysql)");
     }
 
     /// <summary>
