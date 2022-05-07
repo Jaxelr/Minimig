@@ -5,406 +5,407 @@ using Minimig;
 using MinimigTests.Fakes;
 using Xunit;
 
-namespace MinimigTests.Integration;
-
-/*
- * Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
- */
-
-public class ConnectionContextFixture
+namespace MinimigTests.Integration
 {
-    public static IEnumerable<object[]> GetConnectionData()
+    /*
+     * Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
+     */
+
+    public class ConnectionContextFixture
     {
-        //We do this to pass the connection from Appveyor or locally
-        string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
-        if (string.IsNullOrEmpty(sqlServerConnEnv))
+        public static IEnumerable<object[]> GetConnectionData()
         {
-            sqlServerConnEnv = "Server=(local);Database=master;Trusted_Connection=true;";
+            //We do this to pass the connection from Appveyor or locally
+            string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
+            if (string.IsNullOrEmpty(sqlServerConnEnv))
+            {
+                sqlServerConnEnv = "Server=(local);Database=master;Trusted_Connection=true;";
+            }
+
+            string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
+            if (string.IsNullOrEmpty(postgresConnEnv))
+            {
+                postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
+            }
+
+            string mysqlConnEnv = Environment.GetEnvironmentVariable("MySql_Connection");
+            if (string.IsNullOrEmpty(mysqlConnEnv))
+            {
+                mysqlConnEnv = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;";
+            }
+
+            return new List<object[]>
+            {
+                new object[] { sqlServerConnEnv, DatabaseProvider.sqlserver },
+                new object[] { postgresConnEnv, DatabaseProvider.postgresql },
+                new object[] { mysqlConnEnv, DatabaseProvider.mysql }
+            };
         }
 
-        string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
-        if (string.IsNullOrEmpty(postgresConnEnv))
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Open_connection(string connectionString, DatabaseProvider provider)
         {
-            postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
+
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
         }
 
-        string mysqlConnEnv = Environment.GetEnvironmentVariable("MySql_Connection");
-        if (string.IsNullOrEmpty(mysqlConnEnv))
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Dispose_connection(string connectionString, DatabaseProvider provider)
         {
-            mysqlConnEnv = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;";
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
+
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.Dispose();
+
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
         }
 
-        return new List<object[]>
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Connection_has_pending_transactions(string connectionString, DatabaseProvider provider)
         {
-            new object[] { sqlServerConnEnv, DatabaseProvider.sqlserver },
-            new object[] { postgresConnEnv, DatabaseProvider.postgresql },
-            new object[] { mysqlConnEnv, DatabaseProvider.mysql }
-        };
-    }
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Open_connection(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.True(context.HasPendingTransaction);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Connection_commit_without_begin_invalid_operation_exception(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Dispose_connection(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            void action() => context.Commit();
 
-        //Act
-        var context = new ConnectionContext(options);
-        context.Open();
-        context.Dispose();
+            //Assert
+            Assert.Throws<InvalidOperationException>(action);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Closed, context.Connection.State);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Connection_has_completed_transactions(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Connection_has_pending_transactions(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.Commit();
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.BeginTransaction();
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.False(context.HasPendingTransaction);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.True(context.HasPendingTransaction);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Connection_has_completed_transactions_on_preview(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider, Preview = true };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Connection_commit_without_begin_invalid_operation_exception(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.Commit();
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        void action() => context.Commit();
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.False(context.HasPendingTransaction);
+        }
 
-        //Assert
-        Assert.Throws<InvalidOperationException>(action);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Connection_has_rollback_transactions(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Connection_has_completed_transactions(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.Rollback();
 
-        //Act
-        var context = new ConnectionContext(options);
-        context.Open();
-        context.BeginTransaction();
-        context.Commit();
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.False(context.HasPendingTransaction);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.False(context.HasPendingTransaction);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_command_connection(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Connection_has_completed_transactions_on_preview(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, IsPreview = true };
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.ExecuteCommand("SELECT 1");
 
-        //Act
-        var context = new ConnectionContext(options);
-        context.Open();
-        context.BeginTransaction();
-        context.Commit();
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.False(context.HasPendingTransaction);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_create_and_drop_migration_table(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Connection_has_rollback_transactions(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            bool exists = context.MigrationTableExists();
+            context.DropMigrationsTable();
+            bool existsAfter = context.MigrationTableExists();
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.BeginTransaction();
-        context.Rollback();
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.True(exists);
+            Assert.False(existsAfter);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.False(context.HasPendingTransaction);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_create_and_drop_schema(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            const string schema = "minimigtest";
+            var options = new Options() { Connection = connectionString, Provider = provider, Schema = schema };
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_command_connection(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.ExecuteCommand($"Create schema {schema}");
+            context.Commit();
+            bool existsSchema = context.SchemaMigrationExists();
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.ExecuteCommand("SELECT 1");
+            //Clean Up
+            context.ExecuteCommand($"Drop schema {schema}");
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-    }
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.True(existsSchema);
+        }
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_create_and_drop_migration_table(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_create_and_drop_schema_table(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            const string schema = "minimigtest2";
+            const string table = "minimigtabletest";
+            var options = new Options() { Connection = connectionString, Provider = provider, Schema = schema, Table = table };
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.CreateMigrationsTable();
-        bool exists = context.MigrationTableExists();
-        context.DropMigrationsTable();
-        bool existsAfter = context.MigrationTableExists();
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.BeginTransaction();
+            context.ExecuteCommand($"Create schema {schema}");
+            context.Commit();
+            bool existsSchema = context.SchemaMigrationExists();
+            context.CreateMigrationsTable();
+            bool existsTable = context.SchemaMigrationExists();
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.True(exists);
-        Assert.False(existsAfter);
-    }
+            //Clean Up
+            context.DropMigrationsTable();
+            context.ExecuteCommand($"Drop schema {schema}");
+            context.Dispose();
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_create_and_drop_schema(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        const string schema = "minimigtest";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema };
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.True(existsSchema);
+            Assert.True(existsTable);
+        }
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.BeginTransaction();
-        context.ExecuteCommand($"Create schema {schema}");
-        context.Commit();
-        bool existsSchema = context.SchemaMigrationExists();
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_create_migration_table_and_insert_row(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            const string table = "minimigTableTest2";
+            var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
+            var row = new FakeMigrationRow();
 
-        //Clean Up
-        context.ExecuteCommand($"Drop schema {schema}");
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            bool exists = context.MigrationTableExists();
+            context.InsertMigrationRecord(row);
+            context.DropMigrationsTable();
+            bool existsAfter = context.MigrationTableExists();
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.True(existsSchema);
-    }
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.True(exists);
+            Assert.False(existsAfter);
+        }
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_create_and_drop_schema_table(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        const string schema = "minimigtest2";
-        const string table = "minimigtabletest";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema, MigrationsTable = table };
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_create_migration_table_and_insert_check_row(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            const string table = "minimigTableTest3";
+            var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
+            var row = new FakeMigrationRow();
+            const string dateFormat = "yyyy-MM-dd hh:mm";
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.BeginTransaction();
-        context.ExecuteCommand($"Create schema {schema}");
-        context.Commit();
-        bool existsSchema = context.SchemaMigrationExists();
-        context.CreateMigrationsTable();
-        bool existsTable = context.SchemaMigrationExists();
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            context.InsertMigrationRecord(row);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
 
-        //Clean Up
-        context.DropMigrationsTable();
-        context.ExecuteCommand($"Drop schema {schema}");
-        context.Dispose();
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Closed, context.Connection.State);
-        Assert.True(existsSchema);
-        Assert.True(existsTable);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_create_migration_table_and_update_check_row(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            const string table = "minimigTableTest4";
+            var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
+            var row = new FakeMigrationRow();
+            const int newDuration = 20;
+            string newHash = Guid.NewGuid().ToString();
+            const string dateFormat = "yyyy-MM-dd hh:mm";
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_create_migration_table_and_insert_row(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        const string table = "minimigTableTest2";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
-        var row = new FakeMigrationRow();
+            //Act
+            var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            context.InsertMigrationRecord(row);
+            row.Duration = newDuration;
+            row.Hash = newHash;
+            context.UpdateMigrationRecordHash(row);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
+            context.Dispose();
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.CreateMigrationsTable();
-        bool exists = context.MigrationTableExists();
-        context.InsertMigrationRecord(row);
-        context.DropMigrationsTable();
-        bool existsAfter = context.MigrationTableExists();
+            //Assert
+            Assert.Equal(ConnectionState.Closed, context.Connection.State);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.True(exists);
-        Assert.False(existsAfter);
-    }
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Update_migration_without_record(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            var options = new Options() { Connection = connectionString, Provider = provider };
+            var row = new FakeMigrationRow();
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_create_migration_table_and_insert_check_row(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        const string table = "minimigTableTest3";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
-        var row = new FakeMigrationRow();
-        const string dateFormat = "yyyy-MM-dd hh:mm";
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            void action() => context.UpdateMigrationRecordHash(row);
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.CreateMigrationsTable();
-        context.InsertMigrationRecord(row);
-        var ran = context.GetAlreadyRan();
-        context.DropMigrationsTable();
+            //Assert
+            Assert.Throws<Exception>(action);
 
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.Equal(ran.Last.Hash, row.Hash);
-        Assert.Equal(ran.Last.Id, row.Id);
-        Assert.Equal(ran.Last.Filename, row.Filename);
-        Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
-        Assert.Equal(ran.Last.Duration, row.Duration);
-    }
+            //Cleanup
+            context.DropMigrationsTable();
+        }
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_create_migration_table_and_update_check_row(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        const string table = "minimigTableTest4";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
-        var row = new FakeMigrationRow();
-        const int newDuration = 20;
-        string newHash = Guid.NewGuid().ToString();
-        const string dateFormat = "yyyy-MM-dd hh:mm";
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Execute_create_migration_table_and_update_filename_row(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            const string table = "minimigTableTest5";
+            string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
+            var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
+            var migration = new FakeMigration(filePath);
+            var row = new FakeMigrationRow(migration.Filename, migration.Hash);
+            const string dateFormat = "yyyy-MM-dd hh:mm";
 
-        //Act
-        var context = new ConnectionContext(options);
-        context.Open();
-        context.CreateMigrationsTable();
-        context.InsertMigrationRecord(row);
-        row.Duration = newDuration;
-        row.Hash = newHash;
-        context.UpdateMigrationRecordHash(row);
-        var ran = context.GetAlreadyRan();
-        context.DropMigrationsTable();
-        context.Dispose();
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            context.InsertMigrationRecord(row);
+            context.RenameMigration(migration);
+            var ran = context.GetAlreadyRan();
+            context.DropMigrationsTable();
 
-        //Assert
-        Assert.Equal(ConnectionState.Closed, context.Connection.State);
-        Assert.Equal(ran.Last.Hash, row.Hash);
-        Assert.Equal(ran.Last.Id, row.Id);
-        Assert.Equal(ran.Last.Filename, row.Filename);
-        Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
-        Assert.Equal(ran.Last.Duration, row.Duration);
-    }
+            //Assert
+            Assert.Equal(ConnectionState.Open, context.Connection.State);
+            Assert.Equal(ran.Last.Hash, row.Hash);
+            Assert.Equal(ran.Last.Id, row.Id);
+            Assert.Equal(ran.Last.Filename, row.Filename);
+            Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
+            Assert.Equal(ran.Last.Duration, row.Duration);
+        }
 
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Update_migration_without_record(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
-        var row = new FakeMigrationRow();
+        [Theory]
+        [MemberData(nameof(GetConnectionData))]
+        public void Rename_migration_without_record(string connectionString, DatabaseProvider provider)
+        {
+            //Arrange
+            string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
+            var options = new Options() { Connection = connectionString, Provider = provider };
+            var migration = new FakeMigration(filePath);
 
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.CreateMigrationsTable();
-        void action() => context.UpdateMigrationRecordHash(row);
+            //Act
+            using var context = new ConnectionContext(options);
+            context.Open();
+            context.CreateMigrationsTable();
+            void action() => context.RenameMigration(migration);
 
-        //Assert
-        Assert.Throws<Exception>(action);
+            //Assert
+            Assert.Throws<Exception>(action);
 
-        //Cleanup
-        context.DropMigrationsTable();
-    }
-
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Execute_create_migration_table_and_update_filename_row(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        const string table = "minimigTableTest5";
-        string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
-        var migration = new FakeMigration(filePath);
-        var row = new FakeMigrationRow(migration.Filename, migration.Hash);
-        const string dateFormat = "yyyy-MM-dd hh:mm";
-
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.CreateMigrationsTable();
-        context.InsertMigrationRecord(row);
-        context.RenameMigration(migration);
-        var ran = context.GetAlreadyRan();
-        context.DropMigrationsTable();
-
-        //Assert
-        Assert.Equal(ConnectionState.Open, context.Connection.State);
-        Assert.Equal(ran.Last.Hash, row.Hash);
-        Assert.Equal(ran.Last.Id, row.Id);
-        Assert.Equal(ran.Last.Filename, row.Filename);
-        Assert.Equal(ran.Last.ExecutionDate.ToString(dateFormat), row.ExecutionDate.ToString(dateFormat));
-        Assert.Equal(ran.Last.Duration, row.Duration);
-    }
-
-    [Theory]
-    [MemberData(nameof(GetConnectionData))]
-    public void Rename_migration_without_record(string connectionString, DatabaseProvider provider)
-    {
-        //Arrange
-        string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
-        var migration = new FakeMigration(filePath);
-
-        //Act
-        using var context = new ConnectionContext(options);
-        context.Open();
-        context.CreateMigrationsTable();
-        void action() => context.RenameMigration(migration);
-
-        //Assert
-        Assert.Throws<Exception>(action);
-
-        //Cleanup
-        context.DropMigrationsTable();
+            //Cleanup
+            context.DropMigrationsTable();
+        }
     }
 }

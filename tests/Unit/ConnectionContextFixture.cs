@@ -3,112 +3,113 @@ using System.Text.RegularExpressions;
 using Minimig;
 using Xunit;
 
-namespace MinimigTests.Unit;
-
-public class ConnectionContextFixture
+namespace MinimigTests.Unit
 {
-    private static string Database => "master";
-
-    [Fact]
-    public void Construct_connection_context_exception()
+    public class ConnectionContextFixture
     {
-        //Arrange
-        var options = new Options();
+        private static string Database => "master";
 
-        //Act
-        void action() => new ConnectionContext(options);
+        [Fact]
+        public void Construct_connection_context_exception()
+        {
+            //Arrange
+            var options = new Options();
 
-        //Assert
-        Assert.Throws<Exception>(action);
-    }
+            //Act
+            void action() => new ConnectionContext(options);
 
-    [Fact]
-    public void Construct_connection_context_exception_with_provider()
-    {
-        //Arrange
-        var options = new Options() { Database = Database, Provider = DatabaseProvider.unknown };
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
 
-        //Act
-        void action() => new ConnectionContext(options);
+        [Fact]
+        public void Construct_connection_context_exception_with_provider()
+        {
+            //Arrange
+            var options = new Options() { Database = Database, Provider = DatabaseProvider.unknown };
 
-        //Assert
-        Assert.Throws<NotImplementedException>(action);
-    }
+            //Act
+            void action() => new ConnectionContext(options);
 
-    [Fact]
-    public void Construct_connection_context_exception_missing_database()
-    {
-        //Arrange
-        var options = new Options() { Database = string.Empty, Provider = DatabaseProvider.sqlserver };
+            //Assert
+            Assert.Throws<NotImplementedException>(action);
+        }
 
-        //Act
-        void action() => new ConnectionContext(options);
+        [Fact]
+        public void Construct_connection_context_exception_missing_database()
+        {
+            //Arrange
+            var options = new Options() { Database = string.Empty, Provider = DatabaseProvider.sqlserver };
 
-        //Assert
-        Assert.Throws<Exception>(action);
-    }
+            //Act
+            void action() => new ConnectionContext(options);
 
-    [Fact]
-    public void Construct_connection_context()
-    {
-        //Arrange
-        string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
-        const DatabaseProvider provider = DatabaseProvider.sqlserver;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
 
-        //Act
-        using var context = new ConnectionContext(options);
+        [Fact]
+        public void Construct_connection_context()
+        {
+            //Arrange
+            string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
+            const DatabaseProvider provider = DatabaseProvider.sqlserver;
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-        //Assert
-        Assert.Equal(provider, context.Provider);
-        Assert.False(context.IsPreview);
-        Assert.Equal(Database, context.Database);
-    }
+            //Act
+            using var context = new ConnectionContext(options);
 
-    [Fact]
-    public void Construct_connection_context_exception_missing_database_on_connection_string()
-    {
-        //Arrange
-        const string connectionString = "Server=.;Database=;Trusted_Connection=true;";
-        const DatabaseProvider provider = DatabaseProvider.sqlserver;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Assert
+            Assert.Equal(context.Provider, provider);
+            Assert.False(context.IsPreview);
+            Assert.Equal(context.Database, Database);
+        }
 
-        //Act
-        void action() => new ConnectionContext(options);
+        [Fact]
+        public void Construct_connection_context_exception_missing_database_on_connection_string()
+        {
+            //Arrange
+            const string connectionString = "Server=.;Database=;Trusted_Connection=true;";
+            const DatabaseProvider provider = DatabaseProvider.sqlserver;
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-        //Assert
-        Assert.Throws<Exception>(action);
-    }
+            //Act
+            void action() => new ConnectionContext(options);
 
-    [Fact]
-    public void Verify_command_splitter_sql_server()
-    {
-        //Arrange
-        string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
-        const DatabaseProvider provider = DatabaseProvider.sqlserver;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Assert
+            Assert.Throws<Exception>(action);
+        }
 
-        //Act
-        using var context = new ConnectionContext(options);
+        [Fact]
+        public void Verify_command_splitter_sql_server()
+        {
+            //Arrange
+            string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
+            const DatabaseProvider provider = DatabaseProvider.sqlserver;
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-        //Assert
-        Assert.Equal(RegexOptions.IgnoreCase | RegexOptions.Multiline, context.CommandSplitter.Options);
-        Assert.Equal(@"^\s*GO\s*$", context.CommandSplitter.ToString());
-    }
+            //Act
+            using var context = new ConnectionContext(options);
 
-    [Fact]
-    public void Verify_command_splitter_postgresql()
-    {
-        //Arrange
-        const string connectionString = "Server=localhost;Port=5432;Database=postgres;";
-        const DatabaseProvider provider = DatabaseProvider.postgresql;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+            //Assert
+            Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            Assert.Equal(@"^\s*GO\s*$", context.CommandSplitter.ToString());
+        }
 
-        //Act
-        using var context = new ConnectionContext(options);
+        [Fact]
+        public void Verify_command_splitter_postgresql()
+        {
+            //Arrange
+            const string connectionString = "Server=localhost;Port=5432;Database=postgres;";
+            const DatabaseProvider provider = DatabaseProvider.postgresql;
+            var options = new Options() { Connection = connectionString, Provider = provider };
 
-        //Assert
-        Assert.Equal(RegexOptions.IgnoreCase | RegexOptions.Multiline, context.CommandSplitter.Options);
-        Assert.Equal(@"^\s*;\s*$", context.CommandSplitter.ToString());
+            //Act
+            using var context = new ConnectionContext(options);
+
+            //Assert
+            Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            Assert.Equal(@"^\s*;\s*$", context.CommandSplitter.ToString());
+        }
     }
 }
