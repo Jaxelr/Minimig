@@ -82,7 +82,7 @@ internal class ConnectionContext : IDisposable
     {
         if (IsPreview)
             transaction.Rollback();
-        else if (transaction is IDbTransaction)
+        else if (transaction is not null)
             transaction.Commit();
         else
             throw new InvalidOperationException("Cannot Commit a transaction without beginning");

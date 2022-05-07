@@ -79,15 +79,12 @@ public class Options
     {
         if (string.IsNullOrEmpty(Schema))
         {
-            switch (Provider)
+            return Provider switch
             {
-                case DatabaseProvider.postgresql:
-                    return "public";
-                case DatabaseProvider.mysql:
-                    return "mysql";
-                default:
-                    return "dbo";
-            }
+                DatabaseProvider.postgresql => "public",
+                DatabaseProvider.mysql => "mysql",
+                _ => "dbo",
+            };
         }
         else
         {
