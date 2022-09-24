@@ -138,3 +138,4 @@ testcoverage/
 .vscode/
 src/Minimig/Properties/
 coverage*.xml
+MSBuild_Logs/
