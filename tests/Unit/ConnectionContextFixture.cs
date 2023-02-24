@@ -7,7 +7,7 @@ namespace MinimigTests.Unit
 {
     public class ConnectionContextFixture
     {
-        private string Database => "master";
+        private static string Database => "master";
 
         [Fact]
         public void Construct_connection_context_exception()
@@ -60,9 +60,9 @@ namespace MinimigTests.Unit
             using var context = new ConnectionContext(options);
 
             //Assert
-            Assert.Equal(context.Provider, provider);
+            Assert.Equal(provider, context.Provider);
             Assert.False(context.IsPreview);
-            Assert.Equal(context.Database, Database);
+            Assert.Equal(Database, context.Database);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace MinimigTests.Unit
             using var context = new ConnectionContext(options);
 
             //Assert
-            Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            Assert.Equal(RegexOptions.IgnoreCase | RegexOptions.Multiline, context.CommandSplitter.Options);
             Assert.Equal(@"^\s*GO\s*$", context.CommandSplitter.ToString());
         }
 
@@ -108,7 +108,7 @@ namespace MinimigTests.Unit
             using var context = new ConnectionContext(options);
 
             //Assert
-            Assert.Equal(context.CommandSplitter.Options, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            Assert.Equal(RegexOptions.IgnoreCase | RegexOptions.Multiline, context.CommandSplitter.Options);
             Assert.Equal(@"^\s*;\s*$", context.CommandSplitter.ToString());
         }
     }

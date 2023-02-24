@@ -34,9 +34,9 @@ namespace MinimigTests.Unit
             var cmd = conn.NewCommand(sql, null, timeout);
 
             //Assert
-            Assert.Equal(cmd.CommandText, sql);
+            Assert.Equal(sql, cmd.CommandText);
             Assert.Null(cmd.Transaction);
-            Assert.Equal(cmd.CommandTimeout, timeout);
+            Assert.Equal(timeout, cmd.CommandTimeout);
         }
     }
 }
