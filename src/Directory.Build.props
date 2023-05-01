@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Authors>Jaxel Rojas</Authors>
-    <Version>0.10.0</Version>
+    <Version>0.11.0</Version>
     <Copyright>Copyright 2023</Copyright>
   </PropertyGroup>
 </Project>

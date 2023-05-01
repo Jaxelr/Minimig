@@ -1,4 +1,4 @@
-version: '0.10.0.{build}'
+version: '0.11.0.{build}'
 image: Visual Studio 2022
 branches:
   only:
@@ -21,7 +21,7 @@ build_script:
 test_script:
   - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit"
 after_test:
-  - codecov -f "./tests/coverage.net6.0.xml" -t $(codecov_token)
+  - codecov -f "./tests/coverage.net7.0.xml" -t $(codecov_token)
 environment:
   sql_connection: Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!;
   postgres_connection: Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;
