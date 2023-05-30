@@ -9,6 +9,7 @@
     <AssemblyTitle>Minimig</AssemblyTitle>
     <Title>Minimig</Title>
     <Product>Minimig</Product>
+    <LangVersion>latest</LangVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
