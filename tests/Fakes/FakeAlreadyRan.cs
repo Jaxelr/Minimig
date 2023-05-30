@@ -1,11 +1,10 @@
 ﻿using Minimig;
 
-namespace MinimigTests.Fakes
+namespace MinimigTests.Fakes;
+
+internal class FakeAlreadyRan : AlreadyRan
 {
-    internal class FakeAlreadyRan : AlreadyRan
+    public FakeAlreadyRan(MigrationRow row) : base(new MigrationRow[1] { row })
     {
-        public FakeAlreadyRan(MigrationRow row) : base(new MigrationRow[1] { row })
-        {
-        }
     }
 }
