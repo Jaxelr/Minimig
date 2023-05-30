@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace Minimig
+namespace Minimig;
+
+public class MigrationRow
 {
-    public class MigrationRow
-    {
-        public int Id { get; set; }
-        public string Filename { get; set; }
-        public string Hash { get; set; }
-        public DateTime ExecutionDate { get; set; }
-        public int Duration { get; set; }
-    }
+    public int Id { get; set; }
+    public string Filename { get; set; }
+    public string Hash { get; set; }
+    public DateTime ExecutionDate { get; set; }
+    public int Duration { get; set; }
 }
