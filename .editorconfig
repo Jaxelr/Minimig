@@ -128,6 +128,7 @@ csharp_style_prefer_range_operator = true:suggestion
 csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
 csharp_indent_labels = one_less_than_current
 csharp_style_prefer_tuple_swap = true:suggestion
+csharp_style_prefer_primary_constructors = true:suggestion
 
 # .NET Naming conventions
 
