@@ -11,7 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".Solution
 		appveyor.yml = appveyor.yml
 		codecov.yml = codecov.yml
 		src\Directory.Build.props = src\Directory.Build.props
-		docker\docker-compose.yml = docker\docker-compose.yml
 		LICENSE = LICENSE
 		README.md = README.md
 		sampleinstallation.md = sampleinstallation.md
@@ -22,6 +21,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minimig", "src\Minimig\Minimig.csproj", "{58AAD572-E4FD-4E92-A237-CFA54AFA1A6E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimigTests", "tests\MinimigTests.csproj", "{62A21921-5700-4B1D-8A0C-7B4A07B39953}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docker", ".docker", "{A2843030-4498-4767-8887-5884ED27A225}"
+	ProjectSection(SolutionItems) = preProject
+		.docker\.env = .docker\.env
+		.docker\build-docker-compose-localhost.md = .docker\build-docker-compose-localhost.md
+		.docker\docker-compose.yml = .docker\docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +50,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A2843030-4498-4767-8887-5884ED27A225} = {3A3CA428-B7A3-4E50-BB9C-0D2A131951E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DDE8061B-A0E1-477F-BC01-C2AE44E8FA18}
