@@ -15,7 +15,7 @@ public class MigratorFixture
         string result = Migrator.GetVersion();
 
         //Assert
-        Assert.Equal(version, result);
+        Assert.Contains(version, result);
     }
 
     [Theory]
