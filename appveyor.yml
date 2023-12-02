@@ -6,7 +6,7 @@ branches:
 init:
   - cmd: git config --global core.autocrlf true
   - cmd: net start MSSQL$SQL2019
-  - cmd: Start-Service MySQL80
+  - ps: Start-Service MySQL80
 configuration:
   - Release
 services:
