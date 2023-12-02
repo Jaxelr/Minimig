@@ -9,7 +9,7 @@ init:
 configuration:
   - Release
 services:
-  - postgresql101
+  - postgresql10
   - mysql
 nuget:
   disable_publish_on_pr: true
