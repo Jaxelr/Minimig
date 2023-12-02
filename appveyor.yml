@@ -6,11 +6,11 @@ branches:
 init:
   - cmd: git config --global core.autocrlf true
   - cmd: net start MSSQL$SQL2019
+  - cmd: Start-Service MySQL80
 configuration:
   - Release
 services:
   - postgresql10
-  - mysql
 nuget:
   disable_publish_on_pr: true
 before_build:
