@@ -10,7 +10,7 @@ init:
 configuration:
   - Release
 services:
-  - postgresql
+  - postgresql11
 nuget:
   disable_publish_on_pr: true
 install:
