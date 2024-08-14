@@ -25,7 +25,7 @@ public class ConnectionContextFixture
         string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
         if (string.IsNullOrEmpty(postgresConnEnv))
         {
-            postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres;";
+            postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12;";
         }
 
         string mysqlConnEnv = Environment.GetEnvironmentVariable("MySql_Connection");
