@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ToolCommandName>mig</ToolCommandName>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <PackageId>Minimig</PackageId>
     <AssemblyTitle>Minimig</AssemblyTitle>
@@ -18,7 +18,7 @@
     <PackageTags>migration;sql;sqlserver;database;postgresql;mysql</PackageTags>
     <Description>A simple database migrator for SQL Server, PostgreSQL and MySQL</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added support for net7.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Remove support for net7.0</PackageReleaseNotes>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TieredCompilation>true</TieredCompilation>
