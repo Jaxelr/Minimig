@@ -4,7 +4,7 @@ services:
   postgres:
     # For more details on configuring the Postgres Docker image, see:
     #   https://hub.docker.com/_/postgres/
-    image: postgres:12.4-alpine
+    image: postgres:13-alpine
 
     # Expose the default Postgres port on localhost
     ports:
