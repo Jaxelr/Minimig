@@ -15,7 +15,7 @@ internal class PostgreSqlStatements : ISqlStatements
     public string GetAlreadyRan { get; }
 
     /// <summary>
-    /// /// Define the Postgres statements needed to run migrations as based on the definition needed for the provider
+    /// Define the Postgres statements needed to run migrations as based on the definition needed for the provider
     /// </summary>
     /// <param name="migrationsTableName"></param>
     /// <param name="schemaName"></param>
