@@ -26,7 +26,7 @@ internal class ConnectionContext : IDisposable
     internal bool IsPreview { get; }
     internal DatabaseProvider Provider { get; }
     internal string Database { get; }
-    internal List<string> FilesInCurrentTransaction { get; } = new List<string>();
+    internal List<string> FilesInCurrentTransaction { get; } = [];
 
     internal Regex CommandSplitter => sql.CommandSplitter;
     internal bool HasPendingTransaction => transaction != null;

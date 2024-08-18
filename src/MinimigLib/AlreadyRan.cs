@@ -5,8 +5,8 @@ namespace Minimig;
 internal class AlreadyRan
 {
     public int Count => ByFilename.Count;
-    public Dictionary<string, MigrationRow> ByFilename { get; } = new Dictionary<string, MigrationRow>();
-    public Dictionary<string, MigrationRow> ByHash { get; } = new Dictionary<string, MigrationRow>();
+    public Dictionary<string, MigrationRow> ByFilename { get; } = [];
+    public Dictionary<string, MigrationRow> ByHash { get; } = [];
     public MigrationRow Last { get; }
 
     /// <summary>
