@@ -210,5 +210,9 @@ dotnet_style_prefer_simplified_interpolation = true:suggestion
 dotnet_style_namespace_match_folder = true:suggestion
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4
-dotnet_diagnostic.CA1806.severity = silent
 dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
+
+dotnet_diagnostic.CA1806.severity = silent
+dotnet_diagnostic.IDE0130.severity = silent
+
+
