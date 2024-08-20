@@ -121,9 +121,7 @@ internal class ConnectionContext : IDisposable
 
         //Depending on the provider the result might be type long instead of int
         if (result is long longScalar)
-        {
             return longScalar == 1;
-        }
 
         return (int) result == 1;
     }
@@ -140,9 +138,7 @@ internal class ConnectionContext : IDisposable
 
         //Depending on the provider the result might be type long instead of int
         if (result is long longScalar)
-        {
             return longScalar == 1;
-        }
 
         return (int) result == 1;
     }

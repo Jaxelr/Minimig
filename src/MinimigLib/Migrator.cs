@@ -57,9 +57,7 @@ public class Migrator : IDisposable
         Log($"    Transaction Mode: {(useGlobalTransaction ? "Global" : "Individual")}");
 
         if (!ValidateMigrationsSchemaIsAvailable())
-        {
             return;
-        }
 
         EnsureMigrationsTableExists();
 
@@ -232,9 +230,7 @@ public class Migrator : IDisposable
         }
 
         if (mode == MigrateMode.HashMismatch && !force)
-        {
             throw new MigrationChangedException(migration);
-        }
 
         if (!migration.UseTransaction && isPreview)
         {
@@ -316,9 +312,7 @@ public class Migrator : IDisposable
         if (useTransaction)
         {
             if (!db.HasPendingTransaction)
-            {
                 db.BeginTransaction();
-            }
         }
         else
         {
@@ -414,9 +408,7 @@ public class Migrator : IDisposable
     private bool ValidateMigrationsSchemaIsAvailable()
     {
         if (db.SchemaMigrationExists())
-        {
             return true;
-        }
 
         Log($"No schema found (or no access given) that corresponds to the given input schema {inputSchema}");
         return false;

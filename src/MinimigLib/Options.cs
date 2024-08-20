@@ -25,20 +25,13 @@ public class Options
     public void AssertValid()
     {
         if (!Directory.Exists(GetFolder()))
-        {
             throw new Exception($"Invalid folder or possible unscaped \\; current folder argument is \"{MigrationsFolder}\"");
-        }
 
         if (string.IsNullOrEmpty(ConnectionString) == string.IsNullOrEmpty(Database))
-        {
             throw new Exception("Either a connection string or a database must be specified.");
-        }
 
-        if (!string.IsNullOrEmpty(MigrationsTable))
-        {
-            if (!Regex.IsMatch(MigrationsTable, "^[a-zA-Z]+$"))
-                throw new Exception("Migrations table name can only contain letters A-Z.");
-        }
+        if (!string.IsNullOrEmpty(MigrationsTable) && !Regex.IsMatch(MigrationsTable, "^[a-zA-Z]+$"))
+            throw new Exception("Migrations table name can only contain letters A-Z.");
     }
 
     /// <summary>
@@ -74,25 +67,15 @@ public class Options
     /// Get the current migrations schema
     /// </summary>
     /// <returns>The current migrations schema</returns>
-    internal string GetMigrationsTableSchema()
-    {
-        if (string.IsNullOrEmpty(MigrationsTableSchema))
-        {
-            switch (Provider)
+    internal string GetMigrationsTableSchema() =>
+        string.IsNullOrEmpty(MigrationsTableSchema)
+            ? Provider switch
             {
-                case DatabaseProvider.postgresql:
-                    return "public";
-                case DatabaseProvider.mysql:
-                    return "mysql";
-                default:
-                    return "dbo";
+                DatabaseProvider.postgresql => "public",
+                DatabaseProvider.mysql => "mysql",
+                _ => "dbo",
             }
-        }
-        else
-        {
-            return MigrationsTableSchema;
-        }
-    }
+            : MigrationsTableSchema;
 
     /// <summary>
     /// Map the provider text into the plausible enums
@@ -102,9 +85,7 @@ public class Options
     public DatabaseProvider MapDatabaseProvider(string input)
     {
         if (Enum.TryParse(input.ToLowerInvariant(), out DatabaseProvider provider))
-        {
             return provider;
-        }
 
         throw new Exception("The string provided as a provider doesnt correspond to one of the possible values (sqlserver, postgresql, mysql)");
     }

@@ -44,14 +44,10 @@ public class Migration
     internal MigrateMode GetMigrateMode(AlreadyRan alreadyRan)
     {
         if (alreadyRan.ByFilename.TryGetValue(Filename, out MigrationRow row))
-        {
             return row.Hash == Hash ? MigrateMode.Skip : MigrateMode.HashMismatch;
-        }
 
         if (alreadyRan.ByHash.TryGetValue(Hash, out _))
-        {
             return MigrateMode.Rename;
-        }
 
         return MigrateMode.Run;
     }
@@ -68,9 +64,7 @@ public class Migration
 
         byte[] hashBytes;
         lock (Md5Provider)
-        {
             hashBytes = Md5Provider.ComputeHash(inputBytes);
-        }
 
         return new Guid(hashBytes).ToString();
     }
