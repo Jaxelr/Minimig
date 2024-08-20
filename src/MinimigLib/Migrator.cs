@@ -28,7 +28,7 @@ public class Migrator : IDisposable
     /// <summary>
     /// Create an instance of the migrator object after validation are completed
     /// </summary>
-    /// <param name="options"></param>
+    /// <param name="options">Minimig custom option arguments</param>
     internal Migrator(Options options)
     {
         output = options.Output;
@@ -98,7 +98,7 @@ public class Migrator : IDisposable
     /// <summary>
     /// Get the amount of migrations left to process
     /// </summary>
-    /// <param name="options"></param>
+    /// <param name="options">Minimig custom option arguments</param>
     /// <returns>An int with the total of migrations left</returns>
     public static int GetOutstandingMigrationsCount(Options options)
     {
@@ -116,7 +116,7 @@ public class Migrator : IDisposable
     /// <summary>
     /// Execute the migrations left to process
     /// </summary>
-    /// <param name="options"></param>
+    /// <param name="options">Minimig custom option arguments</param>
     /// <returns>An object defining the migration result</returns>
     public static MigrationResult RunOutstandingMigrations(Options options)
     {
@@ -127,16 +127,16 @@ public class Migrator : IDisposable
     /// <summary>
     /// Create the migrator object instance
     /// </summary>
-    /// <param name="options"></param>
+    /// <param name="options">Minimig custom option arguments</param>
     /// <returns>An instance of the migrator class</returns>
     // this only exists because you don't expect a constructor to perform I/O, whereas calling Create() implies there might be some work being performed
-    private static Migrator Create(Options options) => new Migrator(options);
+    private static Migrator Create(Options options) => new(options);
 
     /// <summary>
     /// Get all the migrations available in a directory specified
     /// </summary>
-    /// <param name="directory"></param>
-    /// <param name="commandSplitter"></param>
+    /// <param name="directory">A filepath directory on the system</param>
+    /// <param name="commandSplitter">A Regex object to split the commands to execute</param>
     /// <returns>An generic Enumerable of Migrations</returns>
     private static IEnumerable<Migration> GetAllMigrations(string directory, Regex commandSplitter) =>
         Directory.GetFiles(directory, "*.sql")

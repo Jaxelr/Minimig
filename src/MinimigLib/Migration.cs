@@ -39,7 +39,7 @@ public class Migration
     /// <summary>
     /// Classify migrations in order to determine action to take
     /// </summary>
-    /// <param name="alreadyRan"></param>
+    /// <param name="alreadyRan">An already ran instance that will determine existing executions</param>
     /// <returns>An enum with the migration mode to execute</returns>
     internal MigrateMode GetMigrateMode(AlreadyRan alreadyRan)
     {

@@ -44,7 +44,7 @@ public class Options
     /// <summary>
     /// Construct a ConnectionString  based on the current options for the provider given.
     /// </summary>
-    /// <param name="provider"></param>
+    /// <param name="provider">An enum type with the different type of supported database providers</param>
     /// <returns>A valid ConnectionString</returns>
     internal string GetConnectionString(DatabaseProvider provider)
     {
@@ -97,7 +97,7 @@ public class Options
     /// <summary>
     /// Map the provider text into the plausible enums
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="input">Input string to map to the Databas Provider enum</param>
     /// <returns>An enum with the mapped provider</returns>
     public DatabaseProvider MapDatabaseProvider(string input)
     {

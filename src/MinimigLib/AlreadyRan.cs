@@ -12,7 +12,7 @@ internal class AlreadyRan
     /// <summary>
     /// Populate the properties needed to search migrations by filename or by hash
     /// </summary>
-    /// <param name="rows"></param>
+    /// <param name="rows">A migraiton row to analyze or process</param>
     internal AlreadyRan(IEnumerable<MigrationRow> rows)
     {
         MigrationRow last = null;

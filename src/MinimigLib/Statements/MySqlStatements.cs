@@ -18,8 +18,8 @@ public class MySqlStatements : ISqlStatements
     /// <summary>
     /// Define the MySql statements needed to run migrations as based on the definition needed for the provider
     /// </summary>
-    /// <param name="migrationsTableName"></param>
-    /// <param name="schemaName"></param>
+    /// <param name="migrationsTableName">Migrations table name to record the entries</param>
+    /// <param name="schemaName">Migrations schema to use to map the entries</param>
     internal MySqlStatements(string migrationsTableName, string schemaName = "mysql")
     {
         DoesSchemaMigrationExist = $"SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}';";

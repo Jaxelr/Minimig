@@ -17,8 +17,8 @@ internal class PostgreSqlStatements : ISqlStatements
     /// <summary>
     /// Define the Postgres statements needed to run migrations as based on the definition needed for the provider
     /// </summary>
-    /// <param name="migrationsTableName"></param>
-    /// <param name="schemaName"></param>
+    /// <param name="migrationsTableName">Migrations table name to record the entries</param>
+    /// <param name="schemaName">Migrations schema to use to map the entries</param>
     internal PostgreSqlStatements(string migrationsTableName, string schemaName = "public")
     {
         DoesSchemaMigrationExist = $"SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = '{schemaName}';";

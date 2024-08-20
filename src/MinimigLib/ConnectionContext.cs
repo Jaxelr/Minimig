@@ -34,7 +34,7 @@ internal class ConnectionContext : IDisposable
     /// <summary>
     /// Generate a new Connection Context with the options provided
     /// </summary>
-    /// <param name="options"></param>
+    /// <param name="options">Minimig custom option arguments</param>
     internal ConnectionContext(Options options)
     {
         timeout = options.CommandTimeout;
@@ -197,7 +197,7 @@ internal class ConnectionContext : IDisposable
     /// <summary>
     /// Execute a sql command based on the string provided
     /// </summary>
-    /// <param name="sql"></param>
+    /// <param name="sql">Sql script to execute.</param>
     /// <returns>An integer indicating the result of the command</returns>
     public int ExecuteCommand(string sql)
     {

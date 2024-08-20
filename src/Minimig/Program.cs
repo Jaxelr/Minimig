@@ -46,11 +46,12 @@ internal static class Program
 
         Environment.Exit(0);
     }
+
     /// <summary>
     /// Parse optional parameters passed from the console and return the action to perform
     /// </summary>
-    /// <param name="args"></param>
-    /// <param name="options"></param>
+    /// <param name="args">Command line arguments array</param>
+    /// <param name="options">Minimig custom option arguments</param>
     /// <returns>A Command enum that indicates which action will be performed</returns>
     private static Command TryParseArgs(string[] args, out Options options)
     {
@@ -111,7 +112,7 @@ internal static class Program
     /// <summary>
     /// Show help message on the console
     /// </summary>
-    /// <param name="optionSet"></param>
+    /// <param name="optionSet">An OptionSet object instance that maps to the command line</param>
     private static void ShowHelpMessage(OptionSet optionSet)
     {
         Console.WriteLine("Usage: Minimig [OPTIONS]+");
