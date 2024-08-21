@@ -4,11 +4,11 @@ using Xunit;
 
 namespace MinimigTests.Integration;
 
-/*
- * Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
- */
-
-public class MigratorFixture
+/// <summary>
+/// These are integration tests to a live connection that require an existing active database and cant be entirely mocked.
+/// Note: Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
+/// </summary>
+public class MigratorTests
 {
     private readonly int migrationCount = 5;
 

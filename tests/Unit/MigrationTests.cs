@@ -6,7 +6,7 @@ using Xunit;
 
 namespace MinimigTests.Unit;
 
-public class MigrationFixture
+public class MigrationTests
 {
     [Theory]
     [InlineData("SampleMigrations\\SqlServer\\0001 - Add One and Two tables.sql")]

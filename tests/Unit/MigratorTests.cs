@@ -3,7 +3,7 @@ using Xunit;
 
 namespace MinimigTests.Unit;
 
-public class MigratorFixture
+public class MigratorTests
 {
     [Fact]
     public void Migrator_get_version()

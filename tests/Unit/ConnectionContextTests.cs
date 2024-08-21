@@ -5,7 +5,7 @@ using Xunit;
 
 namespace MinimigTests.Unit;
 
-public class ConnectionContextFixture
+public class ConnectionContextTests
 {
     private static string Database => "master";
 

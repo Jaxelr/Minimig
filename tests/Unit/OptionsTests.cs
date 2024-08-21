@@ -4,11 +4,7 @@ using Xunit;
 
 namespace MinimigTests.Unit;
 
-/*
- * Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
- */
-
-public class OptionsFixture
+public class OptionsTests
 {
     [Theory]
     [InlineData("MyMigration")]

@@ -7,39 +7,33 @@ using Xunit;
 
 namespace MinimigTests.Integration;
 
-/*
- * Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
- */
-
-public class ConnectionContextFixture
+/// <summary>
+/// These are integration tests to a live connection that require an existing active database and cant be entirely mocked.
+/// Note: Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
+/// </summary>
+public class ConnectionContextTests
 {
     public static IEnumerable<object[]> GetConnectionData()
     {
         //We do this to pass the connection from Appveyor or locally
         string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
         if (string.IsNullOrEmpty(sqlServerConnEnv))
-        {
             sqlServerConnEnv = "Server=(local);Database=master;Trusted_Connection=true;";
-        }
 
         string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
         if (string.IsNullOrEmpty(postgresConnEnv))
-        {
             postgresConnEnv = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12;";
-        }
 
         string mysqlConnEnv = Environment.GetEnvironmentVariable("MySql_Connection");
         if (string.IsNullOrEmpty(mysqlConnEnv))
-        {
             mysqlConnEnv = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;";
-        }
 
-        return new List<object[]>
-        {
-            new object[] { sqlServerConnEnv, DatabaseProvider.sqlserver },
-            new object[] { postgresConnEnv, DatabaseProvider.postgresql },
-            new object[] { mysqlConnEnv, DatabaseProvider.mysql }
-        };
+        return
+        [
+            [sqlServerConnEnv, DatabaseProvider.sqlserver],
+            [postgresConnEnv, DatabaseProvider.postgresql],
+            [mysqlConnEnv, DatabaseProvider.mysql]
+        ];
     }
 
     [Theory]
@@ -213,12 +207,12 @@ public class ConnectionContextFixture
         context.Commit();
         bool existsSchema = context.SchemaMigrationExists();
 
-        //Clean Up
-        context.ExecuteCommand($"Drop schema {schema}");
-
         //Assert
         Assert.Equal(ConnectionState.Open, context.Connection.State);
         Assert.True(existsSchema);
+
+        //Clean Up
+        context.ExecuteCommand($"Drop schema {schema}");
     }
 
     [Theory]
@@ -240,15 +234,15 @@ public class ConnectionContextFixture
         context.CreateMigrationsTable();
         bool existsTable = context.SchemaMigrationExists();
 
-        //Clean Up
-        context.DropMigrationsTable();
-        context.ExecuteCommand($"Drop schema {schema}");
-        context.Dispose();
-
         //Assert
         Assert.Equal(ConnectionState.Closed, context.Connection.State);
         Assert.True(existsSchema);
         Assert.True(existsTable);
+
+        //Clean Up
+        context.DropMigrationsTable();
+        context.ExecuteCommand($"Drop schema {schema}");
+        context.Dispose();
     }
 
     [Theory]

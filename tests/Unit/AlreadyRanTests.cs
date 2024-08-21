@@ -3,7 +3,7 @@ using Xunit;
 
 namespace MinimigTests.Unit;
 
-public class AlreadyRanFixture
+public class AlreadyRanTests
 {
     [Fact]
     public void Check_if_migration_row_already_ran_last()
