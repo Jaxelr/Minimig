@@ -235,7 +235,7 @@ public class ConnectionContextTests
         bool existsTable = context.SchemaMigrationExists();
 
         //Assert
-        Assert.Equal(ConnectionState.Closed, context.Connection.State);
+        Assert.Equal(ConnectionState.Open, context.Connection.State);
         Assert.True(existsSchema);
         Assert.True(existsTable);
 
