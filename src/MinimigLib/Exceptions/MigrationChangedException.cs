@@ -8,15 +8,15 @@ public class MigrationChangedException : Exception
     {
     }
 
-    public MigrationChangedException() : base()
+    internal MigrationChangedException()
     {
     }
 
-    public MigrationChangedException(string message) : base(message)
+    internal MigrationChangedException(string message) : base(message)
     {
     }
 
-    public MigrationChangedException(string message, Exception innerException) : base(message, innerException)
+    internal MigrationChangedException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }
