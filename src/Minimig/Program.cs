@@ -21,14 +21,14 @@ namespace Minimig
         {
             var root = new RootCommand()
             {
-                new Option<string>(new[] { "--connection", "-c" }, @"A connection string (can be PostgreSQL or SQLServer or MySQL).
+                new Option<string>(["--connection", "-c"], @"A connection string (can be PostgreSQL or SQLServer or MySQL).
                                                                     For integrated auth, you can use --database and --server instead."),
-                new Option<string>(new[] { "--database", "-d" }, "Generates an integrated auth connection string for the specified database."),
-                new Option<string>(new[] { "--server", "-s" }, "Generates an integrated auth connection string with the specified server (default: localhost)."),
-                new Option<string>(new[] { "--folder", "-f" }, "The folder containing your .sql migration files (defaults to current working directory)."),
-                new Option<int>(new[] { "--timeout", "-t" }, "Command timeout duration in seconds (default: 30)."),
+                new Option<string>(["--database", "-d"], "Generates an integrated auth connection string for the specified database."),
+                new Option<string>(["--server", "-s"], "Generates an integrated auth connection string with the specified server (default: localhost)."),
+                new Option<string>(["--folder", "-f"], "The folder containing your .sql migration files (defaults to current working directory)."),
+                new Option<int>(["--timeout", "-t"], "Command timeout duration in seconds (default: 30)."),
                 new Option<bool>("--preview", "Preview the migration without running it."),
-                new Option<DatabaseProvider>(new[] { "--provider", "-p" }, "Use a specific database provider options: sqlserver (default), postgresql, mysql."),
+                new Option<DatabaseProvider>(["--provider", "-p"], "Use a specific database provider options: sqlserver (default), postgresql, mysql."),
                 new Option<bool>("--global", "Run all outstanding migrations in a single transaction, if possible."),
                 new Option<string>("--table", "The table name to use for the migrations (default: migrations)."),
                 new Option<string>("--schema", "The schema name to use for the migrations (default: dbo for sqlserver, public for postgresql, mysql for mysql)."),

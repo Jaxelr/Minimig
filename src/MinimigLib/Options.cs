@@ -93,6 +93,19 @@ public class Options
     }
 
     /// <summary>
+    /// Map the provider text into the plausible enums
+    /// </summary>
+    /// <param name="input">Input string to map to the Databas Provider enum</param>
+    /// <returns>An enum with the mapped provider</returns>
+    public DatabaseProvider MapDatabaseProvider(string input)
+    {
+        if (Enum.TryParse(input.ToLowerInvariant(), out DatabaseProvider provider))
+            return provider;
+
+        throw new Exception("The string provided as a provider doesnt correspond to one of the possible values (sqlserver, postgresql, mysql)");
+    }
+
+    /// <summary>
     /// Get the current migrations folder (defaults to current directory)
     /// </summary>
     /// <returns>A string with the directory requested</returns>

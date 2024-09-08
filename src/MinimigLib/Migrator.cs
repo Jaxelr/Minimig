@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Minimig;
@@ -406,4 +406,14 @@ public class Migrator : IDisposable
     /// </summary>
     /// <param name="str">A string to write into the console, defaults to empty string</param>
     private void Log(string str = "") => output?.WriteLine(str);
+
+    /// <summary>
+    /// Get minimig version
+    /// </summary>
+    /// <returns>A string detailing the version of the console</returns>
+    public static string GetVersion()
+    {
+        var attr = typeof(Migrator).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        return attr.InformationalVersion;
+    }
 }
