@@ -8,14 +8,6 @@ using Npgsql;
 
 namespace Minimig;
 
-public enum DatabaseProvider
-{
-    unknown = -1,
-    sqlserver = 0,
-    postgresql = 1,
-    mysql = 2
-}
-
 internal class ConnectionContext : IDisposable
 {
     internal readonly IDbConnection Connection;
@@ -37,8 +29,8 @@ internal class ConnectionContext : IDisposable
     /// <param name="options">Minimig custom option arguments</param>
     internal ConnectionContext(Options options)
     {
-        timeout = options.CommandTimeout;
-        IsPreview = options.IsPreview;
+        timeout = options.Timeout;
+        IsPreview = options.Preview;
         Provider = options.Provider;
 
         string connStr = options.GetConnectionString(Provider);

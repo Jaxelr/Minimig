@@ -11,7 +11,7 @@ public class OptionsTests
     public void Get_migration_table_with_value(string inputTable)
     {
         //Arrange
-        var options = new Options() { MigrationsTable = inputTable };
+        var options = new Options() { Table = inputTable };
 
         //Act
         string table = options.GetMigrationsTable();
@@ -39,7 +39,7 @@ public class OptionsTests
     public void Get_migration_folder_with_value(string inputFolder)
     {
         //Arrange
-        var options = new Options() { MigrationsFolder = inputFolder };
+        var options = new Options() { Folder = inputFolder };
 
         //Act
         string folder = options.GetFolder();
@@ -67,7 +67,7 @@ public class OptionsTests
     public void Get_migration_connection_string_with_value(string inputConnection)
     {
         //Arrange
-        var options = new Options() { ConnectionString = inputConnection };
+        var options = new Options() { Connection = inputConnection };
 
         //Act
         string conn = options.GetConnectionString(DatabaseProvider.sqlserver);
@@ -126,7 +126,7 @@ public class OptionsTests
     public void Assert_valid_migrations_table(string table, string db)
     {
         //Arrange
-        var options = new Options() { MigrationsTable = table, Database = db };
+        var options = new Options() { Table = table, Database = db };
 
         //Act
         var action = new Action(options.AssertValid);
@@ -134,7 +134,7 @@ public class OptionsTests
         action.Invoke();
 
         //Assert
-        Assert.Equal(result.MigrationsTable, table);
+        Assert.Equal(result.Table, table);
         Assert.Equal(result.Database, db);
         Assert.NotNull(result);
     }
@@ -156,7 +156,7 @@ public class OptionsTests
     public void Assert_valid_exception_invalid_path()
     {
         //Arrange
-        var options = new Options() { MigrationsFolder = "C:\\randommissingpath\\" };
+        var options = new Options() { Folder = "C:\\randommissingpath\\" };
 
         //Act
         var action = new Action(options.AssertValid);
@@ -169,7 +169,7 @@ public class OptionsTests
     public void Assert_valid_exception_migrations_table()
     {
         //Arrange
-        var options = new Options() { MigrationsTable = "$Inv@lid N@me", Database = "master" };
+        var options = new Options() { Table = "$Inv@lid N@me", Database = "master" };
 
         //Act
         var action = new Action(options.AssertValid);
@@ -182,7 +182,7 @@ public class OptionsTests
     public void Assert_valid_exception_migrations_table_empty()
     {
         //Arrange
-        var options = new Options() { MigrationsTable = "" };
+        var options = new Options() { Table = "" };
 
         //Act
         var action = new Action(options.AssertValid);

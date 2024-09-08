@@ -17,7 +17,7 @@ public class MigratorTests
     public void Migrator_instantiation(string server, string database, bool isPreview, string table)
     {
         //Arrange
-        var option = new Options() { Server = server, Database = database, IsPreview = isPreview, MigrationsTable = table };
+        var option = new Options() { Server = server, Database = database, Preview = isPreview, Table = table };
         var connection = new ConnectionContext(option);
 
         //Act
@@ -38,7 +38,7 @@ public class MigratorTests
     public void Migrator_instantiation_with_migrations(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
-        var option = new Options() { Server = server, Database = database, MigrationsTable = table, MigrationsFolder = migrationsFolder };
+        var option = new Options() { Server = server, Database = database, Table = table, Folder = migrationsFolder };
         var connection = new ConnectionContext(option);
         int outstanding = Migrator.GetOutstandingMigrationsCount(option);
 
@@ -65,9 +65,9 @@ public class MigratorTests
         {
             Server = server,
             Database = database,
-            MigrationsTableSchema = schema,
-            MigrationsTable = table,
-            MigrationsFolder = migrationsFolder
+            Schema = schema,
+            Table = table,
+            Folder = migrationsFolder
         };
         var connection = new ConnectionContext(option);
 
@@ -88,7 +88,7 @@ public class MigratorTests
     public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
-        var option = new Options() { Server = server, Database = database, MigrationsTable = table, MigrationsFolder = migrationsFolder };
+        var option = new Options() { Server = server, Database = database, Table = table, Folder = migrationsFolder };
         var connection = new ConnectionContext(option);
         var result = Migrator.RunOutstandingMigrations(option);
 
@@ -113,7 +113,7 @@ public class MigratorTests
     public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations_single_transaction(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
-        var option = new Options() { Server = server, Database = database, MigrationsTable = table, MigrationsFolder = migrationsFolder, UseGlobalTransaction = true };
+        var option = new Options() { Server = server, Database = database, Table = table, Folder = migrationsFolder, Global = true };
         var connection = new ConnectionContext(option);
         var result = Migrator.RunOutstandingMigrations(option);
 
@@ -138,7 +138,7 @@ public class MigratorTests
     public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations_twice(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
-        var option = new Options() { Server = server, Database = database, MigrationsTable = table, MigrationsFolder = migrationsFolder };
+        var option = new Options() { Server = server, Database = database, Table = table, Folder = migrationsFolder };
         var connection = new ConnectionContext(option);
         var result = Migrator.RunOutstandingMigrations(option);
         var result2 = Migrator.RunOutstandingMigrations(option);

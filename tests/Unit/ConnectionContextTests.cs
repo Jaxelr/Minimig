@@ -54,7 +54,7 @@ public class ConnectionContextTests
         //Arrange
         string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
         const DatabaseProvider provider = DatabaseProvider.sqlserver;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -71,7 +71,7 @@ public class ConnectionContextTests
         //Arrange
         const string connectionString = "Server=.;Database=;Trusted_Connection=true;";
         const DatabaseProvider provider = DatabaseProvider.sqlserver;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         void action() => new ConnectionContext(options);
@@ -86,7 +86,7 @@ public class ConnectionContextTests
         //Arrange
         string connectionString = $"Server=.;Database={Database};Trusted_Connection=true;";
         const DatabaseProvider provider = DatabaseProvider.sqlserver;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -102,7 +102,7 @@ public class ConnectionContextTests
         //Arrange
         const string connectionString = "Server=localhost;Port=5432;Database=postgres;";
         const DatabaseProvider provider = DatabaseProvider.postgresql;
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);

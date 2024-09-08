@@ -41,7 +41,7 @@ public class ConnectionContextTests
     public void Open_connection(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -56,7 +56,7 @@ public class ConnectionContextTests
     public void Dispose_connection(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         var context = new ConnectionContext(options);
@@ -72,7 +72,7 @@ public class ConnectionContextTests
     public void Connection_has_pending_transactions(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -89,7 +89,7 @@ public class ConnectionContextTests
     public void Connection_commit_without_begin_invalid_operation_exception(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -105,7 +105,7 @@ public class ConnectionContextTests
     public void Connection_has_completed_transactions(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         var context = new ConnectionContext(options);
@@ -123,7 +123,7 @@ public class ConnectionContextTests
     public void Connection_has_completed_transactions_on_preview(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, IsPreview = true };
+        var options = new Options() { Connection = connectionString, Provider = provider, Preview = true };
 
         //Act
         var context = new ConnectionContext(options);
@@ -141,7 +141,7 @@ public class ConnectionContextTests
     public void Connection_has_rollback_transactions(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -159,7 +159,7 @@ public class ConnectionContextTests
     public void Execute_command_connection(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -175,7 +175,7 @@ public class ConnectionContextTests
     public void Execute_create_and_drop_migration_table(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -197,7 +197,7 @@ public class ConnectionContextTests
     {
         //Arrange
         const string schema = "minimigtest";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema };
+        var options = new Options() { Connection = connectionString, Provider = provider, Schema = schema };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -222,7 +222,7 @@ public class ConnectionContextTests
         //Arrange
         const string schema = "minimigtest2";
         const string table = "minimigtabletest";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTableSchema = schema, MigrationsTable = table };
+        var options = new Options() { Connection = connectionString, Provider = provider, Schema= schema, Table = table };
 
         //Act
         using var context = new ConnectionContext(options);
@@ -251,7 +251,7 @@ public class ConnectionContextTests
     {
         //Arrange
         const string table = "minimigTableTest2";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
+        var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
         var row = new FakeMigrationRow();
 
         //Act
@@ -275,7 +275,7 @@ public class ConnectionContextTests
     {
         //Arrange
         const string table = "minimigTableTest3";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
+        var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
         var row = new FakeMigrationRow();
         const string dateFormat = "yyyy-MM-dd hh:mm";
 
@@ -302,7 +302,7 @@ public class ConnectionContextTests
     {
         //Arrange
         const string table = "minimigTableTest4";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
+        var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
         var row = new FakeMigrationRow();
         const int newDuration = 20;
         string newHash = Guid.NewGuid().ToString();
@@ -334,7 +334,7 @@ public class ConnectionContextTests
     public void Update_migration_without_record(string connectionString, DatabaseProvider provider)
     {
         //Arrange
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
         var row = new FakeMigrationRow();
 
         //Act
@@ -357,7 +357,7 @@ public class ConnectionContextTests
         //Arrange
         const string table = "minimigTableTest5";
         string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider, MigrationsTable = table };
+        var options = new Options() { Connection = connectionString, Provider = provider, Table = table };
         var migration = new FakeMigration(filePath);
         var row = new FakeMigrationRow(migration.Filename, migration.Hash);
         const string dateFormat = "yyyy-MM-dd hh:mm";
@@ -386,7 +386,7 @@ public class ConnectionContextTests
     {
         //Arrange
         string filePath = $"SampleMigrations\\{provider}\\0001 - Add One and Two tables.sql";
-        var options = new Options() { ConnectionString = connectionString, Provider = provider };
+        var options = new Options() { Connection = connectionString, Provider = provider };
         var migration = new FakeMigration(filePath);
 
         //Act
