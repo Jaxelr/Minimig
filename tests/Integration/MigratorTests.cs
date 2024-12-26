@@ -144,6 +144,8 @@ public class MigratorTests
         var result = Migrator.RunOutstandingMigrations(option);
         var result2 = Migrator.RunOutstandingMigrations(option);
 
+        System.Threading.Thread.Sleep(millisecondsTimeout: 1000);
+
         //Act
         using (var mig = new Migrator(option))
         {
