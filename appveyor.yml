@@ -5,12 +5,10 @@ branches:
   - master
 init:
   - cmd: git config --global core.autocrlf true
-  - cmd: net start MSSQL$SQL2019
-  - ps: Start-Service MySQL80
 configuration:
   - Release
 services:
-  - postgresql13
+  - docker
 nuget:
   disable_publish_on_pr: true
 install:
@@ -19,7 +17,7 @@ install:
     & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '8.0.100' -InstallDir "$env:ProgramFiles\dotnet"
 before_build:
   - cmd: dotnet --version
-  - choco install codecov
+  - docker compose -f .docker\docker-compose.yml up -d
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
@@ -27,9 +25,6 @@ test_script:
 after_test:
   - codecov -f "./tests/coverage.net8.0.xml" -t $(codecov_token)
 environment:
-  sql_connection: Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!;
-  postgres_connection: Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;
-  mysql_connection: Server=localhost;Port=3306;Database=mysql;User Id=root;Password=Password12!;SSL Mode=Required;
   codecov_token:
     secure: lUmWvr1PcJnFJ7tR5/Y+fpuIPkc0L822Dh/NQy6EACQHZa/KY//Vwkap4lZg3yAN
 artifacts:
