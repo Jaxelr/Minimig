@@ -17,7 +17,7 @@ install:
     & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '8.0.100' -InstallDir "$env:ProgramFiles\dotnet"
 before_build:
   - cmd: dotnet --version
-  - docker compose -f .docker\docker-compose.yml up -d
+  - docker-compose -f .docker\docker-compose.yml up -d
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
