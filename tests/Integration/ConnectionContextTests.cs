@@ -11,11 +11,12 @@ namespace MinimigTests.Integration;
 /// These are integration tests to a live connection that require an existing active database and cant be entirely mocked.
 /// Note: Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
 /// </summary>
+[Collection("IntegrationContext")]
 public class ConnectionContextTests
 {
     public static IEnumerable<object[]> GetConnectionData()
     {
-        //We do this to pass the connection from Appveyor or locally
+        //This logic allows to pass the connection from ci or locally
         string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
         if (string.IsNullOrEmpty(sqlServerConnEnv))
             sqlServerConnEnv = "Server=(local);Database=master;Trusted_Connection=true;";
@@ -180,7 +181,8 @@ public class ConnectionContextTests
         //Act
         using var context = new ConnectionContext(options);
         context.Open();
-        context.CreateMigrationsTable();
+        if (!context.MigrationTableExists())
+            context.CreateMigrationsTable();
         bool exists = context.MigrationTableExists();
         context.DropMigrationsTable();
         bool existsAfter = context.MigrationTableExists();
@@ -257,7 +259,8 @@ public class ConnectionContextTests
         //Act
         using var context = new ConnectionContext(options);
         context.Open();
-        context.CreateMigrationsTable();
+        if (!context.MigrationTableExists())
+            context.CreateMigrationsTable();
         bool exists = context.MigrationTableExists();
         context.InsertMigrationRecord(row);
         context.DropMigrationsTable();
@@ -282,7 +285,8 @@ public class ConnectionContextTests
         //Act
         using var context = new ConnectionContext(options);
         context.Open();
-        context.CreateMigrationsTable();
+        if (!context.MigrationTableExists())
+            context.CreateMigrationsTable();
         context.InsertMigrationRecord(row);
         var ran = context.GetAlreadyRan();
         context.DropMigrationsTable();
@@ -311,7 +315,8 @@ public class ConnectionContextTests
         //Act
         var context = new ConnectionContext(options);
         context.Open();
-        context.CreateMigrationsTable();
+        if (!context.MigrationTableExists())
+            context.CreateMigrationsTable();
         context.InsertMigrationRecord(row);
         row.Duration = newDuration;
         row.Hash = newHash;
@@ -340,7 +345,9 @@ public class ConnectionContextTests
         //Act
         using var context = new ConnectionContext(options);
         context.Open();
-        context.CreateMigrationsTable();
+        if (!context.MigrationTableExists())
+            context.CreateMigrationsTable();
+
         void action() => context.UpdateMigrationRecordHash(row);
 
         //Assert
@@ -365,7 +372,8 @@ public class ConnectionContextTests
         //Act
         using var context = new ConnectionContext(options);
         context.Open();
-        context.CreateMigrationsTable();
+        if (!context.MigrationTableExists())
+            context.CreateMigrationsTable();
         context.InsertMigrationRecord(row);
         context.RenameMigration(migration);
         var ran = context.GetAlreadyRan();
