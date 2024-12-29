@@ -23,8 +23,7 @@ before_build:
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
-  - cmd: dotnet test --framework net8.0 ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit" /p:AltCoverAssemblyFilter="testhost|Microsoft"
-  - cmd: dotnet test --framework net9.0 ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit" /p:AltCoverAssemblyFilter="testhost|Microsoft"
+  - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit" /p:AltCoverAssemblyFilter="testhost|Microsoft"
 after_test:
   - codecov -f "./tests/coverage.net9.0.xml" -t $(codecov_token)
 environment:
