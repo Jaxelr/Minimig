@@ -48,7 +48,7 @@ public class Options
             throw new Exception("No database assign to infer Connection String");
 
         if (provider is DatabaseProvider.sqlserver)
-            return $"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={(string.IsNullOrEmpty(Server) ? "." : Server)}";
+            return $"Persist Security Info=False;Integrated Security=true;Initial Catalog={Database};server={(string.IsNullOrEmpty(Server) ? "." : Server)};TrustServerCertificate=True;";
         else if (provider is DatabaseProvider.postgresql)
             return $"Server={(string.IsNullOrEmpty(Server) ? "localhost" : Server)};Port=5432;Database={Database};Integrated Security=true;";
         else if (provider is DatabaseProvider.mysql)

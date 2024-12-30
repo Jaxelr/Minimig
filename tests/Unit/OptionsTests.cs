@@ -81,7 +81,7 @@ public class OptionsTests
     public void Get_connection_string_with_server_and_database_sqlserver(string inputServer, string inputDatabase)
     {
         //Arrange
-        string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server={inputServer}";
+        string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server={inputServer};TrustServerCertificate=True;";
         var options = new Options() { Server = inputServer, Database = inputDatabase };
 
         //Act
@@ -111,7 +111,7 @@ public class OptionsTests
     public void Get_connection_string_with_database(string inputDatabase)
     {
         //Arrange
-        string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server=.";
+        string inputConnection = $"Persist Security Info=False;Integrated Security=true;Initial Catalog={inputDatabase};server=.;TrustServerCertificate=True;";
         var options = new Options() { Database = inputDatabase };
 
         //Act
