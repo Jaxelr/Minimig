@@ -19,7 +19,7 @@ public class ConnectionContextTests
         //This logic allows to pass the connection from ci or locally
         string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
         if (string.IsNullOrEmpty(sqlServerConnEnv))
-            sqlServerConnEnv = "Server=(local);Database=master;Trusted_Connection=true;";
+            sqlServerConnEnv = "Server=(local);Database=master;Trusted_Connection=true;TrustServerCertificate=True;";
 
         string postgresConnEnv = Environment.GetEnvironmentVariable("Postgres_Connection");
         if (string.IsNullOrEmpty(postgresConnEnv))
