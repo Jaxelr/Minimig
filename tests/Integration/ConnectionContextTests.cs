@@ -10,11 +10,12 @@ namespace MinimigTests.Integration;
 /// <summary>
 /// These are integration tests to a live connection that require an existing active database and cant be entirely mocked.
 /// Note: Some of these unit tests require that we use trusted connections which means that the sql instance cannot be a docker image.
+/// It also means we mark as Collection these tests to ensure theyre executed sequentially and once per framework to avoid side-effects of concurrency.
 /// </summary>
 [Collection("IntegrationContext")]
 public class ConnectionContextTests
 {
-    public static IEnumerable<object[]> GetConnectionData()
+    public static TheoryData<string, DatabaseProvider> GetConnectionData()
     {
         //This logic allows to pass the connection from ci or locally
         string sqlServerConnEnv = Environment.GetEnvironmentVariable("Sql_Connection");
@@ -29,12 +30,12 @@ public class ConnectionContextTests
         if (string.IsNullOrEmpty(mysqlConnEnv))
             mysqlConnEnv = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;";
 
-        return
-        [
-            [sqlServerConnEnv, DatabaseProvider.sqlserver],
-            [postgresConnEnv, DatabaseProvider.postgresql],
-            [mysqlConnEnv, DatabaseProvider.mysql]
-        ];
+        return new TheoryData<string, DatabaseProvider>
+        {
+            { sqlServerConnEnv, DatabaseProvider.sqlserver },
+            { postgresConnEnv, DatabaseProvider.postgresql },
+            { mysqlConnEnv, DatabaseProvider.mysql }
+        };
     }
 
     [Theory]
