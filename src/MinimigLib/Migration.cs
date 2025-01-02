@@ -18,7 +18,6 @@ internal enum MigrateMode
 
 public class Migration
 {
-    private static readonly MD5CryptoServiceProvider Md5Provider = new();
     private static readonly Regex LineEndings = new("\r\n|\n\r|\n|\r", RegexOptions.Compiled);
 
     public IEnumerable<string> SqlCommands { get; }
@@ -55,16 +54,13 @@ public class Migration
     /// <summary>
     /// Get the md5 hash of the string provided
     /// </summary>
-    /// <param name="str"></param>
+    /// <param name="str">Input string to calculate hash</param>
     /// <returns>A new guid with the hashed bytes of the string provided</returns>
     private static string GetHash(string str)
     {
         string normalized = NormalizeLineEndings(str);
         byte[] inputBytes = Encoding.Unicode.GetBytes(normalized);
-
-        byte[] hashBytes;
-        lock (Md5Provider)
-            hashBytes = Md5Provider.ComputeHash(inputBytes);
+        byte[] hashBytes = MD5.HashData(inputBytes);
 
         return new Guid(hashBytes).ToString();
     }
@@ -72,7 +68,7 @@ public class Migration
     /// <summary>
     /// Standarize line endings with \n
     /// </summary>
-    /// <param name="str"></param>
+    /// <param name="str">Input string to normalize line endings</param>
     /// <returns>A string standarized</returns>
     private static string NormalizeLineEndings(string str) => LineEndings.Replace(str, "\n");
 }
