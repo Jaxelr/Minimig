@@ -10,6 +10,8 @@ namespace Minimig;
 
 public class Migrator : IDisposable
 {
+    private bool disposed;
+
     private readonly ConnectionContext db;
     private bool tableExists;
     private readonly string inputSchema;
@@ -17,7 +19,6 @@ public class Migrator : IDisposable
     private readonly bool useGlobalTransaction;
     private readonly TextWriter output;
     private readonly bool force;
-
     private readonly AlreadyRan alreadyRan;
 
     public IEnumerable<Migration> Migrations { get; }
@@ -78,7 +79,26 @@ public class Migrator : IDisposable
     /// <summary>
     /// Dispose of the database connection context
     /// </summary>
-    public void Dispose() => db?.Dispose();
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            db?.Dispose();
+        }
+
+        disposed = true;
+    }
 
     /// <summary>
     /// Get minimig version
