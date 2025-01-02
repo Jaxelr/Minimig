@@ -196,10 +196,9 @@ public class OptionsTests
     {
         //Arrange
         const string provider = "postgresql";
-        var options = new Options();
 
         //Act
-        var databaseProvider = options.MapDatabaseProvider(provider);
+        var databaseProvider = Options.MapDatabaseProvider(provider);
 
         //Assert
         Assert.Equal(DatabaseProvider.postgresql, databaseProvider);
@@ -211,10 +210,9 @@ public class OptionsTests
     {
         //Arrange
         const string provider = "sqlserver";
-        var options = new Options();
 
         //Act
-        var databaseProvider = options.MapDatabaseProvider(provider);
+        var databaseProvider = Options.MapDatabaseProvider(provider);
 
         //Assert
         Assert.Equal(DatabaseProvider.sqlserver, databaseProvider);
@@ -226,10 +224,9 @@ public class OptionsTests
     {
         //Arrange
         const string provider = "mysql";
-        var options = new Options();
 
         //Act
-        var databaseProvider = options.MapDatabaseProvider(provider);
+        var databaseProvider = Options.MapDatabaseProvider(provider);
 
         //Assert
         Assert.Equal(DatabaseProvider.mysql, databaseProvider);
@@ -241,9 +238,11 @@ public class OptionsTests
     {
         //Arrange
         const string provider = "somethingelse";
-        var options = new Options();
 
-        //Act & Assert
-        Assert.Throws<Exception>(() => options.MapDatabaseProvider(provider));
+        //Act
+        var exception = Assert.Throws<Exception>(() => Options.MapDatabaseProvider(provider));
+
+        // Assert
+        Assert.NotNull(exception);
     }
 }

@@ -69,7 +69,7 @@ internal static class Program
             {"f|folder=", "The folder containing your .sql migration files (defaults to current working directory).", v => optionsTmp.MigrationsFolder = v },
             {"timeout=", "Command timeout duration in seconds (default: 30).", v => optionsTmp.CommandTimeout = int.Parse(v) },
             {"preview", "Run outstanding migrations, but roll them back.", v => optionsTmp.IsPreview = v != null },
-            {"p|provider=", "Use a specific database provider options: sqlserver (default), postgresql, mysql.", v => optionsTmp.Provider = optionsTmp.MapDatabaseProvider(v) },
+            {"p|provider=", "Use a specific database provider options: sqlserver (default), postgresql, mysql.", v => optionsTmp.Provider = Options.MapDatabaseProvider(v) },
             {"global", "Run all outstanding migrations in a single transaction, if possible.", v => optionsTmp.UseGlobalTransaction = v != null },
             {"table=", "Name of the table used to track migrations (default: Migrations).", v => optionsTmp.MigrationsTable = v },
             {"schema=", "Name of the schema to be used to track migrations (default: dbo for sqlserver, public for postgresql, mysql for mysql).", v => optionsTmp.MigrationsTableSchema = v },

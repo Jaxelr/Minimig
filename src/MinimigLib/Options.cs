@@ -82,7 +82,7 @@ public class Options
     /// </summary>
     /// <param name="input">Input string to map to the Databas Provider enum</param>
     /// <returns>An enum with the mapped provider</returns>
-    public DatabaseProvider MapDatabaseProvider(string input)
+    public static DatabaseProvider MapDatabaseProvider(string input)
     {
         if (Enum.TryParse(input.ToLowerInvariant(), out DatabaseProvider provider))
             return provider;
