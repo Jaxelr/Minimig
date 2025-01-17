@@ -9,7 +9,7 @@ public class MigratorTests
     public void Migrator_get_version()
     {
         //Arrange
-        const string version = "0.11.0";
+        const string version = "0.12.0";
 
         //Act
         string result = Migrator.GetVersion();
