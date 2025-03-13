@@ -2,7 +2,10 @@
 version: 2
 updates:
   - package-ecosystem: "nuget"
-    directory: "/tests" #MinimigTests.csproj
+    directories:
+      - "/src/MinimigLib" #MinimigLib.csproj
+      - "/src/Minimig" #Minimig.csproj
+      - "/tests" #MinimigTests.csproj
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -11,24 +14,3 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
-  - package-ecosystem: "nuget"
-    directory: "/src/Minimig" #Minimig.csproj
-    schedule:
-      interval: "weekly"
-      day: "thursday"
-    commit-message:
-      prefix: "deps"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-  - package-ecosystem: "nuget"
-    directory: "/src/MinimigLib" #MinimigLib.csproj
-    schedule:
-      interval: "weekly"
-      day: "thursday"
-    commit-message:
-      prefix: "deps"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-
