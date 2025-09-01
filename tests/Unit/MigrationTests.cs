@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using Minimig;
 using MinimigTests.Fakes;
-using Xunit;
 
 namespace MinimigTests.Unit;
 

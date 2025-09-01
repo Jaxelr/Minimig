@@ -23,4 +23,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <Using Include="Minimig" />
+  </ItemGroup>
+
 </Project>

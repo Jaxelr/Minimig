@@ -1,6 +1,4 @@
 using System;
-using Minimig;
-using Xunit;
 
 namespace MinimigTests.Unit;
 
