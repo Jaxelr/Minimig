@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using Minimig;
-using Xunit;
 
 namespace MinimigTests.Integration;
 

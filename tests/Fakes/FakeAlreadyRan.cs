@@ -1,6 +1,4 @@
-﻿using Minimig;
-
-namespace MinimigTests.Fakes;
+﻿namespace MinimigTests.Fakes;
 
 internal class FakeAlreadyRan(MigrationRow row) : AlreadyRan([row])
 {

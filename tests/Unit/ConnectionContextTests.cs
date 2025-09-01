@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Minimig;
-using Xunit;
 
 namespace MinimigTests.Unit;
 

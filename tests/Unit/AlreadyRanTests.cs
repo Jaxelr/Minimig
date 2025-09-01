@@ -1,5 +1,4 @@
 ﻿using MinimigTests.Fakes;
-using Xunit;
 
 namespace MinimigTests.Unit;
 

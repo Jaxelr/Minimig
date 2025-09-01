@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using Minimig;
 using MinimigTests.Fakes;
-using Xunit;
 
 namespace MinimigTests.Integration;
 

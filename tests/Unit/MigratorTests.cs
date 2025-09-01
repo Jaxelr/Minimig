@@ -1,7 +1,4 @@
-﻿using Minimig;
-using Xunit;
-
-namespace MinimigTests.Unit;
+﻿namespace MinimigTests.Unit;
 
 public class MigratorTests
 {
