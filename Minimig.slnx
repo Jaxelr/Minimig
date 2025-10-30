@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="appveyor.yml" />
+    <File Path="codecov.yml" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="sampleinstallation.md" />
+    <File Path="src/Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Solution Items/.docker/">
+    <File Path=".docker/.env" />
+    <File Path=".docker/build-docker-compose-localhost.md" />
+    <File Path=".docker/docker-compose.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/dependabot.yml" />
+  </Folder>
+  <Project Path="src/Minimig/Minimig.csproj" />
+  <Project Path="src/MinimigLib/MinimigLib.csproj" />
+  <Project Path="tests/MinimigTests.csproj" />
+</Solution>
