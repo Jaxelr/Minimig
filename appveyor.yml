@@ -16,7 +16,7 @@ nuget:
 install:
 - ps: |
     Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-    & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '9.0.100' -InstallDir "$env:ProgramFiles\dotnet"
+    & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '10.0.100' -InstallDir "$env:ProgramFiles\dotnet"
 before_build:
   - cmd: dotnet --version
   - choco install codecov
@@ -25,7 +25,7 @@ build_script:
 test_script:
   - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit" /p:AltCoverAssemblyFilter="testhost|Microsoft"
 after_test:
-  - codecov -f "./tests/coverage.net9.0.xml" -t $(codecov_token)
+  - codecov -f "./tests/coverage.net10.0.xml" -t $(codecov_token)
 environment:
   sql_connection: Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!;TrustServerCertificate=True;
   postgres_connection: Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;
