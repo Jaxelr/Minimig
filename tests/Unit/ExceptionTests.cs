@@ -6,7 +6,7 @@ namespace MinimigTests.Unit;
 public class ExceptionTests
 {
     [Theory]
-    [InlineData("SampleMigrations\\SqlServer\\0001 - Add One and Two tables.sql")]
+    [InlineData("SampleMigrations/SqlServer/0001 - Add One and Two tables.sql")]
     public void FakeMigration_ShouldHaveMigrationChangedException(string filePath)
     {
         //Arrange

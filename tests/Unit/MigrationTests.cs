@@ -7,7 +7,7 @@ namespace MinimigTests.Unit;
 public class MigrationTests
 {
     [Theory]
-    [InlineData("SampleMigrations\\SqlServer\\0001 - Add One and Two tables.sql")]
+    [InlineData("SampleMigrations/SqlServer/0001 - Add One and Two tables.sql")]
     public void Get_migration(string filepath)
     {
         //Arrange
@@ -23,7 +23,7 @@ public class MigrationTests
     }
 
     [Theory]
-    [InlineData("SampleMigrations\\SqlServer\\0003 - Insert Three data.sql")]
+    [InlineData("SampleMigrations/SqlServer/0003 - Insert Three data.sql")]
     public void Get_migration_no_transaction(string filepath)
     {
         //Arrange
@@ -39,7 +39,7 @@ public class MigrationTests
     }
 
     [Theory]
-    [InlineData("SampleMigrations\\SqlServer\\0003 - Insert Three data.sql", "uniqueKey", "c:\\temp\\abc")]
+    [InlineData("SampleMigrations/SqlServer/0003 - Insert Three data.sql", "uniqueKey", "c:\\temp\\abc")]
     public void Get_migration_mode_run(string filepath, string key, string filename)
     {
         //Arrange
@@ -55,7 +55,7 @@ public class MigrationTests
     }
 
     [Theory]
-    [InlineData("SampleMigrations\\SqlServer\\0003 - Insert Three data.sql", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92", "c:\\temp\\abc")]
+    [InlineData("SampleMigrations/SqlServer/0003 - Insert Three data.sql", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92", "c:\\temp\\abc")]
     public void Get_migration_mode_run_renamed(string filepath, string key, string filename)
     {
         //Arrange
@@ -71,7 +71,7 @@ public class MigrationTests
     }
 
     [Theory]
-    [InlineData("SampleMigrations\\SqlServer\\", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92", "0003 - Insert Three data.sql")]
+    [InlineData("SampleMigrations/SqlServer/", "b8b9fcf3-1c1f-8040-8c19-3d87b26dab92", "0003 - Insert Three data.sql")]
     public void Get_migration_mode_run_skip(string filepath, string key, string filename)
     {
         //Arrange
@@ -87,7 +87,7 @@ public class MigrationTests
     }
 
     [Theory]
-    [InlineData("SampleMigrations\\SqlServer\\", "00000-000", "0003 - Insert Three data.sql")]
+    [InlineData("SampleMigrations/SqlServer/", "00000-000", "0003 - Insert Three data.sql")]
     public void Get_migration_mode_run_has_mismatch(string filepath, string key, string filename)
     {
         //Arrange

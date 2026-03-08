@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -v quiet
+
+      - name: Test with coverage
+        run: dotnet test ./tests/MinimigTests.csproj --filter "FullyQualifiedName!~Integration" /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="xunit" /p:AltCoverAssemblyFilter="testhost|Microsoft"
+
+      - name: Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./tests/coverage.net8.0.xml,./tests/coverage.net9.0.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
