@@ -12,6 +12,27 @@ public class MigratorTests
     private readonly int migrationCount = 5;
 
     [Theory]
+    [InlineData(".", "master", true, "previewTable")]
+    public void Migrator_instantiation_preview(string server, string database, bool isPreview, string table)
+    {
+        //Arrange
+        var option = new Options() { Server = server, Database = database, IsPreview = isPreview, MigrationsTable = table };
+        var connection = new ConnectionContext(option);
+
+        //Act
+        using (var mig = new Migrator(option))
+        {
+            //Assert
+            Assert.Empty(mig.Migrations);
+        }
+
+        //Cleanup
+        connection.Open();
+        connection.DropMigrationsTable();
+        connection.Dispose();
+    }
+
+    [Theory]
     [InlineData(".", "master", false, "customTableA")]
     public void Migrator_instantiation(string server, string database, bool isPreview, string table)
     {
@@ -33,7 +54,7 @@ public class MigratorTests
     }
 
     [Theory]
-    [InlineData(".", "master", "customTableB", "SampleMigrations\\SqlServer")]
+    [InlineData(".", "master", "customTableB", "SampleMigrations/SqlServer")]
     public void Migrator_instantiation_with_migrations(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
@@ -56,7 +77,7 @@ public class MigratorTests
     }
 
     [Theory]
-    [InlineData(".", "master", "missingSchema", "customTableB", "SampleMigrations\\SqlServer")]
+    [InlineData(".", "master", "missingSchema", "customTableB", "SampleMigrations/SqlServer")]
     public void Migrator_instantiation_with_migrations_and_missing_schema(string server, string database, string schema, string table, string migrationsFolder)
     {
         //Arrange
@@ -83,7 +104,7 @@ public class MigratorTests
     }
 
     [Theory]
-    [InlineData(".", "master", "customTableC", "SampleMigrations\\SqlServer")]
+    [InlineData(".", "master", "customTableC", "SampleMigrations/SqlServer")]
     public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
@@ -108,7 +129,7 @@ public class MigratorTests
     }
 
     [Theory]
-    [InlineData(".", "master", "customTableD", "SampleMigrations\\SqlServer")]
+    [InlineData(".", "master", "customTableD", "SampleMigrations/SqlServer")]
     public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations_single_transaction(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
@@ -133,7 +154,7 @@ public class MigratorTests
     }
 
     [Theory]
-    [InlineData(".", "master", "customTableE", "SampleMigrations\\SqlServer")]
+    [InlineData(".", "master", "customTableE", "SampleMigrations/SqlServer")]
     public void Migrator_instantiation_with_migrations_and_run_outstanding_migrations_twice(string server, string database, string table, string migrationsFolder)
     {
         //Arrange
