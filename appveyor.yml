@@ -23,11 +23,9 @@ before_build:
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
-  - cmd: dotnet test --project ./tests/MinimigTests.csproj --framework net10.0 --coverlet --coverlet-output-format cobertura
+  - cmd: dotnet test --project ./tests/MinimigTests.csproj --framework net10.0 --coverlet --coverlet-output-format cobertura --results-directory ./TestResults
 after_test:
-  - ps: |
-      $coverageFile = Get-ChildItem -Path ".\TestResults" -Filter "coverage.cobertura.*.xml" -Recurse | Select-Object -First 1 -ExpandProperty FullName
-      codecov -f "$coverageFile" -t $env:codecov_token
+  - ps: codecov -f (Resolve-Path ".\TestResults\coverage.cobertura.*.xml").Path -t $env:codecov_token
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: '1'
   DOTNET_NOLOGO: '1'
