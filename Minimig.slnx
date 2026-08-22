@@ -5,6 +5,7 @@
     <File Path=".gitignore" />
     <File Path="appveyor.yml" />
     <File Path="codecov.yml" />
+    <File Path="global.json" />
     <File Path="LICENSE" />
     <File Path="README.md" />
     <File Path="sampleinstallation.md" />

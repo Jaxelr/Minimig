@@ -23,9 +23,11 @@ before_build:
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
-  - cmd: dotnet test ./tests/MinimigTests.csproj /p:AltCover=true /p:AltCoverAssemblyFilter="testhost|Microsoft|xunit|MinimigTests|AltCover"
+  - cmd: dotnet test ./tests/MinimigTests.csproj --framework net10.0 --coverlet --coverlet-output-format cobertura
 after_test:
-  - codecov -f "./tests/coverage.net10.0.xml" -t $(codecov_token)
+  - ps: |
+      $coverageFile = Get-ChildItem -Path ".\TestResults" -Filter "coverage.cobertura.*.xml" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+      codecov -f "$coverageFile" -t $(codecov_token)
 environment:
   sql_connection: Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!;TrustServerCertificate=True;
   postgres_connection: Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;
