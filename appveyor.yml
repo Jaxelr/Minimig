@@ -27,8 +27,10 @@ test_script:
 after_test:
   - ps: |
       $coverageFile = Get-ChildItem -Path ".\TestResults" -Filter "coverage.cobertura.*.xml" -Recurse | Select-Object -First 1 -ExpandProperty FullName
-      codecov -f "$coverageFile" -t $(codecov_token)
+      codecov -f "$coverageFile" -t $env:codecov_token
 environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+  DOTNET_NOLOGO: '1'
   sql_connection: Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!;TrustServerCertificate=True;
   postgres_connection: Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;
   mysql_connection: Server=localhost;Port=3306;Database=mysql;User Id=root;Password=Password12!;SSL Mode=Required;
