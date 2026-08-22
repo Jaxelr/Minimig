@@ -23,7 +23,7 @@ before_build:
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
-  - cmd: dotnet test ./tests/MinimigTests.csproj --framework net10.0 --coverlet --coverlet-output-format cobertura
+  - cmd: dotnet test --project ./tests/MinimigTests.csproj --framework net10.0 --coverlet --coverlet-output-format cobertura
 after_test:
   - ps: |
       $coverageFile = Get-ChildItem -Path ".\TestResults" -Filter "coverage.cobertura.*.xml" -Recurse | Select-Object -First 1 -ExpandProperty FullName
