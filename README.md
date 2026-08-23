@@ -126,6 +126,54 @@ It is relatively trivial  to configure a docker sql image and run minimig on a c
 
 For uninstallation execute `dotnet tool uninstall --global Minimig` from terminal.
 
+## Contributing
+
+Contributions are welcome. Before opening a pull request, build the project and run the full test suite locally, including the integration tests that require a live database connection.
+
+### Building and testing
+
+Use your favorite editor, but from the terminal to build run: `dotnet build`
+
+To run tests: `dotnet test --project ./tests/MinimigTests.csproj --framework net10.0`
+
+This repository targets .NET 10 and uses `global.json` to enable Microsoft Testing Platform mode for `dotnet test`.
+
+### Testing locally with Docker
+
+The integration tests under `tests/Integration` require live SQL Server, PostgreSQL, and MySQL instances. Use Docker to provision these databases locally.
+
+1. Start the databases from the repository root:
+
+   ```
+   docker compose -f .docker/docker-compose.yml --env-file .docker/.env up -d
+   ```
+
+   This provisions:
+
+   * PostgreSQL 13 on `localhost:5432` (user `postgres`, password `Password12!`, database `postgres`)
+   * MySQL (latest) on `localhost:3306` (empty root password, database `test`)
+   * SQL Server 2019 on `localhost:1433` (user `sa`, password `P@ssword123`)
+
+2. Set connection string env variables to match the containers. Use `tcp:127.0.0.1,1433` explicitly for SQL Server.
+
+   ```powershell
+   $env:Sql_Connection = "Server=tcp:127.0.0.1,1433;Database=master;User Id=sa;Password=P@ssword123;TrustServerCertificate=True;"
+   $env:Postgres_Connection = "Server=localhost;Port=5432;Database=postgres;Username=postgres;Password=Password12!;"
+   $env:MySql_Connection = "Server=127.0.0.1;Port=3306;Database=test;User Id=root;"
+   ```
+
+3. Run the tests:
+
+   ```
+   dotnet test --project ./tests/MinimigTests.csproj --framework net10.0
+   ```
+
+4. Tear down the containers when finished:
+
+   ```
+   docker compose -f .docker/docker-compose.yml down
+   ```
+
 ## Credit
 
 This library started as a fork from Mayflower.net which is [inactive](https://github.com/bretcope/Mayflower.NET)
