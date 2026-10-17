@@ -37,6 +37,8 @@ A local test run failing only against these three integration tests due to conne
 
 `appveyor.yml` is the source of truth for the CI test/coverage invocation. When changing test tooling (test SDK, xunit, coverage provider), update `appveyor.yml` in the same change and verify the exact CI command locally before pushing.
 
+The CI test command adds `--no-restore` because the preceding build restores dependencies.
+
 ### AppVeyor `- ps:` gotchas
 
 - Inside `- ps:` (PowerShell) steps, read AppVeyor environment/secure variables as `$env:variable_name`. The `$(variable_name)` substitution syntax only works inside `- cmd:` steps and silently expands to an empty string in PowerShell steps (this previously broke the codecov upload with `Option 'f, file' has no value`).

@@ -23,7 +23,7 @@ before_build:
 build_script:
   - cmd: dotnet build . -v quiet
 test_script:
-  - cmd: dotnet test --project ./tests/MinimigTests.csproj --framework net10.0 --coverlet --coverlet-output-format cobertura --results-directory ./TestResults
+  - cmd: dotnet test --project ./tests/MinimigTests.csproj --framework net10.0 --no-restore --coverlet --coverlet-output-format cobertura --results-directory ./TestResults
 after_test:
   - ps: codecov -f (Resolve-Path ".\TestResults\coverage.cobertura.*.xml").Path -t $env:codecov_token
 environment:

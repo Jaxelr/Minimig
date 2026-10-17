@@ -138,6 +138,8 @@ To run tests: `dotnet test --project ./tests/MinimigTests.csproj --framework net
 
 This repository targets .NET 10 and uses `global.json` to enable Microsoft Testing Platform mode for `dotnet test`.
 
+After building, run the CI coverage command with `dotnet test --project ./tests/MinimigTests.csproj --framework net10.0 --no-restore --coverlet --coverlet-output-format cobertura --results-directory ./TestResults`. The build restores dependencies, so CI skips restoring them again during testing.
+
 ### Testing locally with Docker
 
 The integration tests under `tests/Integration` require live SQL Server, PostgreSQL, and MySQL instances. Use Docker to provision these databases locally.
